@@ -1,0 +1,15 @@
+//---------------display flex style mixin---------------
+@mixin flex-style ($flexDirection:row,$alignVal:center,$justifyVal:center) {
+    display: flex;
+    flex-direction  : $flexDirection;
+    align-items     : $alignVal;
+    justify-content : $justifyVal;
+}
+//position-style
+//---------------position style mixin---------------
+@mixin position-style ($position:absolute,$left:0,$top:0,$zIndex:null){
+    position    : $position;
+    left        : $left;
+    top         : $top;
+    z-index     : $zIndex;
+}
