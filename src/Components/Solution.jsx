@@ -7,17 +7,15 @@ import DataAnalysis from "./DataAnalysis";
 import ModelTraining from "./ModelTraining";
 
 const Solution = () => {
-
     return (
         <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/normalization" element={<DataNormalization />} />
-            <Route path='/analysis' element={<DataAnalysis />} />
+            <Route path="/analysis" element={<DataAnalysis />} />
             <Route path="/featuremap" element={<FeatureMap />} />
-            <Route path='/training' element={<ModelTraining />} />
+            <Route path="/training" element={<ModelTraining />} />
         </Routes>
-    )
-
-}
+    );
+};
 
 export default Solution;
