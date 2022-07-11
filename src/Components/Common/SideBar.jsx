@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 
 const SideBar = () => {
     return (
-        <section className="side-bar">
+        <section className="side-bar clean">
             <div className="inner column">
                 <div className="top-area"></div>
                 <nav>
