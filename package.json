@@ -1,18 +1,28 @@
 {
-  "name": "mining-cloud",
+  "name": "Mining-Cloud",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@nivo/core": "^0.79.0",
+    "@nivo/heatmap": "^0.79.1",
+    "@nivo/legends": "^0.79.1",
     "@testing-library/jest-dom": "^5.16.4",
     "@testing-library/react": "^13.3.0",
     "@testing-library/user-event": "^13.5.0",
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0",
-    "react-scripts": "5.0.1",
+    "axios": "^0.27.2",
+    "html2canvas": "^1.4.1",
+    "http-proxy-middleware": "^2.0.6",
+    "jquery": "^3.6.0",
+    "react": "^18.1.0",
+    "react-dom": "^18.1.0",
+    "react-icons": "^4.4.0",
+    "react-router-dom": "^6.3.0",
+    "react-scripts": "^5.0.1",
+    "tableexport": "^5.2.0",
     "web-vitals": "^2.1.4"
   },
   "scripts": {
-    "start": "react-scripts start",
+    "start": "set PORT=3005 && react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
