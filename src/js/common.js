@@ -29,7 +29,7 @@ export const fileNamePreview = (
     window.alert('csv 파일만 업로드 가능합니다.');
     return;
   }
-  setUploadFile(inputFile)
+  setUploadFile(inputFile);
   setUploadFileName(inputFile.name);
 };
 
@@ -41,8 +41,7 @@ export const activeOn = (event, uploadFile, setTab) => {
     return;
   }
   // setMsg('loading');
-  $('.content-wrap > div button').removeClass('active');
-  $(event).addClass('active');
+  
 };
 
 //formData 만들기
@@ -73,4 +72,13 @@ export const tableExport = (bool, str) => {
       formats: ['xlsx', 'csv'],
     });
   } else TableExport(document.getElementsByTagName('table')).remove();
+};
+
+export const fileSetting = (
+  e,
+  { setUploadFile, setUploadFileName, setTab, setMsg }
+) => {
+  fileNamePreview(e.target.files[0], setUploadFile, setUploadFileName);
+  setTab('');
+  setMsg('');
 };

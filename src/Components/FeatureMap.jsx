@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-import { fileNamePreview } from 'js/common';
+import { fileSetting } from 'js/common';
 
 import Loading from 'Components/Loading';
 import Header from './Common/Header';
@@ -11,15 +11,12 @@ const FeatureMap = () => {
   const [uploadFile, setUploadFile] = useState('');
   const [uploadFileName, setUploadFileName] = useState('');
   const [msg, setMsg] = useState('');
-  const [downloadUrl, setDownloadUrl] = useState('');
+  const [tab, setTab] = useState('');
+
+  const fileSettingState = { setUploadFile, setUploadFileName, setTab, setMsg };
 
   //이미지 피처맵 api 요청
-  const makeFeatureMap = async e => {
-  };
-
-  const loadingData = { msg, downloadUrl };
-
-  const uploadFileData = { uploadFile, uploadFileName };
+  const featureMap = async e => {};
 
   return (
     <section className='content-container'>
@@ -35,23 +32,18 @@ const FeatureMap = () => {
               type='file'
               id='fileUpload'
               onChange={e =>
-                fileNamePreview(
-                  e.target.files[0],
-                  setUploadFile,
-                  setUploadFileName
-                )
+                fileSetting(e, fileSettingState)
               }
               accept='.csv'
             />
-            {/* <input type="file" id="fileUpload" onChange={(e)=>imgPreview(e.target.files,setUploadImg,setUploadImgName)} accept="image/*" multiple/> */}
-            <button onClick={e => makeFeatureMap(e.target)}>
+            <button onClick={e => featureMap(e.target)}>
               Balancing & Partitioning
             </button>
             <br />
-            <DataUploadComp {...uploadFileData} />
+            <DataUploadComp uploadFileName={uploadFileName} />
           </div>
         </div>
-        <Loading {...loadingData} />
+        <Loading msg={msg} />
       </div>
     </section>
   );

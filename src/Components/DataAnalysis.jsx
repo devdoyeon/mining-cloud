@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { fileNamePreview } from 'js/common';
+import { fileSetting } from 'js/common';
 import Loading from 'Components/Loading';
 import Header from './Common/Header';
 import SideBar from './Common/SideBar';
@@ -11,18 +11,16 @@ const DataAnalysis = () => {
   const [msg, setMsg] = useState('');
   const [tab, setTab] = useState('');
 
-  const dataProcess = async e => {
-    setTab(e.textContent);
-  };
+  const fileSettingState = { setUploadFile, setUploadFileName, setTab, setMsg };
 
-  const uploadFileData = { uploadFile, uploadFileName };
+  const analysis = async e => {};
 
   return (
     <section className='content-container'>
       <SideBar />
       <div>
         <Header />
-        <div className='content-wrap'> 
+        <div className='content-wrap'>
           <h3 className='bold'>변수 분석 및 선택</h3>
           <hr />
           <div>
@@ -30,34 +28,28 @@ const DataAnalysis = () => {
             <input
               type='file'
               id='fileUpload'
-              onChange={e =>
-                fileNamePreview(
-                  e.target.files[0],
-                  setUploadFile,
-                  setUploadFileName
-                )
-              }
+              onChange={e => fileSetting(e, fileSettingState)}
               accept='.csv'
             />
             <button
-              onClick={e => dataProcess(e.target)}
+              onClick={e => analysis(e.target)}
               className={tab === '상관분석' ? 'active' : ''}>
               상관분석
             </button>
             <button
-              onClick={e => dataProcess(e.target)}
+              onClick={e => analysis(e.target)}
               className={tab === '교차분석' ? 'active' : ''}>
               교차분석
             </button>
             <button
-              onClick={e => dataProcess(e.target)}
+              onClick={e => analysis(e.target)}
               className={tab === 'CART분석' ? 'active' : ''}>
               CART분석
             </button>
             <br />
             <DataUploadComp uploadFileName={uploadFileName} />
           </div>
-            {/* {tab === '상관분석' && <Correlation />} */}
+        {/* {msg === 'download'} */}
         </div>
         <Loading msg={msg} />
       </div>

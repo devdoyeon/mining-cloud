@@ -1,10 +1,11 @@
 import { useState } from 'react';
-import { activeOn, fileNamePreview } from 'js/common';
+import { fileSetting } from 'js/common';
 
 import Loading from 'Components/Loading';
 import Header from './Common/Header';
 import SideBar from './Common/SideBar';
 import DataUploadComp from './Common/DataUploadComp';
+import $ from 'jquery'
 import { normalizationAPI } from 'js/solutionApi';
 import { errorList } from 'js/array';
 
@@ -18,12 +19,7 @@ const DataNormalization = () => {
   const [thead, setThead] = useState([]);
   let prevent = false;
 
-  //@ input이 onchange될 때 실행시켜 주는 함수
-  const fileSetting = e => {
-    fileNamePreview(e.target.files[0], setUploadFile, setUploadFileName);
-    setTab('');
-    setMsg('');
-  };
+  const fileSettingState = { setUploadFile, setUploadFileName, setTab, setMsg };
 
   //@ api 통신
   const normalization = async e => {
@@ -32,7 +28,13 @@ const DataNormalization = () => {
     setTimeout(() => {
       prevent = false;
     }, 200);
-    activeOn(e, uploadFile, setMsg); //업로드 파일 체크
+    if (uploadFile === '') {
+      alert('데이터를 업로드해 주세요.');
+      setTab('');
+      return;
+    }
+    $('.content-wrap > div button').removeClass('active');
+    $(e).addClass('active');
     setTab(e.textContent); // tab setting
     setMsg('loading'); // loading spinner
     // 클릭한 button의 textContent를 가져와 각각 다른 api 통신을 보낼 수 있게 함
@@ -153,7 +155,7 @@ const DataNormalization = () => {
             <input
               type='file'
               id='fileUpload'
-              onChange={e => fileSetting(e)}
+              onChange={e => fileSetting(e, fileSettingState)}
               accept='.csv'
             />
             <button

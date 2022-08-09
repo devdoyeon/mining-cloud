@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-import { fileNamePreview } from 'js/common';
+import { fileSetting } from 'js/common';
 
 import Loading from 'Components/Loading';
 import Header from './Common/Header';
@@ -11,34 +11,21 @@ const ModelTraining = () => {
   const [uploadFile, setUploadFile] = useState('');
   const [uploadFileName, setUploadFileName] = useState('');
   const [msg, setMsg] = useState('');
-  const [downloadUrl, setDownloadUrl] = useState('');
+  const [tab, setTab] = useState('');
 
-  const dataProcess = async (e, type) => {
+  const training = async e => {
     if (msg === 'loading') {
       alert('다른 작업을 수행하는 중에는 버튼을 클릭할 수 없습니다.');
       return;
     }
-    switch (type) {
-      case 'lr':
-        break;
-      case 'dt':
-        break;
-      case 'svm':
-        break;
-      case 'dnn':
-        break;
-      case 'rf':
-        break;
-      case 'xg':
-        break;
-      default:
-        break;
-    }
+    setTab(e.textContent);
   };
-
-  const loadingData = { msg, downloadUrl };
-
-  const uploadFileData = { uploadFile, uploadFileName };
+  const fileSettingState = {
+    setUploadFile,
+    setUploadFileName,
+    setTab,
+    setMsg,
+  };
 
   return (
     <section className='content-container'>
@@ -53,26 +40,44 @@ const ModelTraining = () => {
             <input
               type='file'
               id='fileUpload'
-              onChange={e =>
-                fileNamePreview(
-                  e.target.files[0],
-                  setUploadFile,
-                  setUploadFileName
-                )
-              }
+              onChange={e => fileSetting(e, fileSettingState)}
               accept='.csv'
             />
-            <button onClick={e => dataProcess(e.target)}>LR</button>
-            <button onClick={e => dataProcess(e.target)}>DT</button>
-            <button onClick={e => dataProcess(e.target)}>SVM</button>
-            <button onClick={e => dataProcess(e.target)}>DNN</button>
-            <button onClick={e => dataProcess(e.target)}>RF</button>
-            <button onClick={e => dataProcess(e.target)}>XGBoost</button>
+            <button
+              onClick={e => training(e.target)}
+              className={tab === 'LR' ? 'active' : 'lr'}>
+              LR
+            </button>
+            <button
+              onClick={e => training(e.target)}
+              className={tab === 'DT' ? 'active' : 'dt'}>
+              DT
+            </button>
+            <button
+              onClick={e => training(e.target)}
+              className={tab === 'SVM' ? 'active' : 'svm'}>
+              SVM
+            </button>
+            <button
+              onClick={e => training(e.target)}
+              className={tab === 'DNN' ? 'active' : 'dnn'}>
+              DNN
+            </button>
+            <button
+              onClick={e => training(e.target)}
+              className={tab === 'RF' ? 'active' : 'rf'}>
+              RF
+            </button>
+            <button
+              onClick={e => training(e.target)}
+              className={tab === 'XGBoost' ? 'active' : 'xg'}>
+              XGBoost
+            </button>
             <br />
-            <DataUploadComp {...uploadFileData} />
+            <DataUploadComp uploadFileName={uploadFileName} />
           </div>
         </div>
-        <Loading {...loadingData} />
+        <Loading msg={msg} />
       </div>
     </section>
   );
