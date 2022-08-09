@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 import { fileSetting } from 'js/common';
 
@@ -12,6 +12,8 @@ const ModelTraining = () => {
   const [uploadFileName, setUploadFileName] = useState('');
   const [msg, setMsg] = useState('');
   const [tab, setTab] = useState('');
+
+  useEffect(() => { document.title = "모델 학습 및 검증 | MINING CLOUD" }, [])
 
   const training = async e => {
     if (msg === 'loading') {

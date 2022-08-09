@@ -53,7 +53,7 @@ const SideBar = () => {
           setMenuBtn(!menuBtn);
           e.stopPropagation();
         }}
-        className={`menuBtn`}>
+        className={`menuBtn ${menuBtn}`}>
         <RiMenu4Fill />
       </button>
     </>

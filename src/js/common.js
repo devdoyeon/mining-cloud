@@ -33,17 +33,6 @@ export const fileNamePreview = (
   setUploadFileName(inputFile.name);
 };
 
-//버튼 및 로딩바 active 처리
-export const activeOn = (event, uploadFile, setTab) => {
-  if (uploadFile === '') {
-    alert('데이터를 업로드해 주세요.');
-    setTab('');
-    return;
-  }
-  // setMsg('loading');
-  
-};
-
 //formData 만들기
 export const makeFormDataArr = async (uploadImg, uploadImgName) => {
   let bloBin = [];

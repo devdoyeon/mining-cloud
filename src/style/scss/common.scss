@@ -109,13 +109,14 @@ input::placeholder {
       width: fit-content;
       max-width: 100%;
       max-height: 500px;
-      overflow-x: auto;
       border: 1px solid rgb(188, 188, 188);
+      overflow-x: auto;
       > table {
         .gray {
           background-color: rgb(220, 220, 220);
         }
-        td, th {
+        td,
+        th {
           border: 1px solid rgb(188, 188, 188);
           white-space: pre;
           padding: 7px;
@@ -127,6 +128,13 @@ input::placeholder {
           }
         }
       }
+    }
+    .downloadBtnWrap {
+      margin-top: 10px;
+      display: flex;
+      align-items: center;
+      width: 100%;
+      justify-content: center;
     }
   }
 
@@ -281,9 +289,11 @@ header {
 }
 
 // 메뉴 열림 효과
-.true {
-  transform: translateX(300px);
-  transition: all 0.3s;
+.side-bar {
+  &.true {
+    transform: translateX(300px);
+    transition: all 0.3s;
+  }
 }
 
 // 슬라이드 메뉴 토글 버튼
@@ -296,7 +306,6 @@ header {
   height: 50px;
   padding: 0 !important;
   margin: 0 !important;
-  border-radius: 0px !important;
   align-items: center;
   justify-content: center;
   display: flex;
@@ -304,6 +313,11 @@ header {
   svg {
     width: 25px;
     height: 25px;
+  }
+  &.true {
+    svg {
+      fill: white;
+    }
   }
 }
 
@@ -336,39 +350,39 @@ header {
       a {
         display: inline-block;
         width: 100%;
-        padding: 10px;
         background-color: var(--background-color);
         color: var(--font-color);
         box-sizing: border-box;
-      }
+        > div {
+          @include flex-style(column);
+          width: 100%;
+          padding: 40px 0;
+          background-color: var(--white);
+          border-top: 1px solid var(--gray04);
 
-      &:hover a {
-        color: var(--main-color);
-      }
-
-      > div {
-        @include flex-style(column);
-        width: 100%;
-        padding: 40px 0;
-        background-color: var(--white);
-        border-top: 1px solid var(--gray04);
-
-        figure {
-          width: 150px;
-          height: 150px;
-          border-radius: 50%;
-          background-color: var(--background-color);
-          box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.2);
+          figure {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            background-color: var(--background-color);
+            box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.2);
+          }
         }
-      }
-
-      p {
-        width: 100%;
-        padding: 15px 0;
-        border-top: 1px solid var(--gray04);
-        text-align: center;
-        color: var(--gray02);
-        font-size: 14px;
+        span {
+          display: inline-block;
+          padding: 10px;
+        }
+        p {
+          width: 100%;
+          padding: 15px 0;
+          border-top: 1px solid var(--gray04);
+          text-align: center;
+          color: var(--gray02);
+          font-size: 14px;
+        }
+        &:hover span {
+          color: var(--main-color);
+        }
       }
     }
   }
@@ -459,30 +473,9 @@ header {
 
       > div {
         width: 350px;
-        height: 300px;
+        height: 320px;
         text-align: center;
         margin: 10px;
-
-        a {
-          padding: 15px;
-        }
-
-        > div {
-          padding: 57px 0;
-
-          figure {
-            width: 130px;
-            height: 130px;
-            box-shadow: 3px 3px 6px rgba(0, 0, 0, 0.2);
-            img {
-              width: 50px;
-              height: 50px;
-            }
-          }
-        }
-        p {
-          display: none;
-        }
       }
     }
   }
@@ -493,9 +486,7 @@ header {
     .row {
       > div {
         width: 40vw;
-
         a {
-          padding: 16px;
           font-size: 0.9em;
         }
       }
@@ -505,24 +496,33 @@ header {
 //~~~~~~~~~~~~~~~~~~mobile responsive~~~~~~~~~~~~~~~~~~~
 @include mobile {
   .content-container {
-    .content-wrap > div {
-      > label {
-        margin-top: 10px;
-        display: block;
-        width: fit-content;
-      }
-      > button {
-        font-size: 14px;
-        &:first-of-type {
-          margin-left: 0;
+    .content-wrap {
+      > div {
+        > label {
+          margin-top: 10px;
+          display: block;
+          width: fit-content;
         }
-      }
-      .outputWrap > .row {
-        span {
-          width: 80px;
-        }
-        p {
+        > button {
           font-size: 14px;
+          &:first-of-type {
+            margin-left: 0;
+          }
+        }
+        .outputWrap > .row {
+          span {
+            width: 80px;
+          }
+          p {
+            font-size: 14px;
+          }
+        }
+        .previewTable > table {
+          td,
+          th {
+            padding: 4px;
+            font-size: 14px;
+          }
         }
       }
     }
@@ -539,9 +539,9 @@ header {
     footer p {
       color: var(--white);
     }
-  }
-  .true {
-    transform: translateX(100%);
+    &.true {
+      transform: translateX(100%);
+    }
   }
 
   // Home 요소들 세로 정렬
@@ -553,17 +553,9 @@ header {
     .row {
       flex-direction: column;
       > div {
-        width: 250px;
-        height: 200px;
+        width: 80vw;
+        height: fit-content;
         margin: 10px 0px;
-
-        a {
-          padding: 13px;
-        }
-
-        > div {
-          padding: 10px 0;
-        }
       }
     }
   }

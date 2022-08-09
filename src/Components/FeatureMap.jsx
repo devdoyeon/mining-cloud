@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 import { fileSetting } from 'js/common';
 
@@ -14,6 +14,8 @@ const FeatureMap = () => {
   const [tab, setTab] = useState('');
 
   const fileSettingState = { setUploadFile, setUploadFileName, setTab, setMsg };
+
+  useEffect(() => { document.title = "AI 학습용 데이터셋 생성 | MINING CLOUD" }, [])
 
   //이미지 피처맵 api 요청
   const featureMap = async e => {};

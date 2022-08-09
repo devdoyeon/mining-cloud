@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { fileSetting } from 'js/common';
 import Loading from 'Components/Loading';
 import Header from './Common/Header';
@@ -12,6 +12,8 @@ const DataAnalysis = () => {
   const [tab, setTab] = useState('');
 
   const fileSettingState = { setUploadFile, setUploadFileName, setTab, setMsg };
+
+  useEffect(() => { document.title = "변수 분석 및 선택 | MINING CLOUD" }, [])
 
   const analysis = async e => {};
 

@@ -1,11 +1,11 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { fileSetting } from 'js/common';
 
 import Loading from 'Components/Loading';
 import Header from './Common/Header';
 import SideBar from './Common/SideBar';
 import DataUploadComp from './Common/DataUploadComp';
-import $ from 'jquery'
+import $ from 'jquery';
 import { normalizationAPI } from 'js/solutionApi';
 import { errorList } from 'js/array';
 
@@ -20,6 +20,10 @@ const DataNormalization = () => {
   let prevent = false;
 
   const fileSettingState = { setUploadFile, setUploadFileName, setTab, setMsg };
+
+  useEffect(() => {
+    document.title = '데이터 정규화 | MINING CLOUD';
+  }, []);
 
   //@ api 통신
   const normalization = async e => {
@@ -175,24 +179,26 @@ const DataNormalization = () => {
             </button>
             <br />
             <DataUploadComp uploadFileName={uploadFileName} />
+            {msg === 'download' && (
+              <>
+                <h2 className='previewTitle'>Preview</h2>
+                <div className='previewTable'>
+                  <table>
+                    <thead>
+                      <tr>
+                        <th>1</th>
+                        {previewThead()}
+                      </tr>
+                    </thead>
+                    <tbody>{previewTbody()}</tbody>
+                  </table>
+                </div>
+                <div className='downloadBtnWrap'>
+                  <button onClick={() => download()}>다운로드</button>
+                </div>
+              </>
+            )}
           </div>
-          {msg === 'download' && (
-            <>
-              <h2 className='previewTitle'>Preview</h2>
-              <div className='previewTable'>
-                <table>
-                  <thead>
-                    <tr>
-                      <th>1</th>
-                      {previewThead()}
-                    </tr>
-                  </thead>
-                  <tbody>{previewTbody()}</tbody>
-                </table>
-              </div>
-              <button onClick={() => download()}>다운로드</button>
-            </>
-          )}
         </div>
         <Loading msg={msg} />
       </div>
