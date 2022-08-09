@@ -9,7 +9,7 @@ const SideBar = () => {
 
   // 사이드바가 아닌 다른 구역을 클릭했을 때 menuBtn을 false로 변경해 주는 코드
   const outClick = e => {
-    for (let p of e.path) {
+    for (let p of e.path || (e.composedPath && e.composedPath())) {
       if (p.className === 'side-bar true') return;
     }
     window.removeEventListener('click', outClick);

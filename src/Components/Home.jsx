@@ -46,7 +46,7 @@ const Home = () => {
                   <img src={icon03} alt='AI 학습용 데이터셋 생성 아이콘' />
                 </figure>
               </div>
-              <p>Data Partitioning</p>
+              <p>Data Balancing & Partitioning</p>
             </div>
             <div className='linkBox'>
               <Link to='/training' className='medium'>
@@ -57,7 +57,7 @@ const Home = () => {
                   <img src={icon04} alt='모델 학습 및 검증 아이콘' />
                 </figure>
               </div>
-              <p>LR, DT, SVM, DNN, RF, XG</p>
+              <p>LR, DT, SVM, DNN, RF, XGBoost</p>
             </div>
           </div>
         </div>

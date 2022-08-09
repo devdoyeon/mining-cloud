@@ -45,7 +45,7 @@ const FeatureMap = () => {
             />
             {/* <input type="file" id="fileUpload" onChange={(e)=>imgPreview(e.target.files,setUploadImg,setUploadImgName)} accept="image/*" multiple/> */}
             <button onClick={e => makeFeatureMap(e.target)}>
-              Partitioning
+              Balancing & Partitioning
             </button>
             <br />
             <DataUploadComp {...uploadFileData} />

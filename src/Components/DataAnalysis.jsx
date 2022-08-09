@@ -4,7 +4,6 @@ import Loading from 'Components/Loading';
 import Header from './Common/Header';
 import SideBar from './Common/SideBar';
 import DataUploadComp from './Common/DataUploadComp';
-import Correlation from './Function/Analysis/Correlation';
 
 const DataAnalysis = () => {
   const [uploadFile, setUploadFile] = useState('');
@@ -56,11 +55,9 @@ const DataAnalysis = () => {
               CART분석
             </button>
             <br />
-            <DataUploadComp {...uploadFileData} />
+            <DataUploadComp uploadFileName={uploadFileName} />
           </div>
-          <div className='container'>
-            {tab === '상관분석' && <Correlation />}
-          </div>
+            {/* {tab === '상관분석' && <Correlation />} */}
         </div>
         <Loading msg={msg} />
       </div>

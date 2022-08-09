@@ -99,6 +99,35 @@ input::placeholder {
         flex-flow: column;
       }
     }
+    .previewTitle {
+      margin-top: 20px;
+      width: 100%;
+      font-size: 18px;
+      margin-bottom: 5px;
+    }
+    .previewTable {
+      width: fit-content;
+      max-width: 100%;
+      max-height: 500px;
+      overflow-x: auto;
+      border: 1px solid rgb(188, 188, 188);
+      > table {
+        .gray {
+          background-color: rgb(220, 220, 220);
+        }
+        td, th {
+          border: 1px solid rgb(188, 188, 188);
+          white-space: pre;
+          padding: 7px;
+          text-align: center;
+          &:first-child {
+            background-color: gray;
+            font-weight: bolder;
+            color: white;
+          }
+        }
+      }
+    }
   }
 
   h3 {
@@ -109,6 +138,7 @@ input::placeholder {
 
   hr {
     width: 100%;
+    color: white;
   }
 
   input[type='file'] {
@@ -158,33 +188,6 @@ input::placeholder {
         padding: 0 20px;
       }
     }
-
-    // table {
-
-    //     width:100%;margin: 10px 0 30px;border: 1px solid var(--gray04);text-align:center;vertical-align:middle;
-
-    //     tr {
-
-    //         border-bottom: 1px solid var(--gray04);
-
-    //         &:last-child { border-bottom: none; }
-
-    //     }
-
-    //     th { padding:10px 0;background-color: var(--background-color); }
-
-    //     td {
-
-    //         padding: 10px 0;
-
-    //         &.no-data-col { padding: 50px 0;text-align: center; }
-
-    //     }
-
-    // }
-
-    // .upload-img { width: 100px;height: 100px;object-fit: cover; }
-    
   }
 }
 
@@ -501,6 +504,29 @@ header {
 }
 //~~~~~~~~~~~~~~~~~~mobile responsive~~~~~~~~~~~~~~~~~~~
 @include mobile {
+  .content-container {
+    .content-wrap > div {
+      > label {
+        margin-top: 10px;
+        display: block;
+        width: fit-content;
+      }
+      > button {
+        font-size: 14px;
+        &:first-of-type {
+          margin-left: 0;
+        }
+      }
+      .outputWrap > .row {
+        span {
+          width: 80px;
+        }
+        p {
+          font-size: 14px;
+        }
+      }
+    }
+  }
   // 모바일부터 폴드까지 사이드바 열었을 때 full로 채워짐
   .side-bar {
     left: -100vw;
@@ -517,7 +543,7 @@ header {
   .true {
     transform: translateX(100%);
   }
-  
+
   // Home 요소들 세로 정렬
   .dashboard-home {
     h2 {
@@ -544,8 +570,31 @@ header {
   .loading-home {
     img {
       position: absolute;
-      width: 30px;
-      right: calc(50% - 100px);
+      width: 70px;
+      bottom: calc(50% - 100px);
+    }
+  }
+}
+
+//~~~~~~~~~~~~~~~~~~fold responsive~~~~~~~~~~~~~~~~~~~
+@include fold {
+  .content-container {
+    .content-wrap > div {
+      > button {
+        font-size: 14px;
+        &:first-of-type {
+          margin-left: 0;
+        }
+      }
+      .outputWrap > .row {
+        span {
+          width: 70px;
+          font-size: 14px;
+        }
+        p {
+          font-size: 13px;
+        }
+      }
     }
   }
 }

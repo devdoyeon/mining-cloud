@@ -1,5 +1,4 @@
 import loadingImg from 'image/loading.gif';
-import { download } from 'js/common';
 
 const Loading = ({ msg }) => {
   return (
