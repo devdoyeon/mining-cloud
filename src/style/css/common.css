@@ -311,7 +311,6 @@ header a {
   color: var(--main-color);
   font-weight: bolder;
 }
-
 .side-bar.true {
   transform: translateX(300px);
   transition: all 0.3s;
@@ -377,6 +376,9 @@ header a {
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  height: -webkit-fit-content;
+  height: -moz-fit-content;
+  height: fit-content;
   width: 100%;
   padding: 40px 0;
   background-color: var(--white);
@@ -391,7 +393,7 @@ header a {
 }
 .dashboard-home .row > div a span {
   display: inline-block;
-  padding: 10px;
+  padding: 15px;
 }
 .dashboard-home .row > div a p {
   width: 100%;
@@ -489,7 +491,6 @@ header a {
   }
   .dashboard-home .row > div {
     width: 350px;
-    height: 320px;
     text-align: center;
     margin: 10px;
   }

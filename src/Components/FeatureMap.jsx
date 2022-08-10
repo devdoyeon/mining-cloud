@@ -17,7 +17,7 @@ const FeatureMap = () => {
 
   useEffect(() => { document.title = "AI 학습용 데이터셋 생성 | MINING CLOUD" }, [])
 
-  //이미지 피처맵 api 요청
+  //피처맵 api 요청
   const featureMap = async e => {};
 
   return (
