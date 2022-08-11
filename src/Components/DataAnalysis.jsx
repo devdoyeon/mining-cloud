@@ -1,18 +1,20 @@
 import { useState, useEffect } from 'react';
 import { fileSetting, startFn } from 'js/common';
-import Loading from 'Components/Loading';
+import Loading from 'Components/Common/Loading';
 import Header from './Common/Header';
 import SideBar from './Common/SideBar';
 import DataUploadComp from './Common/DataUploadComp';
 
 const DataAnalysis = () => {
-  const [uploadFile, setUploadFile] = useState('');
-  const [uploadFileName, setUploadFileName] = useState('');
+  const [fileInfo, setFileInfo] = useState({
+    file: '',
+    name: '',
+  });
   const [msg, setMsg] = useState('');
   const [tab, setTab] = useState('');
 
-  const fileSettingState = { setUploadFile, setUploadFileName, setTab, setMsg };
-  const startParamSet = { msg, setMsg, setTab, uploadFile };
+  const fileSettingState = { setFileInfo, setTab, setMsg };
+  const startParamSet = { msg, setMsg, setTab, fileInfo };
 
   useEffect(() => {
     document.title = '변수 분석 및 선택 | MINING CLOUD';
@@ -55,7 +57,7 @@ const DataAnalysis = () => {
               CART분석
             </button>
             <br />
-            <DataUploadComp uploadFileName={uploadFileName} />
+            <DataUploadComp fileName={fileInfo.name} />
           </div>
           {/* {msg === 'download'} */}
         </div>

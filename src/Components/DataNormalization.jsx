@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { fileSetting, startFn } from 'js/common';
-import Loading from 'Components/Loading';
+import Loading from 'Components/Common/Loading';
 import Header from './Common/Header';
 import SideBar from './Common/SideBar';
 import DataUploadComp from './Common/DataUploadComp';
@@ -8,26 +8,30 @@ import { normalizationAPI } from 'js/solutionApi';
 import { errorList } from 'js/array';
 
 const DataNormalization = () => {
-  const [uploadFile, setUploadFile] = useState('');
-  const [uploadFileName, setUploadFileName] = useState('');
+  const [fileInfo, setFileInfo] = useState({
+    file: '',
+    name: '',
+  });
+  const [table, setTable] = useState({
+    tBody: [],
+    tHead: [],
+  });
   const [msg, setMsg] = useState('');
   const [tab, setTab] = useState('');
   const [url, setUrl] = useState('');
-  const [tBody, setTbody] = useState([]);
-  const [thead, setThead] = useState([]);
 
-  const fileSettingState = { setUploadFile, setUploadFileName, setTab, setMsg };
-  const startParamSet = { msg, setMsg, setTab, uploadFile };
+  const fileSettingState = { setFileInfo, setTab, setMsg };
+  const startParamSet = { msg, setMsg, setTab, fileInfo };
 
   useEffect(() => {
     document.title = '데이터 정규화 | MINING CLOUD';
   }, []);
 
-  //@ api 통신
+  //! Main Function
   const normalization = async e => {
     if (startFn(e, startParamSet)) {
       const result = await normalizationAPI(
-        uploadFile,
+        fileInfo.file,
         e.textContent.replaceAll('-', '').toLowerCase()
       );
       if (typeof result === 'object') {
@@ -36,6 +40,7 @@ const DataNormalization = () => {
         }); // 변환한 문자열을 csv 파일화
         setUrl(window.URL.createObjectURL(blob)); // 위에서 만들어진 csv 파일을 다운로드 받을 수 있는 url 생성
         setMsg('download'); // 다운로드 버튼 표시
+
         //& preview table 렌더하기 위한 데이터셋 작업
         const arr = result.data.split('\n'); // 줄바꿈 기호 기준 배열 생성
         const previewArr = [];
@@ -44,14 +49,18 @@ const DataNormalization = () => {
         }
         previewArr.pop(); // 마지막 인덱스는 빈 문자열로 나오므로 제거
         if (previewArr.length <= 10) {
-          setThead(previewArr[0]);
+          //@ length가 10 이하일 경우 자르는 기능 없이 모두 렌더
           const bodyArr = previewArr.slice(1);
           bodyArr.forEach(arr => {
             const idx = previewArr.indexOf(arr) + 1;
             arr.unshift(idx);
           });
-          setTbody(previewArr.slice(1));
+          setTable({
+            tBody: previewArr.slice(1),
+            tHead: previewArr[0],
+          });
         } else {
+          //@ 아닐 경우 자르는 기능 포함하여 렌더
           const length = previewArr[0].length + 1; // 중간에 끊기 위해 길이 구한 뒤
           const middle = new Array(length).fill('...'); // 길이만큼 ...으로 채워주고
           const first = []; // 미리보기로 보여줄 데이터
@@ -74,16 +83,18 @@ const DataNormalization = () => {
             numArr.unshift(idx); // column number
             last.push(numArr);
           });
-          setTbody([...first, middle, ...last]); //tbody
-          setThead(previewArr[0]); //thead
+          setTable({
+            tBody: [...first, middle, ...last],
+            tHead: previewArr[0],
+          });
         }
       } else return alert(errorList[result]);
     } else return;
   };
 
-  //@ Render Preview Table Head
+  //# Render Preview Table Head
   const previewThead = () => {
-    return thead.reduce((acc, item) => {
+    return table.tHead.reduce((acc, item) => {
       return (
         <>
           {acc}
@@ -93,14 +104,14 @@ const DataNormalization = () => {
     }, <></>);
   };
 
-  //@ Render Preview Table Body
+  //# Render Preview Table Body
   const previewTbody = () => {
-    const length = thead.length + 1;
+    const length = table.tHead.length + 1;
     const numArr = [];
     for (let i = 0; i < length; i++) {
       numArr.push(i);
     }
-    return tBody.reduce((acc, item, idx) => {
+    return table.tBody.reduce((acc, item, idx) => {
       const data = numArr.reduce((acc, num) => {
         return (
           <>
@@ -118,10 +129,10 @@ const DataNormalization = () => {
     }, <></>);
   };
 
-  //@ 다운로드 버튼 클릭 시 실행되는 함수
+  //# Download Function
   const download = () => {
-    const ext = uploadFileName.split('.').pop(); // 확장자
-    const fileName = uploadFileName.split('.')[0]; // 파일 이름
+    const ext = fileInfo.name.split('.').pop(); // 확장자
+    const fileName = fileInfo.name.split('.')[0]; // 파일 이름
     // 임시로 anchor을 만들어서 실행시켜 주고 없애줌
     const link = document.createElement('a');
     document.body.appendChild(link);
@@ -165,7 +176,7 @@ const DataNormalization = () => {
               Quartile
             </button>
             <br />
-            <DataUploadComp uploadFileName={uploadFileName} />
+            <DataUploadComp fileName={fileInfo.name} />
             {msg === 'download' && (
               <>
                 <h2 className='previewTitle'>Preview</h2>

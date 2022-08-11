@@ -1,13 +1,15 @@
 import { useState, useEffect } from 'react';
 import { fileSetting, startFn } from 'js/common';
-import Loading from 'Components/Loading';
+import Loading from 'Components/Common/Loading';
 import Header from './Common/Header';
 import SideBar from './Common/SideBar';
 import DataUploadComp from './Common/DataUploadComp';
 
 const ModelTraining = () => {
-  const [uploadFile, setUploadFile] = useState('');
-  const [uploadFileName, setUploadFileName] = useState('');
+  const [fileInfo, setFileInfo] = useState({
+    file: '',
+    name: ''
+  })
   const [msg, setMsg] = useState('');
   const [tab, setTab] = useState('');
 
@@ -15,8 +17,8 @@ const ModelTraining = () => {
     document.title = '모델 학습 및 검증 | MINING CLOUD';
   }, []);
 
-  const fileSettingState = { setUploadFile, setUploadFileName, setTab, setMsg };
-  const startParamSet = { msg, setMsg, setTab, uploadFile };
+  const fileSettingState = { setFileInfo, setTab, setMsg };
+  const startParamSet = { msg, setMsg, setTab, fileInfo };
 
   const training = async e => {
     if (startFn(e, startParamSet)) {
@@ -70,7 +72,7 @@ const ModelTraining = () => {
               XGBoost
             </button>
             <br />
-            <DataUploadComp uploadFileName={uploadFileName} />
+            <DataUploadComp fileName={fileInfo.name} />
           </div>
         </div>
         <Loading msg={msg} />

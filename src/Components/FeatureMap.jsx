@@ -2,19 +2,21 @@ import { useState, useEffect } from 'react';
 import { fileSetting, startFn } from 'js/common';
 import { featureMapAPI } from 'js/solutionApi';
 import { errorList } from 'js/array';
-import Loading from 'Components/Loading';
+import Loading from 'Components/Common/Loading';
 import Header from './Common/Header';
 import SideBar from './Common/SideBar';
 import DataUploadComp from './Common/DataUploadComp';
 
 const FeatureMap = () => {
-  const [uploadFile, setUploadFile] = useState('');
-  const [uploadFileName, setUploadFileName] = useState('');
+  const [fileInfo, setFileInfo] = useState({
+    file: '',
+    name: ''
+  })
   const [msg, setMsg] = useState('');
   const [tab, setTab] = useState('');
 
-  const fileSettingState = { setUploadFile, setUploadFileName, setTab, setMsg };
-  const startParamSet = { msg, setMsg, setTab, uploadFile };
+  const fileSettingState = { setFileInfo, setTab, setMsg };
+  const startParamSet = { msg, setMsg, setTab, fileInfo };
 
   useEffect(() => {
     document.title = 'AI 학습용 데이터셋 생성 | MINING CLOUD';
@@ -24,7 +26,7 @@ const FeatureMap = () => {
   const featureMap = async e => {
     if (startFn(e, startParamSet)) {
       const result = await featureMapAPI(
-        uploadFile,
+        fileInfo.file,
         e.textContent.toLowerCase()
       );
       if (typeof result === 'object') {
@@ -60,7 +62,7 @@ const FeatureMap = () => {
               Partitioning
             </button>
             <br />
-            <DataUploadComp uploadFileName={uploadFileName} />
+            <DataUploadComp fileName={fileInfo.name} />
           </div>
         </div>
         <Loading msg={msg} />

@@ -1,13 +1,13 @@
 import { memo } from 'react';
 
-const DataUploadComp = ({ uploadFileName }) => {
+const DataUploadComp = ({ fileName }) => {
   return (
     <div className='outputWrap'>
       <h4>Uploaded Data</h4>
       <div className='row'>
         <span className='medium'>name</span>
         <p>
-          {uploadFileName === '' ? '파일을 업로드해 주세요.' : uploadFileName}
+          {fileName === '' ? '파일을 업로드해 주세요.' : fileName}
         </p>
       </div>
     </div>

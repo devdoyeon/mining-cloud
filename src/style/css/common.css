@@ -3,7 +3,7 @@
 html,
 body,
 * {
-  font-family: "S-CoreDream-4Regular", "맑은고딕", "sans-serif";
+  font-family: 'S-CoreDream-4Regular', '맑은고딕', 'sans-serif';
   color: #333;
   font-size: 16px;
 }
@@ -23,15 +23,15 @@ body,
 }
 
 .bold {
-  font-family: "S-CoreDream-6Bold", "맑은고딕", "sans-serif";
+  font-family: 'S-CoreDream-6Bold', '맑은고딕', 'sans-serif';
 }
 
 .medium {
-  font-family: "S-CoreDream-5Medium", "맑은고딕", "sans-serif";
+  font-family: 'S-CoreDream-5Medium', '맑은고딕', 'sans-serif';
 }
 
 .regular {
-  font-family: "S-CoreDream-4Regular", "맑은고딕", "sans-serif";
+  font-family: 'S-CoreDream-4Regular', '맑은고딕', 'sans-serif';
 }
 
 .content-container {
@@ -144,7 +144,7 @@ body,
 .content-container .content-wrap .previewTable > table td:first-child,
 .content-container .content-wrap .previewTable > table th:first-child {
   background-color: gray;
-  font-family: "S-CoreDream-6Bold", "맑은고딕", "sans-serif";
+  font-family: 'S-CoreDream-6Bold', '맑은고딕', 'sans-serif';
   color: white;
 }
 .content-container .content-wrap .downloadBtnWrap {
@@ -163,7 +163,7 @@ body,
   width: 100%;
   color: white;
 }
-.content-container input[type=file] {
+.content-container input[type='file'] {
   display: none;
 }
 .content-container label {
@@ -221,7 +221,7 @@ header {
   box-sizing: border-box;
 }
 header a {
-  font-family: "S-CoreDream-6Bold", "맑은고딕", "sans-serif";
+  font-family: 'S-CoreDream-6Bold', '맑은고딕', 'sans-serif';
   color: #ffffff;
   font-size: 36px;
 }
@@ -288,7 +288,7 @@ header a {
 }
 .side-bar .active a {
   color: #79db56;
-  font-family: "S-CoreDream-6Bold", "맑은고딕", "sans-serif";
+  font-family: 'S-CoreDream-6Bold', '맑은고딕', 'sans-serif';
 }
 .side-bar.true {
   transform: translateX(300px);
@@ -509,7 +509,7 @@ header a {
     font-size: 14px;
   }
   .content-container .content-wrap > div .previewTable > table td,
-.content-container .content-wrap > div .previewTable > table th {
+  .content-container .content-wrap > div .previewTable > table th {
     padding: 4px;
     font-size: 14px;
   }
