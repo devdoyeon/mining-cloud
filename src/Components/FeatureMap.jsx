@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
-
-import { fileSetting } from 'js/common';
-
+import { fileSetting, startFn } from 'js/common';
+import { featureMapAPI } from 'js/solutionApi';
+import { errorList } from 'js/array';
 import Loading from 'Components/Loading';
 import Header from './Common/Header';
 import SideBar from './Common/SideBar';
@@ -14,11 +14,24 @@ const FeatureMap = () => {
   const [tab, setTab] = useState('');
 
   const fileSettingState = { setUploadFile, setUploadFileName, setTab, setMsg };
+  const startParamSet = { msg, setMsg, setTab, uploadFile };
 
-  useEffect(() => { document.title = "AI 학습용 데이터셋 생성 | MINING CLOUD" }, [])
+  useEffect(() => {
+    document.title = 'AI 학습용 데이터셋 생성 | MINING CLOUD';
+  }, []);
 
   //피처맵 api 요청
-  const featureMap = async e => {};
+  const featureMap = async e => {
+    if (startFn(e, startParamSet)) {
+      const result = await featureMapAPI(
+        uploadFile,
+        e.textContent.toLowerCase()
+      );
+      if (typeof result === 'object') {
+        // 여기부터 작성
+      } else return alert(errorList[result]);
+    } else return;
+  };
 
   return (
     <section className='content-container'>
@@ -33,13 +46,18 @@ const FeatureMap = () => {
             <input
               type='file'
               id='fileUpload'
-              onChange={e =>
-                fileSetting(e, fileSettingState)
-              }
+              onChange={e => fileSetting(e, fileSettingState)}
               accept='.csv'
             />
-            <button onClick={e => featureMap(e.target)}>
-              Balancing & Partitioning
+            <button
+              onClick={e => featureMap(e.target)}
+              className={tab === 'Balancing' ? 'active' : ''}>
+              Balancing
+            </button>
+            <button
+              onClick={e => featureMap(e.target)}
+              className={tab === 'Partitioning' ? 'active' : ''}>
+              Partitioning
             </button>
             <br />
             <DataUploadComp uploadFileName={uploadFileName} />

@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { fileSetting } from 'js/common';
+import { fileSetting, startFn } from 'js/common';
 import Loading from 'Components/Loading';
 import Header from './Common/Header';
 import SideBar from './Common/SideBar';
@@ -12,10 +12,16 @@ const DataAnalysis = () => {
   const [tab, setTab] = useState('');
 
   const fileSettingState = { setUploadFile, setUploadFileName, setTab, setMsg };
+  const startParamSet = { msg, setMsg, setTab, uploadFile };
 
-  useEffect(() => { document.title = "변수 분석 및 선택 | MINING CLOUD" }, [])
+  useEffect(() => {
+    document.title = '변수 분석 및 선택 | MINING CLOUD';
+  }, []);
 
-  const analysis = async e => {};
+  const analysis = async e => {
+    if (startFn(e, startParamSet)) {
+    } else return;
+  };
 
   return (
     <section className='content-container'>
@@ -51,7 +57,7 @@ const DataAnalysis = () => {
             <br />
             <DataUploadComp uploadFileName={uploadFileName} />
           </div>
-        {/* {msg === 'download'} */}
+          {/* {msg === 'download'} */}
         </div>
         <Loading msg={msg} />
       </div>

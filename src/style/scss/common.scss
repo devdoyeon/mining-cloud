@@ -4,8 +4,8 @@
 html,
 body,
 * {
-  @extend .regular;
-  color: var(--font-color);
+  font-family: $regularFont;
+  color: $fontColor;
   font-size: 16px;
 }
 .row {
@@ -15,16 +15,13 @@ body,
   @include flex-style($flexDirection: column);
 }
 .bold {
-  font-family: var(--bold);
+  font-family: $boldFont;
 }
 .medium {
-  font-family: var(--medium);
+  font-family: $mediumFont;
 }
 .regular {
-  font-family: var(--regular);
-}
-input::placeholder {
-  @extend .regular;
+  font-family: $regularFont;
 }
 .content-container {
   @include flex-style($justifyVal: flex-start);
@@ -89,9 +86,9 @@ input::placeholder {
       .uploadBtn {
         display: inline-block;
         padding: 10px 20px;
-        background-color: var(--gray02);
+        background-color: $gray02;
         border-radius: 5px;
-        color: var(--white);
+        color: $white;
         cursor: pointer;
       }
       .download {
@@ -123,7 +120,7 @@ input::placeholder {
           text-align: center;
           &:first-child {
             background-color: gray;
-            font-weight: bolder;
+            font-family: $boldFont;
             color: white;
           }
         }
@@ -155,22 +152,22 @@ input::placeholder {
   label {
     display: inline-block;
     padding: 10px 20px;
-    background-color: var(--gray02);
+    background-color: $gray02;
     border-radius: 5px;
-    color: var(--white);
+    color: $white;
     cursor: pointer;
   }
   button {
     margin-top: 10px;
     margin-left: 5px;
-    background-color: var(--gray04);
+    background-color: $gray04;
     padding: 10px 20px;
     border-radius: 5px;
     cursor: pointer;
 
     &.active {
-      background-color: var(--active);
-      color: var(--white);
+      background-color: $active;
+      color: $white;
     }
   }
 
@@ -181,13 +178,13 @@ input::placeholder {
       justify-content: flex-start;
       height: 50px;
       margin-top: 10px;
-      border: 1px solid var(--gray04);
+      border: 1px solid $gray04;
 
       span {
         display: inline-block;
         width: 100px;
         height: 100%;
-        background-color: var(--background-color);
+        background-color: $bgColor;
         text-align: center;
         line-height: 50px;
       }
@@ -209,12 +206,12 @@ header {
   width: 100%;
   height: 50px;
   padding: 0 100px;
-  background-color: var(--main-color);
+  background-color: $mainColor;
   box-sizing: border-box;
 
   a {
-    font-weight: bold;
-    color: var(--white);
+    font-family: $boldFont;
+    color: $white;
     font-size: 36px;
   }
 }
@@ -222,27 +219,29 @@ header {
 /* side-bar | 사이드바 */
 .side-bar {
   @include position-style(fixed, $zIndex: 10);
+  @include flex-style(column);
   width: 300px;
   left: -300px;
   min-height: 100vh;
-  background-color: var(--side-bar-color);
+  background-color: $sideBarColor;
   transition: all 0.3s;
 
   .inner {
-    justify-content: flex-start;
     width: 100%;
     height: 100%;
   }
 
   .top-area {
+    position: absolute;
+    top: 0;
     width: 100%;
     height: 50px;
-    background-color: var(--sub-color);
+    background-color: $subColor;
   }
 
   nav {
     width: 100%;
-    margin: 180px 0 80px 0;
+    margin-bottom: 10vh;
     padding: 0 50px;
     box-sizing: border-box;
 
@@ -253,7 +252,7 @@ header {
 
     li {
       width: 100%;
-      border-top: 1px solid var(--white);
+      border-top: 1px solid $white;
 
       &:first-child {
         border-top: none;
@@ -265,25 +264,25 @@ header {
       display: inline-block;
       padding: 30px 0;
       box-sizing: border-box;
-      color: var(--white);
+      color: $white;
       cursor: pointer;
       font-size: 1em;
 
       &:hover {
-        color: var(--main-color);
+        color: $mainColor;
       }
     }
   }
 
   footer p {
-    color: var(--white);
+    color: $white;
   }
 
   // 현재 페이지 나타내는 클래스
   .active {
     a {
-      color: var(--main-color);
-      font-weight: bolder;
+      color: $mainColor;
+      font-family: $boldFont;
     }
   }
   &.true {
@@ -334,7 +333,7 @@ header {
       width: 580px;
       margin-right: 10px;
       margin-bottom: 10px;
-      border: 1px solid var(--gray04);
+      border: 1px solid $gray04;
       box-sizing: border-box;
       cursor: pointer;
       box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.2);
@@ -346,22 +345,22 @@ header {
       a {
         display: inline-block;
         width: 100%;
-        background-color: var(--background-color);
-        color: var(--font-color);
+        background-color: $bgColor;
+        color: $fontColor;
         box-sizing: border-box;
         > div {
           @include flex-style(column);
           height: fit-content;
           width: 100%;
           padding: 40px 0;
-          background-color: var(--white);
-          border-top: 1px solid var(--gray04);
+          background-color: $white;
+          border-top: 1px solid $gray04;
 
           figure {
             width: 150px;
             height: 150px;
             border-radius: 50%;
-            background-color: var(--background-color);
+            background-color: $bgColor;
             box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.2);
           }
         }
@@ -372,13 +371,13 @@ header {
         p {
           width: 100%;
           padding: 15px 0;
-          border-top: 1px solid var(--gray04);
+          border-top: 1px solid $gray04;
           text-align: center;
-          color: var(--gray02);
+          color: $gray02;
           font-size: 14px;
         }
         &:hover span {
-          color: var(--main-color);
+          color: $mainColor;
         }
       }
     }
@@ -396,9 +395,9 @@ header {
   }
 
   a {
-    background-color: var(--sub-color);
+    background-color: $subColor;
     padding: 10px 20px;
-    color: var(--white);
+    color: $white;
     border-radius: 5px;
   }
 }
@@ -478,6 +477,9 @@ header {
 }
 //~~~~~~~~~~~~~~~~~~tablet responsive~~~~~~~~~~~~~~~~~~~
 @include tablet {
+  .content-wrap {
+    margin-top: 120px !important;
+  }
   .dashboard-home {
     .row {
       > div {
@@ -493,6 +495,7 @@ header {
 @include mobile {
   .content-container {
     .content-wrap {
+      margin-top: 60px;
       > div {
         > label {
           margin-top: 10px;
@@ -527,14 +530,6 @@ header {
   .side-bar {
     left: -100vw;
     width: 100vw;
-
-    nav {
-      margin: 30px 0;
-    }
-
-    footer p {
-      color: var(--white);
-    }
     &.true {
       transform: translateX(100%);
     }

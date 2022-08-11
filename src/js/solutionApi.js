@@ -27,30 +27,16 @@ export const normalizationAPI = async (file, param) => {
   }
 };
 
-// Dummy Data
-export const viewDataAPI = async (sc = 0) => {
-  try {
-    return await axios.post(`/api/viewdata`);
-  } catch (error) {
-    return await errorHandling(error);
-  }
-};
-
-// cycle = 3~23
-export const heatMapAPI = async cycle => {
-  try {
-    return await axios.post(`/api/heatmap?cycle=${cycle}`);
-  } catch (error) {
-    return await errorHandling(error);
-  }
-};
-
-export const uploadAPI = async file => {
+export const featureMapAPI = async (file, param) => {
   try {
     const headers = {
       'Content-Type': 'multipart/form-data',
     };
-    return await axios.post(`/api/upload`, { file }, { headers });
+    return await axios.post(
+      `/api/balancing/${param === 'balancing' ? 'fiftyfifty' : param}`,
+      { file },
+      { headers }
+    );
   } catch (error) {
     return await errorHandling(error);
   }

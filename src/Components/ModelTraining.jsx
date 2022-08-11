@@ -1,7 +1,5 @@
 import { useState, useEffect } from 'react';
-
-import { fileSetting } from 'js/common';
-
+import { fileSetting, startFn } from 'js/common';
 import Loading from 'Components/Loading';
 import Header from './Common/Header';
 import SideBar from './Common/SideBar';
@@ -13,20 +11,16 @@ const ModelTraining = () => {
   const [msg, setMsg] = useState('');
   const [tab, setTab] = useState('');
 
-  useEffect(() => { document.title = "모델 학습 및 검증 | MINING CLOUD" }, [])
+  useEffect(() => {
+    document.title = '모델 학습 및 검증 | MINING CLOUD';
+  }, []);
+
+  const fileSettingState = { setUploadFile, setUploadFileName, setTab, setMsg };
+  const startParamSet = { msg, setMsg, setTab, uploadFile };
 
   const training = async e => {
-    if (msg === 'loading') {
-      alert('다른 작업을 수행하는 중에는 버튼을 클릭할 수 없습니다.');
-      return;
-    }
-    setTab(e.textContent);
-  };
-  const fileSettingState = {
-    setUploadFile,
-    setUploadFileName,
-    setTab,
-    setMsg,
+    if (startFn(e, startParamSet)) {
+    } else return;
   };
 
   return (

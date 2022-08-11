@@ -43,7 +43,7 @@ const Home = () => {
               </Link>
             </div>
             <div className='linkBox'>
-              <Link to='/featuremap' className='medium'>
+              <Link to='/featureMap' className='medium'>
                 <span>AI 학습용 데이터셋 생성</span>
                 <div>
                   <figure className='row'>

@@ -35,8 +35,8 @@ const SideBar = () => {
               <li className={location === '/analysis' ? 'active' : ''}>
                 <Link to='/analysis'>변수 분석 및 선택</Link>
               </li>
-              <li className={location === '/featuremap' ? 'active' : ''}>
-                <Link to='/featuremap'>AI 학습용 데이터셋 생성</Link>
+              <li className={location === '/featureMap' ? 'active' : ''}>
+                <Link to='/featureMap'>AI 학습용 데이터셋 생성</Link>
               </li>
               <li className={location === '/training' ? 'active' : ''}>
                 <Link to='/training'>모델 학습 및 검증</Link>

@@ -12,7 +12,7 @@ function App() {
       <Route path='/' element={<Home />} />
       <Route path='/normalization' element={<DataNormalization />} />
       <Route path='/analysis' element={<DataAnalysis />} />
-      <Route path='/featuremap' element={<FeatureMap />} />
+      <Route path='/featureMap' element={<FeatureMap />} />
       <Route path='/training' element={<ModelTraining />} />
     </Routes>
   );
