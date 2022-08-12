@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { fileSetting, startFn } from 'js/common';
+import { fileSetting, startFn, download } from 'js/common';
 import Loading from 'Components/Common/Loading';
 import Header from './Common/Header';
 import SideBar from './Common/SideBar';
@@ -8,20 +8,22 @@ import DataUploadComp from './Common/DataUploadComp';
 const ModelTraining = () => {
   const [fileInfo, setFileInfo] = useState({
     file: '',
-    name: ''
-  })
+    name: '',
+  });
   const [msg, setMsg] = useState('');
   const [tab, setTab] = useState('');
+  const [url, setUrl] = useState('');
 
   useEffect(() => {
     document.title = '모델 학습 및 검증 | MINING CLOUD';
   }, []);
 
   const fileSettingState = { setFileInfo, setTab, setMsg };
-  const startParamSet = { msg, setMsg, setTab, fileInfo };
+  const startParamState = { msg, setMsg, setTab, fileInfo };
+  const downloadState = { fileInfo, url, tab }
 
   const training = async e => {
-    if (startFn(e, startParamSet)) {
+    if (startFn(e, startParamState)) {
     } else return;
   };
 
@@ -73,6 +75,13 @@ const ModelTraining = () => {
             </button>
             <br />
             <DataUploadComp fileName={fileInfo.name} />
+            {msg === 'download' && (
+              <div className='downloadBtnWrap'>
+                <button onClick={() => download(downloadState)}>
+                  다운로드
+                </button>
+              </div>
+            )}
           </div>
         </div>
         <Loading msg={msg} />

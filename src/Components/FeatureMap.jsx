@@ -1,5 +1,12 @@
 import { useState, useEffect } from 'react';
-import { fileSetting, startFn } from 'js/common';
+import {
+  fileSetting,
+  startFn,
+  download,
+  csvToTable,
+  previewThead,
+  previewTbody,
+} from 'js/common';
 import { featureMapAPI } from 'js/solutionApi';
 import { errorList } from 'js/array';
 import Loading from 'Components/Common/Loading';
@@ -10,13 +17,20 @@ import DataUploadComp from './Common/DataUploadComp';
 const FeatureMap = () => {
   const [fileInfo, setFileInfo] = useState({
     file: '',
-    name: ''
-  })
+    name: '',
+    ext: '',
+  });
+  const [table, setTable] = useState({
+    tBody: [],
+    tHead: [],
+  });
+  const [url, setUrl] = useState('');
   const [msg, setMsg] = useState('');
   const [tab, setTab] = useState('');
 
   const fileSettingState = { setFileInfo, setTab, setMsg };
-  const startParamSet = { msg, setMsg, setTab, fileInfo };
+  const startParamState = { msg, setMsg, setTab, fileInfo };
+  const downloadState = { fileInfo, url, tab };
 
   useEffect(() => {
     document.title = 'AI 학습용 데이터셋 생성 | MINING CLOUD';
@@ -24,13 +38,36 @@ const FeatureMap = () => {
 
   //피처맵 api 요청
   const featureMap = async e => {
-    if (startFn(e, startParamSet)) {
+    if (startFn(e, startParamState)) {
       const result = await featureMapAPI(
         fileInfo.file,
         e.textContent.toLowerCase()
       );
       if (typeof result === 'object') {
-        // 여기부터 작성
+        if (e.textContent === 'Balancing') {
+          setFileInfo(prev => {
+            const clone = { ...prev };
+            clone.ext = 'csv';
+            return clone;
+          });
+          const blob = new Blob([result.data], {
+            type: 'text/csv',
+          });
+          setUrl(window.URL.createObjectURL(blob));
+          setMsg('download');
+          csvToTable(result, setTable);
+        } else if (e.textContent === 'Partitioning') {
+          setFileInfo(prev => {
+            const clone = { ...prev };
+            clone.ext = 'zip';
+            return clone;
+          });
+          const blob = new Blob([result.data], {
+            type: 'application/octet-stream',
+          });
+          setUrl(window.URL.createObjectURL(blob));
+          setMsg('download');
+        }
       } else return alert(errorList[result]);
     } else return;
   };
@@ -63,6 +100,35 @@ const FeatureMap = () => {
             </button>
             <br />
             <DataUploadComp fileName={fileInfo.name} />
+            {tab === 'Balancing'
+              ? msg === 'download' && (
+                  <>
+                    <h2 className='previewTitle'>Preview</h2>
+                    <div className='previewTable'>
+                      <table>
+                        <thead>
+                          <tr>
+                            <th>1</th>
+                            {previewThead(table)}
+                          </tr>
+                        </thead>
+                        <tbody>{previewTbody(table)}</tbody>
+                      </table>
+                    </div>
+                    <div className='downloadBtnWrap'>
+                      <button onClick={() => download(downloadState)}>
+                        다운로드
+                      </button>
+                    </div>
+                  </>
+                )
+              : msg === 'download' && (
+                  <div className='downloadBtnWrap'>
+                    <button onClick={() => download(downloadState)}>
+                      다운로드
+                    </button>
+                  </div>
+                )}
           </div>
         </div>
         <Loading msg={msg} />

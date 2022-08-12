@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { fileSetting, startFn } from 'js/common';
+import { fileSetting, startFn, download } from 'js/common';
 import Loading from 'Components/Common/Loading';
 import Header from './Common/Header';
 import SideBar from './Common/SideBar';
@@ -12,16 +12,32 @@ const DataAnalysis = () => {
   });
   const [msg, setMsg] = useState('');
   const [tab, setTab] = useState('');
+  const [url, setUrl] = useState('');
 
   const fileSettingState = { setFileInfo, setTab, setMsg };
-  const startParamSet = { msg, setMsg, setTab, fileInfo };
+  const startParamState = { msg, setMsg, setTab, fileInfo };
+  const downloadState = { fileInfo, url, tab };
 
   useEffect(() => {
     document.title = '변수 분석 및 선택 | MINING CLOUD';
   }, []);
 
   const analysis = async e => {
-    if (startFn(e, startParamSet)) {
+    if (startFn(e, startParamState)) {
+      let param;
+      switch (e.textContent) {
+        case '상관분석':
+          param = 'correlation';
+          break;
+        case '교차분석':
+          param = 'crosstab';
+          break;
+        case 'CART분석':
+          param = 'cart';
+          break;
+        default:
+          param = '';
+      }
     } else return;
   };
 
@@ -58,8 +74,14 @@ const DataAnalysis = () => {
             </button>
             <br />
             <DataUploadComp fileName={fileInfo.name} />
+            {msg === 'download' && (
+              <div className='downloadBtnWrap'>
+                <button onClick={() => download(downloadState)}>
+                  다운로드
+                </button>
+              </div>
+            )}
           </div>
-          {/* {msg === 'download'} */}
         </div>
         <Loading msg={msg} />
       </div>
