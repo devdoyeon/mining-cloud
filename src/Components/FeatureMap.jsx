@@ -3,12 +3,12 @@ import {
   fileSetting,
   startFn,
   download,
-  csvToTable,
+  csv2table,
   previewThead,
   previewTbody,
+  errorHandler,
 } from 'js/common';
 import { featureMapAPI } from 'js/solutionApi';
-import { errorList } from 'js/array';
 import Loading from 'Components/Common/Loading';
 import Header from './Common/Header';
 import SideBar from './Common/SideBar';
@@ -18,7 +18,6 @@ const FeatureMap = () => {
   const [fileInfo, setFileInfo] = useState({
     file: '',
     name: '',
-    ext: '',
   });
   const [table, setTable] = useState({
     tBody: [],
@@ -45,30 +44,20 @@ const FeatureMap = () => {
       );
       if (typeof result === 'object') {
         if (e.textContent === 'Balancing') {
-          setFileInfo(prev => {
-            const clone = { ...prev };
-            clone.ext = 'csv';
-            return clone;
-          });
           const blob = new Blob([result.data], {
             type: 'text/csv',
           });
           setUrl(window.URL.createObjectURL(blob));
           setMsg('download');
-          csvToTable(result, setTable);
+          csv2table(result, setTable);
         } else if (e.textContent === 'Partitioning') {
-          setFileInfo(prev => {
-            const clone = { ...prev };
-            clone.ext = 'zip';
-            return clone;
-          });
           const blob = new Blob([result.data], {
             type: 'application/octet-stream',
           });
           setUrl(window.URL.createObjectURL(blob));
           setMsg('download');
         }
-      } else return alert(errorList[result]);
+      } else return errorHandler(result, fileSettingState);
     } else return;
   };
 

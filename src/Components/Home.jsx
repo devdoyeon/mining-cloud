@@ -1,5 +1,6 @@
 import { useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import icon00 from 'image/icon00.png';
 import icon01 from 'image/icon01.png';
 import icon02 from 'image/icon02.png';
 import icon03 from 'image/icon03.png';
@@ -20,6 +21,17 @@ const Home = () => {
         <div className='content-wrap'>
           <h2 className='bold'>MINING CLOUD DASHBOARD</h2>
           <div className='row'>
+            <div className='linkBox'>
+              <Link to='/preprocessing' className='medium'>
+                <span>데이터 전처리</span>
+                <div>
+                  <figure className='row'>
+                    <img src={icon00} alt='데이터 전처리 아이콘' />
+                  </figure>
+                </div>
+                <p>데이터 제거/삭제, 채우기/보간</p>
+              </Link>
+            </div>
             <div className='linkBox'>
               <Link to='/normalization' className='medium'>
                 <span>데이터 정규화</span>
@@ -42,6 +54,8 @@ const Home = () => {
                 <p>상관분석, 교차분석, CART 분석</p>
               </Link>
             </div>
+          </div>
+          <div className='row'>
             <div className='linkBox'>
               <Link to='/featureMap' className='medium'>
                 <span>AI 학습용 데이터셋 생성</span>

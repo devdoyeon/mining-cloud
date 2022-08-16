@@ -4,7 +4,7 @@ const headers = {
   'Content-Type': 'multipart/form-data',
 };
 
-const errorHandling = async error => {
+const errorMessage = async error => {
   const status = error?.response.status;
   switch (status) {
     case 500:
@@ -24,7 +24,7 @@ export const normalizationAPI = async (file, param) => {
       { headers }
     );
   } catch (error) {
-    return await errorHandling(error);
+    return await errorMessage(error);
   }
 };
 
@@ -51,7 +51,7 @@ export const featureMapAPI = async (file, param) => {
       query()
     );
   } catch (error) {
-    return await errorHandling(error);
+    return await errorMessage(error);
   }
 };
 
@@ -59,6 +59,6 @@ export const analysisAPI = async (file, param) => {
   try {
     return await axios.post(`/api/analysis/${param}`, { file }, { headers });
   } catch (error) {
-    return await errorHandling(error);
+    return await errorMessage(error);
   }
 };

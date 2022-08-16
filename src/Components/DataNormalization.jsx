@@ -3,16 +3,16 @@ import {
   fileSetting,
   startFn,
   download,
-  csvToTable,
+  csv2table,
   previewThead,
   previewTbody,
+  errorHandler,
 } from 'js/common';
 import Loading from 'Components/Common/Loading';
 import Header from './Common/Header';
 import SideBar from './Common/SideBar';
 import DataUploadComp from './Common/DataUploadComp';
 import { normalizationAPI } from 'js/solutionApi';
-import { errorList } from 'js/array';
 
 const DataNormalization = () => {
   const [fileInfo, setFileInfo] = useState({
@@ -49,12 +49,8 @@ const DataNormalization = () => {
         }); // 변환한 문자열을 csv 파일화
         setUrl(window.URL.createObjectURL(blob)); // 위에서 만들어진 csv 파일을 다운로드 받을 수 있는 url 생성
         setMsg('download'); // 다운로드 버튼 표시
-        csvToTable(result, setTable);
-      } else {
-        setMsg('')
-        alert(errorList[result])
-        return;
-      };
+        csv2table(result, setTable);
+      } else return errorHandler(result, fileSettingState);
     } else return;
   };
 
@@ -100,17 +96,19 @@ const DataNormalization = () => {
             <DataUploadComp fileName={fileInfo.name} />
             {msg === 'download' && (
               <>
+                <div className='wrap'>
                 <h2 className='previewTitle'>Preview</h2>
-                <div className='previewTable'>
-                  <table>
-                    <thead>
-                      <tr>
-                        <th>1</th>
-                        {previewThead(table)}
-                      </tr>
-                    </thead>
-                    <tbody>{previewTbody(table)}</tbody>
-                  </table>
+                  <div className='previewTable'>
+                    <table>
+                      <thead>
+                        <tr>
+                          <th>1</th>
+                          {previewThead(table)}
+                        </tr>
+                      </thead>
+                      <tbody>{previewTbody(table)}</tbody>
+                    </table>
+                  </div>
                 </div>
                 <div className='downloadBtnWrap'>
                   <button onClick={() => download(downloadState)}>

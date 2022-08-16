@@ -26,8 +26,11 @@ const SideBar = () => {
           <div className='top-area'></div>
           <nav>
             <ul className='column'>
-              <li className={location === '/' ? 'active' : ''}>
-                <Link to='/'>MINING CLOUD</Link>
+            <li className={location === '/' ? 'active' : ''}>
+                <Link to='/'>HOME</Link>
+              </li>
+              <li className={location === '/preprocessing' ? 'active' : ''}>
+                <Link to='/preprocessing'>데이터 전처리</Link>
               </li>
               <li className={location === '/normalization' ? 'active' : ''}>
                 <Link to='/normalization'>데이터 정규화</Link>
