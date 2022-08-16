@@ -168,12 +168,15 @@ body,
 .content-container .content-wrap .wrap .previewTable.cross th:first-child {
   background-color: white;
   font-family: "S-CoreDream-4Regular", "맑은고딕", "sans-serif";
-  color: black;
+  color: #333;
 }
 .content-container .content-wrap .chart {
   z-index: 1;
   width: 100%;
   height: 1000px;
+}
+.content-container .content-wrap .chart > div > div > svg > g > g {
+  cursor: default !important;
 }
 .content-container .content-wrap .downloadBtnWrap {
   margin-top: 10px;
@@ -181,6 +184,9 @@ body,
   align-items: center;
   width: 100%;
   justify-content: center;
+}
+.content-container .content-wrap .downloadBtnWrap > button {
+  font-family: "S-CoreDream-5Medium", "맑은고딕", "sans-serif";
 }
 .content-container h3 {
   width: 100%;
@@ -195,6 +201,11 @@ body,
   display: none;
 }
 .content-container label {
+  font-family: "S-CoreDream-5Medium", "맑은고딕", "sans-serif";
+  -webkit-user-select: none;
+     -moz-user-select: none;
+      -ms-user-select: none;
+          user-select: none;
   display: inline-block;
   padding: 10px 20px;
   background-color: #777777;
@@ -208,6 +219,10 @@ body,
   transition: all 0.1s;
 }
 .content-container button {
+  -webkit-user-select: none;
+     -moz-user-select: none;
+      -ms-user-select: none;
+          user-select: none;
   margin-top: 10px;
   margin-left: 5px;
   background-color: #cdcdcd;
@@ -217,6 +232,7 @@ body,
   transition: all 0.1s;
 }
 .content-container button.active {
+  font-family: "S-CoreDream-5Medium", "맑은고딕", "sans-serif";
   background-color: #1c8053;
   color: #ffffff;
 }
@@ -428,6 +444,7 @@ header a {
   font-size: 14px;
 }
 .dashboard-home .row > div a:hover span {
+  font-family: "S-CoreDream-5Medium", "맑은고딕", "sans-serif";
   color: #79db56;
 }
 

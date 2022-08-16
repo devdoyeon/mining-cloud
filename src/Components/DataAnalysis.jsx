@@ -155,12 +155,15 @@ const DataAnalysis = () => {
                 <div className='chart'>
                   <ResponsiveHeatMap
                     data={chartData}
-                    margin={{ top: 30, right: 60, bottom: 60, left: 120 }}
+                    margin={{ top: 30, right: 60, bottom: 70, left: 120 }}
                     valueFormat='> .2f'
                     axisBottom={{
-                      tickRotation: 20,
+                      tickRotation: -20,
                     }}
                     axisTop={false}
+                    style={{
+                      cursor: 'default',
+                    }}
                     colors={{
                       type: 'diverging',
                       scheme: 'greens',

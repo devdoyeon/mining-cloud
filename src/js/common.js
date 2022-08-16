@@ -2,7 +2,7 @@ import $ from 'jquery';
 import html2canvas from 'html2canvas';
 import { TableExport } from 'tableexport';
 
-//! 에러 메시지
+//! 에러 메시지 배열
 const errorList = {
   server: '잠시 후 다시 시도해 주세요.',
 };
@@ -76,10 +76,10 @@ export const download = ({ fileInfo, url, tab }) => {
 
 //- 라이브러리로 만든 차트 png 파일로 다운로드 해주는 함수
 export const chart2png = (fileInfo, tab) => {
-  html2canvas(document.querySelector('.chart')).then(canvas => {
+  html2canvas(document.querySelector('.chart'), { scale: 2 }).then(canvas => {
     const link = document.createElement('a');
     document.body.appendChild(link);
-    link.href = canvas.toDataURL('image/png');
+    link.href = canvas.toDataURL('image/png', 1.0);
     link.download = `${makeFileName(fileInfo, tab)}.png`;
     link.click();
     document.body.removeChild(link);
