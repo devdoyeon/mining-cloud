@@ -38,33 +38,8 @@ body,
     width: 1170px;
     height: 100%;
     margin: 150px 0;
-
     > div {
       width: 100%;
-    }
-    .container {
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      margin-top: 20px;
-      > table {
-        border-spacing: 0;
-        border: 1px solid black;
-        thead {
-          th {
-            border-bottom: 1px solid black;
-          }
-        }
-        th,
-        td {
-          text-align: center;
-          padding: 8px;
-        }
-        .gray {
-          background-color: rgb(227, 227, 227);
-        }
-      }
     }
     .wrap {
       margin-top: 30px;
@@ -352,13 +327,13 @@ header {
 /* dashboard-home */
 .dashboard-home {
   h2 {
-    width: 1170px;
+    width: 100%;
     font-size: 30px;
     margin-bottom: 10px;
   }
 
   .row {
-    width: 1170px;
+    width: 100%;
     justify-content: space-evenly;
 
     > div {

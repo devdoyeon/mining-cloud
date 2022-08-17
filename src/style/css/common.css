@@ -64,28 +64,6 @@ body,
 .content-container .content-wrap > div {
   width: 100%;
 }
-.content-container .content-wrap .container {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  margin-top: 20px;
-}
-.content-container .content-wrap .container > table {
-  border-spacing: 0;
-  border: 1px solid black;
-}
-.content-container .content-wrap .container > table thead th {
-  border-bottom: 1px solid black;
-}
-.content-container .content-wrap .container > table th,
-.content-container .content-wrap .container > table td {
-  text-align: center;
-  padding: 8px;
-}
-.content-container .content-wrap .container > table .gray {
-  background-color: rgb(227, 227, 227);
-}
 .content-container .content-wrap .wrap {
   margin-top: 30px;
   display: flex;
@@ -353,12 +331,12 @@ header a {
 
 /* dashboard-home */
 .dashboard-home h2 {
-  width: 1170px;
+  width: 100%;
   font-size: 30px;
   margin-bottom: 10px;
 }
 .dashboard-home .row {
-  width: 1170px;
+  width: 100%;
   justify-content: space-evenly;
 }
 .dashboard-home .row > div {
