@@ -1,14 +1,28 @@
 import React, { useState, useEffect } from 'react';
+import { preprocessAPI } from 'js/solutionApi';
 import SideBar from './Common/SideBar';
 import Header from './Common/Header';
 import Loading from './Common/Loading';
 import DataUploadComp from './Common/DataUploadComp';
-import { fileSetting, startFn } from 'js/common';
+import {
+  fileSetting,
+  startFn,
+  errorHandler,
+  csv2table,
+  download,
+  previewThead,
+  previewTbody,
+} from 'js/common';
 
 const DataPreprocessing = () => {
   const [fileInfo, setFileInfo] = useState({
     file: '',
     name: '',
+    ext: 'csv',
+  });
+  const [table, setTable] = useState({
+    tBody: [],
+    tHead: [],
   });
   const [url, setUrl] = useState('');
   const [msg, setMsg] = useState('');
@@ -24,7 +38,26 @@ const DataPreprocessing = () => {
 
   const preprocessing = async e => {
     if (startFn(e, startParamState)) {
-      
+      let param;
+      switch (e.textContent) {
+        case '제거/삭제':
+          param = 'delna';
+          break;
+        case '채우기/보간':
+          param = 'fillna';
+          break;
+        default:
+          return null;
+      }
+      const result = await preprocessAPI(fileInfo.file, param);
+      if (typeof result === 'object') {
+        const blob = new Blob([result.data], {
+          type: 'text/csv',
+        }); // 변환한 문자열을 csv 파일화
+        setUrl(window.URL.createObjectURL(blob));
+        setMsg('download');
+        csv2table(result, setTable);
+      } else return errorHandler(result, fileSettingState);
     } else return;
   };
 
@@ -56,7 +89,29 @@ const DataPreprocessing = () => {
             </button>
             <br />
             <DataUploadComp fileName={fileInfo.name} />
-            {msg === 'download' && <></>}
+            {msg === 'download' && (
+              <>
+                <div className='wrap'>
+                  <h2 className='previewTitle'>Preview</h2>
+                  <div className='previewTable'>
+                    <table>
+                      <thead>
+                        <tr>
+                          <th>1</th>
+                          {previewThead(table)}
+                        </tr>
+                      </thead>
+                      <tbody>{previewTbody(table)}</tbody>
+                    </table>
+                  </div>
+                  <div className='downloadBtnWrap'>
+                    <button onClick={() => download(downloadState)}>
+                      다운로드
+                    </button>
+                  </div>
+                </div>
+              </>
+            )}
           </div>
         </div>
         <Loading msg={msg} />

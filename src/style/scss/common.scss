@@ -25,7 +25,6 @@ body,
 }
 .content-container {
   @include flex-style($justifyVal: flex-start);
-  margin-bottom: 50px;
 
   > div {
     @include position-style(relative, $zIndex: 5);
@@ -38,7 +37,7 @@ body,
     @include flex-style(column, $justifyVal: flex-start);
     width: 1170px;
     height: 100%;
-    margin-top: 150px;
+    margin: 150px 0;
 
     > div {
       width: 100%;
@@ -65,35 +64,6 @@ body,
         .gray {
           background-color: rgb(227, 227, 227);
         }
-      }
-      .uploadTable {
-        margin-top: 30px;
-      }
-      .downloadTable {
-        width: 200px;
-        margin: 15px 0;
-      }
-      .none {
-        display: none;
-      }
-      input {
-        position: absolute;
-        left: -9999px;
-      }
-      .downloadBtn {
-        margin: 0;
-      }
-      .uploadBtn {
-        display: inline-block;
-        padding: 10px 20px;
-        background-color: $gray02;
-        border-radius: 5px;
-        color: $white;
-        cursor: pointer;
-      }
-      .download {
-        display: flex;
-        flex-flow: column;
       }
     }
     .wrap {
@@ -154,6 +124,16 @@ body,
           }
         }
       }
+      .downloadBtnWrap {
+        margin-top: 10px;
+        display: flex;
+        align-items: center;
+        width: 100%;
+        justify-content: center;
+        > button {
+          font-family: $mediumFont;
+        }
+      }
     }
     .chart {
       z-index: 1;
@@ -161,16 +141,6 @@ body,
       height: 1000px;
       > div > div > svg > g > g {
         cursor: default !important;
-      }
-    }
-    .downloadBtnWrap {
-      margin-top: 10px;
-      display: flex;
-      align-items: center;
-      width: 100%;
-      justify-content: center;
-      > button {
-        font-family: $mediumFont;
       }
     }
   }
@@ -447,18 +417,12 @@ header {
 /* loading-home */
 .loading-home {
   @include flex-style;
-
+  position: fixed;
+  top: 40vh;
   img {
     @include flex-style;
     width: 200px;
     opacity: 0.7;
-  }
-
-  a {
-    background-color: $subColor;
-    padding: 10px 20px;
-    color: $white;
-    border-radius: 5px;
   }
 }
 //~~~~~~~~~~~~~~~~~~wide-tablet responsive~~~~~~~~~~~~~~~~~~~
@@ -612,9 +576,7 @@ header {
   }
   .loading-home {
     img {
-      position: absolute;
-      width: 70px;
-      bottom: calc(50% - 100px);
+      width: 100px;
     }
   }
 }

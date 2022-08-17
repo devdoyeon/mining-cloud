@@ -52,7 +52,6 @@ const DataAnalysis = () => {
       }
       setChartData([]);
       const result = await analysisAPI(fileInfo.file, param);
-      console.log(result);
       if (typeof result === 'object') {
         if (param === 'correlation') {
           const { correlationship } = result.data.data;
@@ -81,8 +80,6 @@ const DataAnalysis = () => {
             tBody: Object.values(importance_df),
           });
         } else if (param === 'cross_anus') {
-          console.log(Object.keys(result.data.data));
-          console.log(Object.values(result.data.data));
           setTable({
             tHead: Object.keys(result.data.data),
             tBody: Object.values(result.data.data),

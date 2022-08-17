@@ -15,6 +15,14 @@ const errorMessage = async error => {
   }
 };
 
+export const preprocessAPI = async (file, param) => {
+  try {
+    return await axios.post(`/api/preprocess/${param}`, { file }, { headers });
+  } catch (error) {
+    return await errorMessage(error);
+  }
+};
+
 // Param 값을 인자로 받아 데이터 정규화 탭 세 개의 API 통신을 하나로 할 수 있게끔 묶어둠
 export const normalizationAPI = async (file, param) => {
   try {
@@ -58,6 +66,14 @@ export const featureMapAPI = async (file, param) => {
 export const analysisAPI = async (file, param) => {
   try {
     return await axios.post(`/api/analysis/${param}`, { file }, { headers });
+  } catch (error) {
+    return await errorMessage(error);
+  }
+};
+
+export const trainingAPI = async (file, param) => {
+  try {
+    return await axios.post(`/api/`), { file }, { headers };
   } catch (error) {
     return await errorMessage(error);
   }

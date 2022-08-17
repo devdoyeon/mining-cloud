@@ -39,7 +39,6 @@ body,
   flex-direction: row;
   align-items: center;
   justify-content: flex-start;
-  margin-bottom: 50px;
 }
 .content-container > div {
   position: relative;
@@ -60,7 +59,7 @@ body,
   justify-content: flex-start;
   width: 1170px;
   height: 100%;
-  margin-top: 150px;
+  margin: 150px 0;
 }
 .content-container .content-wrap > div {
   width: 100%;
@@ -86,35 +85,6 @@ body,
 }
 .content-container .content-wrap .container > table .gray {
   background-color: rgb(227, 227, 227);
-}
-.content-container .content-wrap .container .uploadTable {
-  margin-top: 30px;
-}
-.content-container .content-wrap .container .downloadTable {
-  width: 200px;
-  margin: 15px 0;
-}
-.content-container .content-wrap .container .none {
-  display: none;
-}
-.content-container .content-wrap .container input {
-  position: absolute;
-  left: -9999px;
-}
-.content-container .content-wrap .container .downloadBtn {
-  margin: 0;
-}
-.content-container .content-wrap .container .uploadBtn {
-  display: inline-block;
-  padding: 10px 20px;
-  background-color: #777777;
-  border-radius: 5px;
-  color: #ffffff;
-  cursor: pointer;
-}
-.content-container .content-wrap .container .download {
-  display: flex;
-  flex-flow: column;
 }
 .content-container .content-wrap .wrap {
   margin-top: 30px;
@@ -170,6 +140,16 @@ body,
   font-family: "S-CoreDream-4Regular", "맑은고딕", "sans-serif";
   color: #333;
 }
+.content-container .content-wrap .wrap .downloadBtnWrap {
+  margin-top: 10px;
+  display: flex;
+  align-items: center;
+  width: 100%;
+  justify-content: center;
+}
+.content-container .content-wrap .wrap .downloadBtnWrap > button {
+  font-family: "S-CoreDream-5Medium", "맑은고딕", "sans-serif";
+}
 .content-container .content-wrap .chart {
   z-index: 1;
   width: 100%;
@@ -177,16 +157,6 @@ body,
 }
 .content-container .content-wrap .chart > div > div > svg > g > g {
   cursor: default !important;
-}
-.content-container .content-wrap .downloadBtnWrap {
-  margin-top: 10px;
-  display: flex;
-  align-items: center;
-  width: 100%;
-  justify-content: center;
-}
-.content-container .content-wrap .downloadBtnWrap > button {
-  font-family: "S-CoreDream-5Medium", "맑은고딕", "sans-serif";
 }
 .content-container h3 {
   width: 100%;
@@ -454,6 +424,8 @@ header a {
   flex-direction: row;
   align-items: center;
   justify-content: center;
+  position: fixed;
+  top: 40vh;
 }
 .loading-home img {
   display: flex;
@@ -462,12 +434,6 @@ header a {
   justify-content: center;
   width: 200px;
   opacity: 0.7;
-}
-.loading-home a {
-  background-color: #2d2e39;
-  padding: 10px 20px;
-  color: #ffffff;
-  border-radius: 5px;
 }
 
 @media screen and (max-width: 1180px) {
@@ -596,9 +562,7 @@ header a {
     margin: 10px 0px;
   }
   .loading-home img {
-    position: absolute;
-    width: 70px;
-    bottom: calc(50% - 100px);
+    width: 100px;
   }
 }
 @media screen and (max-width: 374px) {

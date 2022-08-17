@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { trainingAPI } from 'js/solutionApi';
 import { fileSetting, startFn, download } from 'js/common';
 import Loading from 'Components/Common/Loading';
 import Header from './Common/Header';
@@ -24,6 +25,7 @@ const ModelTraining = () => {
 
   const training = async e => {
     if (startFn(e, startParamState)) {
+      
     } else return;
   };
 

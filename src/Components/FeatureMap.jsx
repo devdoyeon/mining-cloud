@@ -92,6 +92,7 @@ const FeatureMap = () => {
             {tab === 'Balancing'
               ? msg === 'download' && (
                   <>
+                  <div className='wrap'>
                     <h2 className='previewTitle'>Preview</h2>
                     <div className='previewTable'>
                       <table>
@@ -104,6 +105,7 @@ const FeatureMap = () => {
                         <tbody>{previewTbody(table)}</tbody>
                       </table>
                     </div>
+                  </div>
                     <div className='downloadBtnWrap'>
                       <button onClick={() => download(downloadState)}>
                         다운로드
