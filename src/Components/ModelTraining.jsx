@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { trainingAPI } from 'js/solutionApi';
+import { trainingAPI } from 'js/miningAPI';
 import { fileSetting, startFn, download } from 'js/common';
 import Loading from 'Components/Common/Loading';
 import Header from './Common/Header';

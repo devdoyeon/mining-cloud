@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { ResponsiveHeatMapCanvas } from '@nivo/heatmap';
 import { ResponsiveBarCanvas } from '@nivo/bar';
-import { analysisAPI } from 'js/solutionApi';
+import { analysisAPI } from 'js/miningAPI';
 import {
   fileSetting,
   startFn,

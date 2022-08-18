@@ -61,6 +61,12 @@ body,
   height: 100%;
   margin: 150px 0;
 }
+.content-container .content-wrap > h3 {
+  -webkit-user-select: none;
+     -moz-user-select: none;
+      -ms-user-select: none;
+          user-select: none;
+}
 .content-container .content-wrap > div {
   width: 100%;
 }
@@ -144,7 +150,8 @@ body,
   background-color: #858585 !important;
   color: white !important;
 }
-.content-container .content-wrap .wrap .previewTable.partitioning td:first-child, .content-container .content-wrap .wrap .previewTable.partitioning th:first-child {
+.content-container .content-wrap .wrap .previewTable.partitioning td:first-child,
+.content-container .content-wrap .wrap .previewTable.partitioning th:first-child {
   background-color: white;
   color: #333;
   font-family: "S-CoreDream-4Regular", "맑은고딕", "sans-serif";
@@ -212,6 +219,14 @@ body,
 }
 .content-container .outputWrap {
   margin-top: 50px;
+}
+.content-container .outputWrap h4,
+.content-container .outputWrap span,
+.content-container .outputWrap p {
+  -webkit-user-select: none;
+     -moz-user-select: none;
+      -ms-user-select: none;
+          user-select: none;
 }
 .content-container .outputWrap .row {
   justify-content: flex-start;
@@ -309,6 +324,10 @@ header a {
   color: #79db56;
 }
 .side-bar footer p {
+  -webkit-user-select: none;
+     -moz-user-select: none;
+      -ms-user-select: none;
+          user-select: none;
   color: #ffffff;
 }
 .side-bar .active a {
@@ -344,6 +363,10 @@ header a {
 
 /* dashboard-home */
 .dashboard-home h2 {
+  -webkit-user-select: none;
+     -moz-user-select: none;
+      -ms-user-select: none;
+          user-select: none;
   width: 100%;
   font-size: 30px;
   margin-bottom: 10px;

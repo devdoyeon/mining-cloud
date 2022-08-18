@@ -12,7 +12,7 @@ import Loading from 'Components/Common/Loading';
 import Header from './Common/Header';
 import SideBar from './Common/SideBar';
 import DataUploadComp from './Common/DataUploadComp';
-import { normalizationAPI } from 'js/solutionApi';
+import { normalizationAPI } from 'js/miningAPI';
 
 const DataNormalization = () => {
   const [fileInfo, setFileInfo] = useState({

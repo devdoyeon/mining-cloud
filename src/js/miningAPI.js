@@ -4,6 +4,7 @@ const headers = {
   'Content-Type': 'multipart/form-data',
 };
 
+//# Error Handling
 const errorMessage = async error => {
   const status = error?.response.status;
   switch (status) {
@@ -15,6 +16,7 @@ const errorMessage = async error => {
   }
 };
 
+//! 데이터 전처리
 export const preprocessAPI = async (file, param) => {
   try {
     return await axios.post(`/api/preprocess/${param}`, { file }, { headers });
@@ -23,7 +25,7 @@ export const preprocessAPI = async (file, param) => {
   }
 };
 
-// Param 값을 인자로 받아 데이터 정규화 탭 세 개의 API 통신을 하나로 할 수 있게끔 묶어둠
+//& 데이터 정규화
 export const normalizationAPI = async (file, param) => {
   try {
     return await axios.post(
@@ -36,6 +38,7 @@ export const normalizationAPI = async (file, param) => {
   }
 };
 
+//@ AI 학습용 데이터셋 생성
 export const featureMapAPI = async (file, param) => {
   try {
     const query = () => {
@@ -63,6 +66,7 @@ export const featureMapAPI = async (file, param) => {
   }
 };
 
+//- 변수 분석 및 선택
 export const analysisAPI = async (file, param) => {
   try {
     return await axios.post(`/api/analysis/${param}`, { file }, { headers });
@@ -71,6 +75,7 @@ export const analysisAPI = async (file, param) => {
   }
 };
 
+//~ 모델 학습 및 검증
 export const trainingAPI = async (file, param) => {
   try {
     return await axios.post(`/api/train/${param}`, { file }, { headers })

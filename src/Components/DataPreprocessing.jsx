@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { preprocessAPI } from 'js/solutionApi';
+import { preprocessAPI } from 'js/miningAPI';
 import SideBar from './Common/SideBar';
 import Header from './Common/Header';
 import Loading from './Common/Loading';

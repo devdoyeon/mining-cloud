@@ -8,7 +8,7 @@ import {
   previewTbody,
   errorHandler,
 } from 'js/common';
-import { featureMapAPI } from 'js/solutionApi';
+import { featureMapAPI } from 'js/miningAPI';
 import Loading from 'Components/Common/Loading';
 import Header from './Common/Header';
 import SideBar from './Common/SideBar';

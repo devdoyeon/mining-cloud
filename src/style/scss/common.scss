@@ -34,6 +34,9 @@ body,
   }
 
   .content-wrap {
+    > h3 {
+      user-select: none;
+    }
     @include flex-style(column, $justifyVal: flex-start);
     width: 1170px;
     height: 100%;
@@ -125,7 +128,8 @@ body,
             background-color: $gray03 !important;
             color: white !important;
           }
-          td, th {
+          td,
+          th {
             &:first-child {
               background-color: white;
               color: #333;
@@ -197,6 +201,12 @@ body,
 
   .outputWrap {
     margin-top: 50px;
+
+    h4,
+    span,
+    p {
+      user-select: none;
+    }
 
     .row {
       justify-content: flex-start;
@@ -300,6 +310,7 @@ header {
   }
 
   footer p {
+    user-select: none;
     color: $white;
   }
 
@@ -344,6 +355,7 @@ header {
 /* dashboard-home */
 .dashboard-home {
   h2 {
+    user-select: none;
     width: 100%;
     font-size: 30px;
     margin-bottom: 10px;
