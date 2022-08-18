@@ -73,7 +73,7 @@ export const analysisAPI = async (file, param) => {
 
 export const trainingAPI = async (file, param) => {
   try {
-    return await axios.post(`/api/`), { file }, { headers };
+    return await axios.post(`/api/train/${param}`, { file }, { headers })
   } catch (error) {
     return await errorMessage(error);
   }

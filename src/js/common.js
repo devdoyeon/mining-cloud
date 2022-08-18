@@ -2,9 +2,15 @@ import $ from 'jquery';
 import html2canvas from 'html2canvas';
 import { TableExport } from 'tableexport';
 
+//! Error
+//& Preparation
+//@ File
+//- Preview & Download
+
 //! 에러 메시지 배열
 const errorList = {
   server: '잠시 후 다시 시도해 주세요.',
+  null: '업로드한 파일을 다시 확인해 주세요.',
 };
 
 //! 에러 발생 시 실행할 함수
@@ -20,32 +26,7 @@ export const errorHandler = (result, { setFileInfo, setTab, setMsg }) => {
   alert(errorList[result]);
 };
 
-//& file Input onChange 시 실행되는 함수
-export const fileSetting = (e, { setFileInfo, setTab, setMsg }) => {
-  const file = e.target.files[0];
-  if (!file) return;
-  else {
-    setFileInfo(prev => {
-      const clone = { ...prev };
-      clone.file = file;
-      clone.name = file.name;
-      return clone;
-    });
-    setTab('');
-    setMsg('');
-  }
-};
-
-//& 파일명 만들어주는 함수
-export const makeFileName = (fileInfo, tab) => {
-  if (fileInfo.name.split('.').length > 2) {
-    const nameArr = fileInfo.name.split('.');
-    nameArr.pop();
-    return `${nameArr.toString().replaceAll(',', '')}(${tab})`; // 파일 이름 수정
-  } else return `${fileInfo.name.split('.')[0]}(${tab})`; // 파일 이름 수정
-};
-
-//@ 함수 실행 전 상태 확인해 주는 함수
+//& 함수 실행 전 상태 확인해 주는 함수
 export const startFn = (e, { msg, setMsg, setTab, fileInfo }) => {
   if (msg === 'loading') {
     alert('다른 작업을 수행하는 중에는 버튼을 클릭할 수 없습니다.');
@@ -63,6 +44,31 @@ export const startFn = (e, { msg, setMsg, setTab, fileInfo }) => {
   }
 };
 
+//@ file Input onChange 시 실행되는 함수
+export const fileSetting = (e, { setFileInfo, setTab, setMsg }) => {
+  const file = e.target.files[0];
+  if (!file) return;
+  else {
+    setFileInfo(prev => {
+      const clone = { ...prev };
+      clone.file = file;
+      clone.name = file.name;
+      return clone;
+    });
+    setTab('');
+    setMsg('');
+  }
+};
+
+//@ 파일명 만들어주는 함수
+export const makeFileName = (fileInfo, tab) => {
+  if (fileInfo.name.split('.').length > 2) {
+    const nameArr = fileInfo.name.split('.');
+    nameArr.pop();
+    return `${nameArr.toString().replaceAll(',', '')}(${tab})`; // 파일 이름 수정
+  } else return `${fileInfo.name.split('.')[0]}(${tab})`; // 파일 이름 수정
+};
+
 //- API로 받아오는 파일 다운로드 해주는 함수
 export const download = ({ fileInfo, url, tab }) => {
   // 임시로 anchor을 만들어서 실행시켜 주고 없애줌
@@ -76,7 +82,9 @@ export const download = ({ fileInfo, url, tab }) => {
 
 //- 라이브러리로 만든 차트 png 파일로 다운로드 해주는 함수
 export const chart2png = (fileInfo, tab) => {
-  html2canvas(document.querySelector('.chart'), { scale: 2 }).then(canvas => {
+  html2canvas(document.querySelector('.chart'), {
+    scale: tab === 'CART분석' ? 3 : 2,
+  }).then(canvas => {
     const link = document.createElement('a');
     document.body.appendChild(link);
     link.href = canvas.toDataURL('image/png', 1.0);
@@ -85,6 +93,19 @@ export const chart2png = (fileInfo, tab) => {
     document.body.removeChild(link);
   });
 };
+
+//- 테이블을 csv 파일로 내보내 주는 함수
+export const table2csv = (fileInfo, tab) => {
+  TableExport($('.exportTable')).remove();
+  TableExport.prototype.defaultButton = 'download';
+  TableExport($('.exportTable'), {
+    filename: makeFileName(fileInfo, tab),
+    formats: ['csv'],
+  });
+  $('.download').hide();
+  $('.download').trigger('click');
+};
+
 
 //- API에서 받아오는 csv 데이터 테이블로 렌더할 수 있도록 데이터셋 생성해 주는 함수
 export const csv2table = (result, setTable) => {
@@ -95,7 +116,7 @@ export const csv2table = (result, setTable) => {
   }
   previewArr.pop(); // 마지막 인덱스는 빈 문자열로 나오므로 제거
   if (previewArr.length <= 10) {
-    //@ length가 10 이하일 경우 자르는 기능 없이 모두 렌더
+    //- length가 10 이하일 경우 자르는 기능 없이 모두 렌더
     const bodyArr = previewArr.slice(1);
     bodyArr.forEach(arr => {
       const idx = previewArr.indexOf(arr) + 1;
@@ -106,7 +127,7 @@ export const csv2table = (result, setTable) => {
       tHead: previewArr[0],
     });
   } else {
-    //@ 아닐 경우 자르는 기능 포함하여 렌더
+    //- 아닐 경우 자르는 기능 포함하여 렌더
     const length = previewArr[0].length + 1; // 중간에 끊기 위해 길이 구한 뒤
     const middle = new Array(length).fill('...'); // 길이만큼 ...으로 채워주고
     const first = []; // 미리보기로 보여줄 데이터
@@ -171,16 +192,4 @@ export const previewTbody = table => {
       </>
     );
   }, <></>);
-};
-
-//- 테이블
-export const table2csv = (fileInfo, tab) => {
-  TableExport($('.exportTable')).remove();
-  TableExport.prototype.defaultButton = 'download';
-  TableExport($('.exportTable'), {
-    filename: makeFileName(fileInfo, tab),
-    formats: ['csv'],
-  });
-  $('.download').hide();
-  $('.download').trigger('click');
 };

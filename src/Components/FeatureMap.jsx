@@ -43,6 +43,8 @@ const FeatureMap = () => {
         e.textContent.toLowerCase()
       );
       if (typeof result === 'object') {
+        if (result.data === null)
+          return alert('업로드한 파일을 확인해 주세요.');
         if (e.textContent === 'Balancing') {
           const blob = new Blob([result.data], {
             type: 'text/csv',
@@ -91,7 +93,6 @@ const FeatureMap = () => {
             <DataUploadComp fileName={fileInfo.name} />
             {tab === 'Balancing'
               ? msg === 'download' && (
-                  <>
                   <div className='wrap'>
                     <h2 className='previewTitle'>Preview</h2>
                     <div className='previewTable'>
@@ -105,19 +106,55 @@ const FeatureMap = () => {
                         <tbody>{previewTbody(table)}</tbody>
                       </table>
                     </div>
-                  </div>
                     <div className='downloadBtnWrap'>
                       <button onClick={() => download(downloadState)}>
                         다운로드
                       </button>
                     </div>
-                  </>
+                  </div>
                 )
               : msg === 'download' && (
-                  <div className='downloadBtnWrap'>
-                    <button onClick={() => download(downloadState)}>
-                      다운로드
-                    </button>
+                  <div className='wrap'>
+                    <div className='previewTable partitioning'>
+                      <table>
+                        <colgroup>
+                          <col width={'200px'} />
+                          <col width={'400px'} />
+                        </colgroup>
+                        <thead>
+                          <tr>
+                            <th>확장자</th>
+                            <th>파일명</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr>
+                            <td rowSpan={6}>ZIP</td>
+                            <td>y_val.csv</td>
+                          </tr>
+                          <tr>
+                            <td>y_train.csv</td>
+                          </tr>
+                          <tr>
+                            <td>y_test.csv</td>
+                          </tr>
+                          <tr>
+                            <td>x_val.csv</td>
+                          </tr>
+                          <tr>
+                            <td>x_train.csv</td>
+                          </tr>
+                          <tr>
+                            <td>x_test.csv</td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
+                    <div className='downloadBtnWrap'>
+                      <button onClick={() => download(downloadState)}>
+                        다운로드
+                      </button>
+                    </div>
                   </div>
                 )}
           </div>

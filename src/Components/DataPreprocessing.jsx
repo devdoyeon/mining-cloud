@@ -51,9 +51,11 @@ const DataPreprocessing = () => {
       }
       const result = await preprocessAPI(fileInfo.file, param);
       if (typeof result === 'object') {
+        if (result.data === null)
+          return alert('업로드한 파일을 확인해 주세요.');
         const blob = new Blob([result.data], {
           type: 'text/csv',
-        }); // 변환한 문자열을 csv 파일화
+        });
         setUrl(window.URL.createObjectURL(blob));
         setMsg('download');
         csv2table(result, setTable);
@@ -90,27 +92,25 @@ const DataPreprocessing = () => {
             <br />
             <DataUploadComp fileName={fileInfo.name} />
             {msg === 'download' && (
-              <>
-                <div className='wrap'>
-                  <h2 className='previewTitle'>Preview</h2>
-                  <div className='previewTable'>
-                    <table>
-                      <thead>
-                        <tr>
-                          <th>1</th>
-                          {previewThead(table)}
-                        </tr>
-                      </thead>
-                      <tbody>{previewTbody(table)}</tbody>
-                    </table>
-                  </div>
-                  <div className='downloadBtnWrap'>
-                    <button onClick={() => download(downloadState)}>
-                      다운로드
-                    </button>
-                  </div>
+              <div className='wrap'>
+                <h2 className='previewTitle'>Preview</h2>
+                <div className='previewTable'>
+                  <table>
+                    <thead>
+                      <tr>
+                        <th>1</th>
+                        {previewThead(table)}
+                      </tr>
+                    </thead>
+                    <tbody>{previewTbody(table)}</tbody>
+                  </table>
                 </div>
-              </>
+                <div className='downloadBtnWrap'>
+                  <button onClick={() => download(downloadState)}>
+                    다운로드
+                  </button>
+                </div>
+              </div>
             )}
           </div>
         </div>

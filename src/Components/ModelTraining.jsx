@@ -21,11 +21,34 @@ const ModelTraining = () => {
 
   const fileSettingState = { setFileInfo, setTab, setMsg };
   const startParamState = { msg, setMsg, setTab, fileInfo };
-  const downloadState = { fileInfo, url, tab }
+  const downloadState = { fileInfo, url, tab };
 
   const training = async e => {
     if (startFn(e, startParamState)) {
-      
+      let param;
+      switch (e.textContent) {
+        case 'LR':
+          param = 'regression';
+          break;
+        case 'DT':
+          param = '';
+          break;
+        case 'SVM':
+          param = '';
+          break;
+        case 'DNN':
+          param = '';
+          break;
+        case 'RF':
+          param = '';
+          break;
+        case 'XGBoost ':
+          param = '';
+          break;
+        default:
+          return null;
+      }
+      const result = await trainingAPI(fileInfo.file, param);
     } else return;
   };
 

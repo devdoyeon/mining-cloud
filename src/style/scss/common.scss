@@ -48,6 +48,28 @@ body,
       align-items: center;
       justify-content: center;
       width: 100%;
+      .downloadBtnWrap {
+        margin-top: 10px;
+        display: flex;
+        align-items: center;
+        width: 100%;
+        justify-content: center;
+        > button {
+          font-family: $mediumFont;
+        }
+      }
+      .chart {
+        z-index: 1;
+        width: 100%;
+        height: 1000px;
+        > div > div > svg > g > g {
+          cursor: default !important;
+        }
+        &.cart-chart {
+          width: 500px;
+          height: 500px;
+        }
+      }
       .previewTitle {
         width: 100%;
         font-size: 18px;
@@ -98,24 +120,19 @@ body,
             }
           }
         }
-      }
-      .downloadBtnWrap {
-        margin-top: 10px;
-        display: flex;
-        align-items: center;
-        width: 100%;
-        justify-content: center;
-        > button {
-          font-family: $mediumFont;
+        &.partitioning {
+          thead th {
+            background-color: $gray03 !important;
+            color: white !important;
+          }
+          td, th {
+            &:first-child {
+              background-color: white;
+              color: #333;
+              font-family: $regularFont;
+            }
+          }
         }
-      }
-    }
-    .chart {
-      z-index: 1;
-      width: 100%;
-      height: 1000px;
-      > div > div > svg > g > g {
-        cursor: default !important;
       }
     }
   }

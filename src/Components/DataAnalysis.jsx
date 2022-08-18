@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
-import { ResponsiveHeatMap } from '@nivo/heatmap';
+import { ResponsiveHeatMapCanvas } from '@nivo/heatmap';
+import { ResponsiveBarCanvas } from '@nivo/bar';
 import { analysisAPI } from 'js/solutionApi';
 import {
   fileSetting,
@@ -23,9 +24,13 @@ const DataAnalysis = () => {
     tBody: [],
     tHead: [],
   });
+  const [bar, setBar] = useState({
+    keys: [],
+    data: [],
+  });
   const [msg, setMsg] = useState('');
   const [tab, setTab] = useState('');
-  const [chartData, setChartData] = useState([]);
+  const [heatMap, setHeatMap] = useState([]);
 
   const fileSettingState = { setFileInfo, setTab, setMsg };
   const startParamState = { msg, setMsg, setTab, fileInfo };
@@ -50,10 +55,14 @@ const DataAnalysis = () => {
         default:
           return null;
       }
-      setChartData([]);
+      setHeatMap([]);
       const result = await analysisAPI(fileInfo.file, param);
       if (typeof result === 'object') {
+        if (result.data === null)
+          return alert('업로드한 파일을 확인해 주세요.');
+        //& 상관분석
         if (param === 'correlation') {
+          //@ HeatMap Chart Data Setting
           const { correlationship } = result.data.data;
           const keys = Object.keys(
             correlationship[Object.keys(correlationship)[0]]
@@ -67,22 +76,38 @@ const DataAnalysis = () => {
             values.forEach((value, idx) => {
               obj.data.push({ x: keys[idx], y: value });
             });
-            setChartData(prev => {
+            setHeatMap(prev => {
               const clone = [...prev];
               clone.push(obj);
               return clone;
             });
           });
+          //& 교차분석
+        } else if (param === 'cross_anus') {
+          //@ Table Data Setting
+          setTable({
+            tHead: Object.keys(result.data.data),
+            tBody: Object.values(result.data.data),
+          });
+          //& CART분석
         } else if (param === 'cart_anus') {
+          //@ Table Data Setting
           const { importance_df } = result.data.data;
           setTable({
             tHead: Object.keys(importance_df),
             tBody: Object.values(importance_df),
           });
-        } else if (param === 'cross_anus') {
-          setTable({
-            tHead: Object.keys(result.data.data),
-            tBody: Object.values(result.data.data),
+          //@ Bar Chart Data Setting
+          const { feature, importance } = importance_df;
+          let arr = [];
+          for (let i = 0; i < Object.values(feature).length; i++) {
+            let obj = {};
+            obj[Object.values(feature)[i]] = Object.values(importance)[i];
+            arr.push(obj);
+          }
+          setBar({
+            keys: Object.values(feature),
+            data: [Object.assign({}, ...arr)],
           });
         }
         setMsg('download');
@@ -147,52 +172,52 @@ const DataAnalysis = () => {
             </button>
             <br />
             <DataUploadComp fileName={fileInfo.name} />
-            {tab === '상관분석' && msg === 'download' && (
-              <>
-                <div className='chart'>
-                  <ResponsiveHeatMap
-                    data={chartData}
-                    margin={{ top: 30, right: 60, bottom: 70, left: 120 }}
-                    valueFormat='> .2f'
-                    axisBottom={{
-                      tickRotation: -20,
-                    }}
-                    axisTop={false}
-                    style={{
-                      cursor: 'default',
-                    }}
-                    colors={{
-                      type: 'diverging',
-                      scheme: 'greens',
-                    }}
-                    animate={false}
-                    isInteractive={false}
-                    legends={[
-                      {
-                        anchor: 'right',
-                        translateX: 40,
-                        length: 500,
-                        direction: 'column',
-                        tickSize: 0,
-                      },
-                    ]}
-                  />
-                </div>
-                <div className='downloadBtnWrap'>
-                  <button onClick={() => chart2png(fileInfo, tab)}>
-                    다운로드
-                  </button>
-                </div>
-              </>
-            )}
-            {(tab === 'CART분석' || tab === '교차분석') && msg === 'download' && (
-              <>
+            {
+              //= 상관분석 다운로드 탭
+              tab === '상관분석' && msg === 'download' && (
                 <div className='wrap'>
-                  <div
-                    className={`previewTable ${
-                      (tab === 'CART분석' && 'cart') ||
-                      (tab === '교차분석' && 'cross')
-                    }`}>
+                  <div className='chart'>
+                    <ResponsiveHeatMapCanvas
+                      data={heatMap}
+                      margin={{ top: 30, right: 60, bottom: 70, left: 120 }}
+                      valueFormat='> .2f'
+                      axisBottom={{
+                        tickRotation: -20,
+                      }}
+                      axisTop={false}
+                      style={{
+                        cursor: 'default',
+                      }}
+                      colors={{
+                        type: 'diverging',
+                        scheme: 'greens',
+                      }}
+                      animate={false}
+                      isInteractive={false}
+                      legends={[
+                        {
+                          anchor: 'right',
+                          translateX: 40,
+                          length: 500,
+                          direction: 'column',
+                          tickSize: 0,
+                        },
+                      ]}
+                    />
+                  </div>
+                  <div className='downloadBtnWrap'>
+                    <button onClick={() => chart2png(fileInfo, tab)}>
+                      다운로드
+                    </button>
+                  </div>
+                </div>
+              )
+            }
+            {
+              //= 교차분석 다운로드 탭
+              tab === '교차분석' && msg === 'download' && (
+                <div className='wrap'>
+                  <div className='previewTable cross'>
                     <table className='exportTable'>
                       <thead>
                         <tr>{previewThead(table)}</tr>
@@ -208,8 +233,65 @@ const DataAnalysis = () => {
                     </button>
                   </div>
                 </div>
-              </>
-            )}
+              )
+            }
+            {
+              //= CART분석 다운로드 탭
+              tab === 'CART분석' && msg === 'download' && (
+                <>
+                  <div className='row'>
+                    <div className='wrap'>
+                      <div className='chart cart-chart'>
+                        <ResponsiveBarCanvas
+                          data={bar.data}
+                          keys={bar.keys}
+                          margin={{ top: 30, right: 30, bottom: 10, left: 30 }}
+                          padding={0}
+                          groupMode='grouped'
+                          colors={{ scheme: 'spectral' }}
+                          animate={false}
+                          isInteractive={false}
+                          enableLabel={false}
+                          axisTop={null}
+                          axisRight={null}
+                          axisBottom={{
+                            tickSize: 0,
+                            tickPadding: 10,
+                          }}
+                          axisLeft={{
+                            tickSize: 0,
+                          }}
+                        />
+                      </div>
+                      <div className='downloadBtnWrap'>
+                        <button
+                          onClick={() => chart2png(fileInfo, tab)}
+                          className='exportBtn'>
+                          차트 이미지 다운로드
+                        </button>
+                      </div>
+                    </div>
+                    <div className='wrap'>
+                      <div className='previewTable cart'>
+                        <table className='exportTable'>
+                          <thead>
+                            <tr>{previewThead(table)}</tr>
+                          </thead>
+                          <tbody>{previewTbody()}</tbody>
+                        </table>
+                      </div>
+                      <div className='downloadBtnWrap'>
+                        <button
+                          onClick={() => table2csv(fileInfo, tab)}
+                          className='exportBtn'>
+                          CSV 다운로드
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </>
+              )
+            }
           </div>
         </div>
         <Loading msg={msg} />
