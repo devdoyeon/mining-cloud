@@ -34,6 +34,10 @@ body,
   font-family: "S-CoreDream-4Regular", "맑은고딕", "sans-serif";
 }
 
+.highlight {
+  color: #2ca700;
+}
+
 .content-container {
   display: flex;
   flex-direction: row;
@@ -100,6 +104,10 @@ body,
   width: 500px;
   height: 500px;
 }
+.content-container .content-wrap .wrap .chart.train-chart {
+  width: 700px;
+  height: 700px;
+}
 .content-container .content-wrap .wrap .previewTitle {
   width: 100%;
   font-size: 18px;
@@ -117,6 +125,11 @@ body,
 .content-container .content-wrap .wrap .previewTable > table .gray {
   background-color: rgb(220, 220, 220);
 }
+.content-container .content-wrap .wrap .previewTable > table thead th {
+  font-family: "S-CoreDream-6Bold", "맑은고딕", "sans-serif";
+  background-color: #858585;
+  color: white;
+}
 .content-container .content-wrap .wrap .previewTable > table td,
 .content-container .content-wrap .wrap .previewTable > table th {
   border: 1px solid rgb(188, 188, 188);
@@ -124,37 +137,48 @@ body,
   padding: 7px;
   text-align: center;
 }
-.content-container .content-wrap .wrap .previewTable > table td:first-child,
-.content-container .content-wrap .wrap .previewTable > table th:first-child {
+.content-container .content-wrap .wrap .previewTable.normalization td:first-child, .content-container .content-wrap .wrap .previewTable.normalization th:first-child {
   background-color: gray;
   font-family: "S-CoreDream-6Bold", "맑은고딕", "sans-serif";
   color: white;
 }
-.content-container .content-wrap .wrap .previewTable.cart > table > thead th {
-  background-color: rgb(77, 77, 77);
-  color: white;
+.content-container .content-wrap .trainGuide {
+  margin-top: 10px;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+      -ms-user-select: none;
+          user-select: none;
+}
+.content-container .content-wrap .trainGuide .guideToggle {
+  text-decoration: underline;
+  text-underline-position: under;
+}
+.content-container .content-wrap .trainGuide .guideToggle:hover {
+  cursor: pointer;
+  color: #2ca700;
+}
+.content-container .content-wrap .guideBox {
+  background-color: white;
+  z-index: 2;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+      -ms-user-select: none;
+          user-select: none;
   font-family: "S-CoreDream-6Bold", "맑은고딕", "sans-serif";
+  height: 50px;
+  letter-spacing: 2px;
+  position: fixed;
+  line-height: 50px;
+  text-align: center;
+  border-top: 2px solid #79db56;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  transition: all 0.3s;
 }
-.content-container .content-wrap .wrap .previewTable.cross > table > thead th {
-  font-family: "S-CoreDream-6Bold", "맑은고딕", "sans-serif" !important;
-  background-color: rgb(77, 77, 77) !important;
-  color: white !important;
-}
-.content-container .content-wrap .wrap .previewTable.cross td:first-child,
-.content-container .content-wrap .wrap .previewTable.cross th:first-child {
-  background-color: white;
-  font-family: "S-CoreDream-4Regular", "맑은고딕", "sans-serif";
-  color: #333;
-}
-.content-container .content-wrap .wrap .previewTable.partitioning thead th {
-  background-color: #858585 !important;
-  color: white !important;
-}
-.content-container .content-wrap .wrap .previewTable.partitioning td:first-child,
-.content-container .content-wrap .wrap .previewTable.partitioning th:first-child {
-  background-color: white;
-  color: #333;
-  font-family: "S-CoreDream-4Regular", "맑은고딕", "sans-serif";
+.content-container .content-wrap .none {
+  transition: all 0.3s;
+  bottom: -52px;
 }
 .content-container h3 {
   width: 100%;
@@ -245,6 +269,14 @@ body,
 .content-container .outputWrap .row p {
   padding: 0 20px;
 }
+.content-container .outputWrap .multi {
+  margin-top: 0;
+  border-top: none;
+}
+.content-container .outputWrap .multi:first-child {
+  margin-top: 10px;
+  border-top: 1px solid #cdcdcd;
+}
 
 /* header */
 header {
@@ -334,7 +366,7 @@ header a {
   color: #79db56;
   font-family: "S-CoreDream-6Bold", "맑은고딕", "sans-serif";
 }
-.side-bar.true {
+.side-bar.open {
   transform: translateX(300px);
   transition: all 0.3s;
 }
@@ -357,7 +389,7 @@ header a {
   width: 25px;
   height: 25px;
 }
-.menuBtn.true svg {
+.menuBtn.open svg {
   fill: white;
 }
 

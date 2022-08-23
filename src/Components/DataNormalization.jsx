@@ -8,6 +8,7 @@ import {
   previewTbody,
   errorHandler,
 } from 'js/common';
+import JSZip from 'jszip';
 import Loading from 'Components/Common/Loading';
 import Header from './Common/Header';
 import SideBar from './Common/SideBar';
@@ -18,7 +19,7 @@ const DataNormalization = () => {
   const [fileInfo, setFileInfo] = useState({
     file: '',
     name: '',
-    ext: 'csv',
+    ext: '',
   });
   const [table, setTable] = useState({
     tBody: [],
@@ -28,7 +29,7 @@ const DataNormalization = () => {
   const [tab, setTab] = useState('');
   const [url, setUrl] = useState('');
 
-  const fileSettingState = { setFileInfo, setTab, setMsg };
+  const fileSettingState = { setFileInfo, tab, setTab, setMsg };
   const startParamState = { msg, setMsg, setTab, fileInfo };
   const downloadState = { fileInfo, url, tab };
 
@@ -46,12 +47,36 @@ const DataNormalization = () => {
       if (typeof result === 'object') {
         if (result.data === null)
           return alert('업로드한 파일을 확인해 주세요.');
-        const blob = new Blob([result.data], {
-          type: 'text/csv',
-        }); // 변환한 문자열을 csv 파일화
-        setUrl(window.URL.createObjectURL(blob)); // 위에서 만들어진 csv 파일을 다운로드 받을 수 있는 url 생성
-        setMsg('download'); // 다운로드 버튼 표시
-        csv2table(result, setTable);
+        if (e.textContent === 'Z-Score') {
+          const blob = new Blob([result.data], {
+            type: 'application/octet-stream',
+          });
+          setUrl(window.URL.createObjectURL(blob));
+          setMsg('download');
+          setFileInfo(prev => {
+            const clone = {...prev};
+            clone.ext = 'zip';
+            return clone;
+          })
+        } else
+          JSZip.loadAsync(result.data).then(zip => {
+            const files = Object.values(zip.files);
+            files.forEach(file => {
+              zip.files[file.name].async('text').then(txt => {
+                const blob = new Blob([txt], {
+                  type: 'text/csv',
+                });
+                setUrl(window.URL.createObjectURL(blob));
+                csv2table(txt, setTable);
+                setMsg('download'); // 다운로드 버튼 표시
+                setFileInfo(prev => {
+                  const clone = {...prev};
+                  clone.ext = 'csv';
+                  return clone;
+                })
+              });
+            });
+          });
       } else return errorHandler(result, fileSettingState);
     } else return;
   };
@@ -96,20 +121,8 @@ const DataNormalization = () => {
             </button>
             <br />
             <DataUploadComp fileName={fileInfo.name} />
-            {msg === 'download' && (
+            {msg === 'download' && tab === 'Z-Score' && (
               <div className='wrap'>
-                <h2 className='previewTitle'>Preview</h2>
-                <div className='previewTable'>
-                  <table>
-                    <thead>
-                      <tr>
-                        <th>1</th>
-                        {previewThead(table)}
-                      </tr>
-                    </thead>
-                    <tbody>{previewTbody(table)}</tbody>
-                  </table>
-                </div>
                 <div className='downloadBtnWrap'>
                   <button onClick={() => download(downloadState)}>
                     다운로드
@@ -117,6 +130,30 @@ const DataNormalization = () => {
                 </div>
               </div>
             )}
+            {msg === 'download' &&
+              (tab === 'Min-Max' ||
+                tab === 'Quartile' ||
+                tab === 'Standard Scaler') && (
+                <div className='wrap'>
+                  <h2 className='previewTitle'>Preview</h2>
+                  <div className='previewTable normalization'>
+                    <table>
+                      <thead>
+                        <tr>
+                          <th>1</th>
+                          {previewThead(table)}
+                        </tr>
+                      </thead>
+                      <tbody>{previewTbody(table)}</tbody>
+                    </table>
+                  </div>
+                  <div className='downloadBtnWrap'>
+                    <button onClick={() => download(downloadState)}>
+                      다운로드
+                    </button>
+                  </div>
+                </div>
+              )}
           </div>
         </div>
         <Loading msg={msg} />

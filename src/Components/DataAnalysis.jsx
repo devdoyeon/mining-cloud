@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
-import { ResponsiveHeatMapCanvas } from '@nivo/heatmap';
-import { ResponsiveBarCanvas } from '@nivo/bar';
+import { ResponsiveHeatMap } from '@nivo/heatmap';
+import { ResponsiveBar } from '@nivo/bar';
 import { analysisAPI } from 'js/miningAPI';
 import {
   fileSetting,
@@ -32,7 +32,7 @@ const DataAnalysis = () => {
   const [tab, setTab] = useState('');
   const [heatMap, setHeatMap] = useState([]);
 
-  const fileSettingState = { setFileInfo, setTab, setMsg };
+  const fileSettingState = { setFileInfo, tab, setTab, setMsg };
   const startParamState = { msg, setMsg, setTab, fileInfo };
 
   useEffect(() => {
@@ -177,14 +177,17 @@ const DataAnalysis = () => {
               tab === '상관분석' && msg === 'download' && (
                 <div className='wrap'>
                   <div className='chart'>
-                    <ResponsiveHeatMapCanvas
-                      data={heatMap}
+                    <ResponsiveHeatMap
+                      data={heatMap.data}
+                      maxValue={heatMap.max}
+                      minValue={heatMap.min}
                       margin={{ top: 30, right: 60, bottom: 70, left: 120 }}
                       valueFormat='> .2f'
                       axisBottom={{
                         tickRotation: -20,
                       }}
                       axisTop={false}
+                      enableLabels={false}
                       style={{
                         cursor: 'default',
                       }}
@@ -242,7 +245,7 @@ const DataAnalysis = () => {
                   <div className='row'>
                     <div className='wrap'>
                       <div className='chart cart-chart'>
-                        <ResponsiveBarCanvas
+                        <ResponsiveBar
                           data={bar.data}
                           keys={bar.keys}
                           margin={{ top: 30, right: 30, bottom: 10, left: 30 }}

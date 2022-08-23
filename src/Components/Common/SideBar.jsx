@@ -5,18 +5,18 @@ import { RiMenu4Fill } from 'react-icons/ri';
 
 const SideBar = () => {
   const location = useLocation().pathname;
-  const [menuBtn, setMenuBtn] = useState(false);
+  const [menuBtn, setMenuBtn] = useState('close');
 
   // 사이드바가 아닌 다른 구역을 클릭했을 때 menuBtn을 false로 변경해 주는 코드
   const outClick = e => {
     for (let p of e.path || (e.composedPath && e.composedPath())) {
-      if (p.className === 'side-bar true') return;
+      if (p.className === 'side-bar open') return;
     }
     window.removeEventListener('click', outClick);
-    setMenuBtn(false);
+    setMenuBtn('close');
   };
   useEffect(() => {
-    if (menuBtn) window.addEventListener('click', outClick);
+    if (menuBtn === 'open') window.addEventListener('click', outClick);
   }, [menuBtn]);
 
   return (
@@ -53,7 +53,7 @@ const SideBar = () => {
       </section>
       <button
         onClick={e => {
-          setMenuBtn(!menuBtn);
+          setMenuBtn('open');
           e.stopPropagation();
         }}
         className={`menuBtn ${menuBtn}`}>

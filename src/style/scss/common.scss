@@ -23,6 +23,9 @@ body,
 .regular {
   font-family: $regularFont;
 }
+.highlight {
+  color: $highlightColor;
+}
 .content-container {
   @include flex-style($justifyVal: flex-start);
 
@@ -72,6 +75,10 @@ body,
           width: 500px;
           height: 500px;
         }
+        &.train-chart {
+          width: 700px;
+          height: 700px;
+        }
       }
       .previewTitle {
         width: 100%;
@@ -88,12 +95,21 @@ body,
           .gray {
             background-color: rgb(220, 220, 220);
           }
+          thead th {
+            font-family: $boldFont;
+            background-color: $gray03;
+            color: white;
+          }
           td,
           th {
             border: 1px solid rgb(188, 188, 188);
             white-space: pre;
             padding: 7px;
             text-align: center;
+          }
+        }
+        &.normalization {
+          td, th {
             &:first-child {
               background-color: gray;
               font-family: $boldFont;
@@ -101,43 +117,40 @@ body,
             }
           }
         }
-        &.cart {
-          > table > thead th {
-            background-color: rgb(77, 77, 77);
-            color: white;
-            font-family: $boldFont;
-          }
-        }
-        &.cross {
-          > table > thead th {
-            font-family: $boldFont !important;
-            background-color: rgb(77, 77, 77) !important;
-            color: white !important;
-          }
-          td,
-          th {
-            &:first-child {
-              background-color: white;
-              font-family: $regularFont;
-              color: #333;
-            }
-          }
-        }
-        &.partitioning {
-          thead th {
-            background-color: $gray03 !important;
-            color: white !important;
-          }
-          td,
-          th {
-            &:first-child {
-              background-color: white;
-              color: #333;
-              font-family: $regularFont;
-            }
-          }
+      }
+      
+    }
+    .trainGuide {
+      margin-top: 10px;
+      user-select: none;
+      .guideToggle {
+        text-decoration: underline;
+        text-underline-position: under;
+        &:hover {
+          cursor: pointer;
+          color: $highlightColor
         }
       }
+    }
+    .guideBox {
+      background-color: white;
+      z-index: 2;
+      user-select: none;
+      font-family: $boldFont;
+      height: 50px;
+      letter-spacing: 2px;
+      position: fixed;
+      line-height: 50px;
+      text-align: center;
+      border-top: 2px solid $mainColor;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      transition: all 0.3s;
+    }
+    .none {
+      transition: all 0.3s;
+      bottom: -52px;
     }
   }
 
@@ -225,6 +238,14 @@ body,
 
       p {
         padding: 0 20px;
+      }
+    }
+    .multi {
+      margin-top: 0;
+      border-top: none;
+      &:first-child {
+        margin-top: 10px;
+        border-top: 1px solid $gray05;
       }
     }
   }
@@ -321,7 +342,7 @@ header {
       font-family: $boldFont;
     }
   }
-  &.true {
+  &.open {
     transform: translateX(300px);
     transition: all 0.3s;
   }
@@ -345,7 +366,7 @@ header {
     width: 25px;
     height: 25px;
   }
-  &.true {
+  &.open {
     svg {
       fill: white;
     }

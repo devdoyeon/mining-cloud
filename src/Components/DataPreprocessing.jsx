@@ -28,7 +28,7 @@ const DataPreprocessing = () => {
   const [msg, setMsg] = useState('');
   const [tab, setTab] = useState('');
 
-  const fileSettingState = { setFileInfo, setTab, setMsg };
+  const fileSettingState = { setFileInfo, tab, setTab, setMsg };
   const startParamState = { msg, setMsg, setTab, fileInfo };
   const downloadState = { fileInfo, url, tab };
 
@@ -58,7 +58,7 @@ const DataPreprocessing = () => {
         });
         setUrl(window.URL.createObjectURL(blob));
         setMsg('download');
-        csv2table(result, setTable);
+        csv2table(result.data, setTable);
       } else return errorHandler(result, fileSettingState);
     } else return;
   };

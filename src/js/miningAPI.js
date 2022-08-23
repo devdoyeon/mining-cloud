@@ -1,7 +1,16 @@
 import axios from 'axios';
 
+//= Header
 const headers = {
   'Content-Type': 'multipart/form-data',
+};
+
+//= Binary Data를 ZIP 파일로 만들어야 할 때 사용하는 Header
+const zipHeaders = {
+  responseType: 'arraybuffer',
+  headers: {
+    'Content-Type': 'multipart/form-data',
+  },
 };
 
 //# Error Handling
@@ -31,7 +40,7 @@ export const normalizationAPI = async (file, param) => {
     return await axios.post(
       `/api/normalization/${param === 'standard scaler' ? 'stdscaler' : param}`,
       { file },
-      { headers }
+      zipHeaders
     );
   } catch (error) {
     return await errorMessage(error);
@@ -41,25 +50,10 @@ export const normalizationAPI = async (file, param) => {
 //@ AI 학습용 데이터셋 생성
 export const featureMapAPI = async (file, param) => {
   try {
-    const query = () => {
-      if (param === 'balancing')
-        return {
-          headers: {
-            'Content-Type': 'multipart/form-data',
-          },
-        };
-      else
-        return {
-          responseType: 'arraybuffer',
-          headers: {
-            'Content-Type': 'multipart/form-data',
-          },
-        };
-    };
     return await axios.post(
       `/api/balancing/${param === 'balancing' ? 'fiftyfifty' : param}`,
       { file },
-      query()
+      param === 'balancing' ? { headers } : zipHeaders
     );
   } catch (error) {
     return await errorMessage(error);
@@ -76,9 +70,9 @@ export const analysisAPI = async (file, param) => {
 };
 
 //~ 모델 학습 및 검증
-export const trainingAPI = async (file, param) => {
+export const trainingAPI = async (files, param) => {
   try {
-    return await axios.post(`/api/train/${param}`, { file }, { headers })
+    return await axios.post(`/api/train/${param}`, files, { headers });
   } catch (error) {
     return await errorMessage(error);
   }

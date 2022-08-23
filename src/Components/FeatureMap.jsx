@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import JSZip from 'jszip';
 import {
   fileSetting,
   startFn,
@@ -23,11 +24,12 @@ const FeatureMap = () => {
     tBody: [],
     tHead: [],
   });
+  const [parse, setParse] = useState([]);
   const [url, setUrl] = useState('');
   const [msg, setMsg] = useState('');
   const [tab, setTab] = useState('');
 
-  const fileSettingState = { setFileInfo, setTab, setMsg };
+  const fileSettingState = { setFileInfo, tab, setTab, setMsg };
   const startParamState = { msg, setMsg, setTab, fileInfo };
   const downloadState = { fileInfo, url, tab };
 
@@ -51,7 +53,7 @@ const FeatureMap = () => {
           });
           setUrl(window.URL.createObjectURL(blob));
           setMsg('download');
-          csv2table(result, setTable);
+          csv2table(result.data, setTable);
         } else if (e.textContent === 'Partitioning') {
           const blob = new Blob([result.data], {
             type: 'application/octet-stream',
@@ -118,18 +120,15 @@ const FeatureMap = () => {
                     <div className='previewTable partitioning'>
                       <table>
                         <colgroup>
-                          <col width={'200px'} />
-                          <col width={'400px'} />
+                          <col width={'600px'} />
                         </colgroup>
                         <thead>
                           <tr>
-                            <th>확장자</th>
-                            <th>파일명</th>
+                            <th>Files</th>
                           </tr>
                         </thead>
                         <tbody>
                           <tr>
-                            <td rowSpan={6}>ZIP</td>
                             <td>y_val.csv</td>
                           </tr>
                           <tr>
@@ -152,7 +151,7 @@ const FeatureMap = () => {
                     </div>
                     <div className='downloadBtnWrap'>
                       <button onClick={() => download(downloadState)}>
-                        다운로드
+                        ZIP 다운로드
                       </button>
                     </div>
                   </div>

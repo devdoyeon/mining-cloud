@@ -1,6 +1,14 @@
 import { useState, useEffect } from 'react';
+import { ResponsiveHeatMap } from '@nivo/heatmap';
 import { trainingAPI } from 'js/miningAPI';
-import { fileSetting, startFn, download } from 'js/common';
+import {
+  fileSetting,
+  startFn,
+  download,
+  table2csv,
+  previewThead,
+  chart2png,
+} from 'js/common';
 import Loading from 'Components/Common/Loading';
 import Header from './Common/Header';
 import SideBar from './Common/SideBar';
@@ -11,13 +19,41 @@ const ModelTraining = () => {
     file: '',
     name: '',
   });
+  const [table, setTable] = useState({
+    tBody: [],
+    tHead: [],
+  });
+  const [matrix, setMatrix] = useState({
+    data: '',
+    min: '',
+    max: '',
+  });
   const [msg, setMsg] = useState('');
   const [tab, setTab] = useState('');
   const [url, setUrl] = useState('');
+  const [guide, setGuide] = useState({
+    btn: false,
+    view: false,
+  });
 
   useEffect(() => {
     document.title = '모델 학습 및 검증 | MINING CLOUD';
   }, []);
+
+  useEffect(() => {
+    if (!guide.btn) return;
+    setGuide(prev => {
+      const clone = { ...prev };
+      clone.view = true;
+      return clone;
+    });
+    setTimeout(() => {
+      setGuide({
+        btn: false,
+        view: false,
+      });
+    }, 3000);
+  }, [guide.btn]);
 
   const fileSettingState = { setFileInfo, setTab, setMsg };
   const startParamState = { msg, setMsg, setTab, fileInfo };
@@ -31,7 +67,7 @@ const ModelTraining = () => {
           param = 'regression';
           break;
         case 'DT':
-          param = '';
+          param = 'deccisiontree';
           break;
         case 'SVM':
           param = '';
@@ -42,14 +78,51 @@ const ModelTraining = () => {
         case 'RF':
           param = '';
           break;
-        case 'XGBoost ':
+        case 'XGBoost':
           param = '';
           break;
         default:
           return null;
       }
-      const result = await trainingAPI(fileInfo.file, param);
+      const trainResult = await trainingAPI(fileInfo.file, param);
+      if (typeof trainResult === 'object') {
+        const { conf_mat, result } = trainResult.data.data;
+        let dataArr = [];
+        let numArr = [];
+        conf_mat.forEach((arr, idx) => {
+          const obj = {
+            id: idx,
+            data: [
+              { x: 0, y: arr[0] },
+              { x: 1, y: arr[1] },
+            ],
+          };
+          numArr.push(...arr);
+          dataArr.push(obj);
+        });
+        setMatrix({
+          data: dataArr,
+          min: Math.min(...numArr),
+          max: Math.max(...numArr),
+        });
+        setTable({
+          tHead: Object.values(result.지표),
+          tBody: Object.values(result.결과값),
+        });
+        setMsg('download');
+      }
     } else return;
+  };
+
+  const previewTbody = () => {
+    return table.tBody.reduce((acc, item) => {
+      return (
+        <>
+          {acc}
+          <td>{item}</td>
+        </>
+      );
+    }, <></>);
   };
 
   return (
@@ -65,8 +138,15 @@ const ModelTraining = () => {
             <input
               type='file'
               id='fileUpload'
-              onChange={e => fileSetting(e, fileSettingState)}
+              onChange={e => {
+                if (e.target.files.length === 1)
+                  return alert(
+                    `6개의 파일이 필요합니다.\n확인하신 뒤 다시 업로드해 주세요.`
+                  );
+                fileSetting(e, fileSettingState);
+              }}
               accept='.csv'
+              multiple
             />
             <button
               onClick={e => training(e.target)}
@@ -99,12 +179,86 @@ const ModelTraining = () => {
               XGBoost
             </button>
             <br />
+            <p className='trainGuide'>
+              <span className='bold'>
+                AI 학습용 데이터셋 생성{' '}
+                <span className='bold highlight'>Partitioning</span>
+              </span>
+              에서{' '}
+              <span
+                className='guideToggle'
+                onClick={() =>
+                  setGuide(prev => {
+                    const clone = { ...prev };
+                    clone.btn = true;
+                    return clone;
+                  })
+                }>
+                다운로드한 파일
+              </span>
+              만 업로드 가능합니다.
+            </p>
+            <div className={`guideBox ${!guide.view ? 'none' : ''}`}>
+              <span className='bold highlight'>업로드 가능 파일: </span>
+              y_val.csv, y_train.csv, y_test.csv, x_val.csv, x_train.csv,
+              x_test.csv
+            </div>
             <DataUploadComp fileName={fileInfo.name} />
             {msg === 'download' && (
-              <div className='downloadBtnWrap'>
-                <button onClick={() => download(downloadState)}>
-                  다운로드
-                </button>
+              <div className='wrap'>
+                <div className='train-chart chart'>
+                  <ResponsiveHeatMap
+                    data={matrix.data}
+                    margin={{ top: 30, right: 80, bottom: 40, left: 30 }}
+                    valueFormat='> .2f'
+                    axisBottom={{}}
+                    axisTop={false}
+                    minValue={matrix.min}
+                    maxValue={matrix.max}
+                    style={{
+                      cursor: 'default',
+                    }}
+                    colors={{
+                      type: 'diverging',
+                      scheme: 'viridis',
+                    }}
+                    sliceLabelsTextColor='#333333'
+                    borderWidth={1}
+                    borderColor='black'
+                    labelTextColor={({ data }) =>
+                      data.y > (matrix.max + matrix.min) / 2 ? 'black' : 'white'
+                    }
+                    animate={false}
+                    isInteractive={false}
+                    legends={[
+                      {
+                        anchor: 'right',
+                        translateX: 40,
+                        length: 500,
+                        direction: 'column',
+                        tickSize: 0,
+                      },
+                    ]}
+                  />
+                </div>
+                <div className='previewTable train'>
+                  <table className='exportTable'>
+                    <thead>
+                      <tr>{previewThead(table)}</tr>
+                    </thead>
+                    <tbody>
+                      <tr>{previewTbody()}</tr>
+                    </tbody>
+                  </table>
+                </div>
+                <div className='downloadBtnWrap'>
+                  <button onClick={() => chart2png(fileInfo, tab)}>
+                    이미지 다운로드
+                  </button>
+                  <button onClick={() => table2csv(fileInfo, tab)}>
+                    표 다운로드
+                  </button>
+                </div>
               </div>
             )}
           </div>

@@ -15,15 +15,16 @@ const errorList = {
 
 //! 에러 발생 시 실행할 함수
 export const errorHandler = (result, { setFileInfo, setTab, setMsg }) => {
+  alert(errorList[result]);
   setMsg('');
+  setTab('');
   setFileInfo(prev => {
     const clone = { ...prev };
     clone.file = '';
     clone.name = '';
     return clone;
   });
-  setTab('');
-  alert(errorList[result]);
+  return;
 };
 
 //& 함수 실행 전 상태 확인해 주는 함수
@@ -48,21 +49,52 @@ export const startFn = (e, { msg, setMsg, setTab, fileInfo }) => {
 export const fileSetting = (e, { setFileInfo, setTab, setMsg }) => {
   const file = e.target.files[0];
   if (!file) return;
-  else {
-    setFileInfo(prev => {
-      const clone = { ...prev };
-      clone.file = file;
-      clone.name = file.name;
-      return clone;
+  if (e.target.files[1]) {
+    let nameArr = [];
+    let trainName = [
+      'y_val.csv',
+      'y_train.csv',
+      'y_test.csv',
+      'x_val.csv',
+      'x_train.csv',
+      'x_test.csv',
+    ];
+    let wrongNum = 0;
+    const formData = new FormData();
+    for (let i = 0; i < e.target.files.length; i++) {
+      formData.append('files', e.target.files[i]);
+      if (!trainName.includes(e.target.files[i].name)) {
+        wrongNum += 1;
+      }
+      nameArr.push(e.target.files[i].name);
+    }
+    if (nameArr.length !== 6)
+      return alert(
+        `6개의 파일이 필요합니다.\n확인하신 뒤 다시 업로드해 주세요.`
+      );
+    if (wrongNum > 0)
+      return alert(
+        `${wrongNum}개의 파일명이 잘못되었습니다.\n파일명을 확인해 주세요.`
+      );
+    setFileInfo({
+      file: formData,
+      name: nameArr,
     });
-    setTab('');
-    setMsg('');
+  } else {
+    setFileInfo({
+      file: file,
+      name: file.name,
+    });
   }
+  setTab('');
+  setMsg('');
 };
 
 //@ 파일명 만들어주는 함수
 export const makeFileName = (fileInfo, tab) => {
-  if (fileInfo.name.split('.').length > 2) {
+  if (Array.isArray(fileInfo.name)) {
+    return `${tab} Confusion Matrix`;
+  } else if (fileInfo.name.split('.').length > 2) {
     const nameArr = fileInfo.name.split('.');
     nameArr.pop();
     return `${nameArr.toString().replaceAll(',', '')}(${tab})`; // 파일 이름 수정
@@ -78,6 +110,7 @@ export const download = ({ fileInfo, url, tab }) => {
   link.download = makeFileName(fileInfo, tab);
   link.click(); // 다운로드 실행
   document.body.removeChild(link);
+  window.URL.revokeObjectURL(url);
 };
 
 //- 라이브러리로 만든 차트 png 파일로 다운로드 해주는 함수
@@ -106,10 +139,9 @@ export const table2csv = (fileInfo, tab) => {
   $('.download').trigger('click');
 };
 
-
 //- API에서 받아오는 csv 데이터 테이블로 렌더할 수 있도록 데이터셋 생성해 주는 함수
-export const csv2table = (result, setTable) => {
-  const arr = result.data.split('\n'); // 줄바꿈 기호 기준 배열 생성
+export const csv2table = (text, setTable) => {
+  const arr = text.split('\n'); // 줄바꿈 기호 기준 배열 생성
   const previewArr = [];
   for (let str of arr) {
     previewArr.push(str.split(',')); // 배열 속 문자열 배열로 변환
