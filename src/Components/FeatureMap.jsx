@@ -1,5 +1,8 @@
 import { useState, useEffect } from 'react';
-import JSZip from 'jszip';
+import Loading from './Common/Loading';
+import DataUploadComp from './Common/DataUploadComp';
+import Header from './Common/Header';
+import SideBar from './Common/SideBar';
 import {
   fileSetting,
   startFn,
@@ -10,10 +13,6 @@ import {
   errorHandler,
 } from 'js/common';
 import { featureMapAPI } from 'js/miningAPI';
-import Loading from 'Components/Common/Loading';
-import Header from './Common/Header';
-import SideBar from './Common/SideBar';
-import DataUploadComp from './Common/DataUploadComp';
 
 const FeatureMap = () => {
   const [fileInfo, setFileInfo] = useState({
@@ -24,12 +23,11 @@ const FeatureMap = () => {
     tBody: [],
     tHead: [],
   });
-  const [parse, setParse] = useState([]);
   const [url, setUrl] = useState('');
   const [msg, setMsg] = useState('');
   const [tab, setTab] = useState('');
 
-  const fileSettingState = { setFileInfo, tab, setTab, setMsg };
+  const fileSettingState = { setFileInfo, setTab, setMsg };
   const startParamState = { msg, setMsg, setTab, fileInfo };
   const downloadState = { fileInfo, url, tab };
 

@@ -1,9 +1,8 @@
-import React, { useState, useEffect } from 'react';
-import { preprocessAPI } from 'js/miningAPI';
-import SideBar from './Common/SideBar';
-import Header from './Common/Header';
+import { useState, useEffect } from 'react';
 import Loading from './Common/Loading';
 import DataUploadComp from './Common/DataUploadComp';
+import Header from './Common/Header';
+import SideBar from './Common/SideBar';
 import {
   fileSetting,
   startFn,
@@ -13,6 +12,7 @@ import {
   previewThead,
   previewTbody,
 } from 'js/common';
+import { preprocessAPI } from 'js/miningAPI';
 
 const DataPreprocessing = () => {
   const [fileInfo, setFileInfo] = useState({
@@ -28,7 +28,7 @@ const DataPreprocessing = () => {
   const [msg, setMsg] = useState('');
   const [tab, setTab] = useState('');
 
-  const fileSettingState = { setFileInfo, tab, setTab, setMsg };
+  const fileSettingState = { setFileInfo, setTab, setMsg };
   const startParamState = { msg, setMsg, setTab, fileInfo };
   const downloadState = { fileInfo, url, tab };
 

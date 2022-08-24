@@ -1,18 +1,17 @@
 import { useState, useEffect } from 'react';
 import { ResponsiveHeatMap } from '@nivo/heatmap';
-import { trainingAPI } from 'js/miningAPI';
+import Loading from 'Components/Common/Loading';
+import DataUploadComp from './Common/DataUploadComp';
+import Header from './Common/Header';
+import SideBar from './Common/SideBar';
 import {
   fileSetting,
   startFn,
-  download,
   table2csv,
   previewThead,
   chart2png,
 } from 'js/common';
-import Loading from 'Components/Common/Loading';
-import Header from './Common/Header';
-import SideBar from './Common/SideBar';
-import DataUploadComp from './Common/DataUploadComp';
+import { trainingAPI } from 'js/miningAPI';
 
 const ModelTraining = () => {
   const [fileInfo, setFileInfo] = useState({
@@ -30,7 +29,6 @@ const ModelTraining = () => {
   });
   const [msg, setMsg] = useState('');
   const [tab, setTab] = useState('');
-  const [url, setUrl] = useState('');
   const [guide, setGuide] = useState({
     btn: false,
     view: false,
@@ -57,7 +55,6 @@ const ModelTraining = () => {
 
   const fileSettingState = { setFileInfo, setTab, setMsg };
   const startParamState = { msg, setMsg, setTab, fileInfo };
-  const downloadState = { fileInfo, url, tab };
 
   const training = async e => {
     if (startFn(e, startParamState)) {

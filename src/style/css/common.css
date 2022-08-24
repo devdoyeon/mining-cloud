@@ -137,10 +137,18 @@ body,
   padding: 7px;
   text-align: center;
 }
-.content-container .content-wrap .wrap .previewTable.normalization td:first-child, .content-container .content-wrap .wrap .previewTable.normalization th:first-child {
+.content-container .content-wrap .wrap .previewTable.normalization td:first-child,
+.content-container .content-wrap .wrap .previewTable.normalization th:first-child, .content-container .content-wrap .wrap .previewTable.correlation td:first-child,
+.content-container .content-wrap .wrap .previewTable.correlation th:first-child {
   background-color: gray;
   font-family: "S-CoreDream-6Bold", "맑은고딕", "sans-serif";
   color: white;
+}
+.content-container .content-wrap .wrap .previewTable.correlation thead > tr > th:first-child {
+  background-color: #434343;
+}
+.content-container .content-wrap .wrap .previewTable.corr {
+  margin-top: 50px;
 }
 .content-container .content-wrap .trainGuide {
   margin-top: 10px;
@@ -605,7 +613,7 @@ header a {
     height: -webkit-fit-content;
     height: -moz-fit-content;
     height: fit-content;
-    margin: 10px 0px;
+    margin: 10px 0;
   }
   .loading-home img {
     width: 100px;

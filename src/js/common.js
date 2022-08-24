@@ -32,6 +32,11 @@ export const startFn = (e, { msg, setMsg, setTab, fileInfo }) => {
   if (msg === 'loading') {
     alert('다른 작업을 수행하는 중에는 버튼을 클릭할 수 없습니다.');
     return false;
+  } else if (msg === 'largeData') {
+    alert(
+      '현재 보여지고 있는 데이터의 양이 많아\n다른 탭으로 이동할 수 없습니다.\n새로 고침 후 다시 시도해 주세요.'
+    );
+    return false;
   } else if (fileInfo.file === '') {
     setTab('');
     alert('데이터를 업로드해 주세요.');
@@ -46,7 +51,12 @@ export const startFn = (e, { msg, setMsg, setTab, fileInfo }) => {
 };
 
 //@ file Input onChange 시 실행되는 함수
-export const fileSetting = (e, { setFileInfo, setTab, setMsg }) => {
+export const fileSetting = (e, { setFileInfo, setTab, setMsg, msg }) => {
+  if (msg === 'largeData') {
+    return alert(
+      '현재 보여지고 있는 데이터의 양이 많아\n파일을 변경할 수 없습니다.\n새로 고침 후 다시 시도해 주세요.'
+    );
+  }
   const file = e.target.files[0];
   if (!file) return;
   if (e.target.files[1]) {
@@ -103,11 +113,12 @@ export const makeFileName = (fileInfo, tab) => {
 
 //- API로 받아오는 파일 다운로드 해주는 함수
 export const download = ({ fileInfo, url, tab }) => {
-  // 임시로 anchor을 만들어서 실행시켜 주고 없애줌
+  // 임시로 a tag를 만들어서 실행시켜 주고 없애줌
   const link = document.createElement('a');
   document.body.appendChild(link);
   link.href = url; // csv 다운로드 url
   link.download = makeFileName(fileInfo, tab);
+  console.log(link);
   link.click(); // 다운로드 실행
   document.body.removeChild(link);
   window.URL.revokeObjectURL(url);
