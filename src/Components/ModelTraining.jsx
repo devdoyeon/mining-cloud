@@ -23,15 +23,16 @@ const ModelTraining = () => {
     tHead: [],
   });
   const [matrix, setMatrix] = useState({
-    data: '',
+    data: [],
     min: '',
     max: '',
   });
   const [msg, setMsg] = useState('');
   const [tab, setTab] = useState('');
   const [guide, setGuide] = useState({
-    btn: false,
-    view: false,
+    // 업로드 가능한 파일명 가이드
+    btn: false, // 가이드 토글 버튼
+    view: false, // 가이드 렌더 여부
   });
 
   useEffect(() => {
@@ -39,13 +40,14 @@ const ModelTraining = () => {
   }, []);
 
   useEffect(() => {
-    if (!guide.btn) return;
+    if (!guide.btn) return; // guide.btn이 true일 때만 작동
     setGuide(prev => {
       const clone = { ...prev };
-      clone.view = true;
+      clone.view = true; // 토글 버튼이 클릭 됐을 때 렌더됨
       return clone;
     });
     setTimeout(() => {
+      // 3초 뒤 렌더 해제 및 토글 버튼 상태도 false로 변경
       setGuide({
         btn: false,
         view: false,
@@ -84,6 +86,7 @@ const ModelTraining = () => {
       const trainResult = await trainingAPI(fileInfo.file, param);
       if (typeof trainResult === 'object') {
         const { conf_mat, result } = trainResult.data.data;
+        //@ Confusion Matrix Data Setting
         let dataArr = [];
         let numArr = [];
         conf_mat.forEach((arr, idx) => {
@@ -102,6 +105,7 @@ const ModelTraining = () => {
           min: Math.min(...numArr),
           max: Math.max(...numArr),
         });
+        //@ Table Data Setting
         setTable({
           tHead: Object.values(result.지표),
           tBody: Object.values(result.결과값),
@@ -206,13 +210,17 @@ const ModelTraining = () => {
                     }}
                     colors={{
                       type: 'diverging',
-                      scheme: 'viridis',
+                      scheme: 'plasma',
                     }}
                     sliceLabelsTextColor='#333333'
                     borderWidth={1}
                     borderColor='black'
-                    labelTextColor={({ data }) =>
-                      data.y > (matrix.max + matrix.min) / 2 ? 'black' : 'white'
+                    labelTextColor={
+                      ({ data }) =>
+                        data.y > (matrix.max + matrix.min) / 2 ? 'black' : 'white'
+                      // value가 Min-Max의 평균보다 클 때 노드 색상이 밝아짐
+                      // value가 Min-Max의 평균보다 클 때 노드 색상이 어두워짐
+                      // 따라서 가독성을 위해 value에 따라 label text color를 조작해 준다.
                     }
                     animate={false}
                     isInteractive={false}

@@ -44,7 +44,7 @@ const DataAnalysis = () => {
     document.title = '변수 분석 및 선택 | MINING CLOUD';
   }, []);
 
-  //= Main Function
+  //! Main Function
   const analysis = async e => {
     if (startFn(e, startParamState)) {
       let param;
@@ -104,7 +104,7 @@ const DataAnalysis = () => {
             data: [Object.assign({}, ...arr)],
           });
         }
-        setMsg('largeData');
+        setMsg('download');
       } else return errorHandler(result, fileSettingState);
     } else return;
   };
@@ -165,32 +165,6 @@ const DataAnalysis = () => {
     } else return `${fileInfo.name.split('.')[0]}(${tab}(${str}))`;
   };
 
-  //= Corr Table DownloadBtn onclick
-  const corrDown = () => {
-    let str = `,,corr\n`; // Head
-    corrData.forEach(obj => {
-      str += `${Object.values(obj).toString()}\n`;
-      // CSV String Data 생성
-    });
-    const blob = new Blob([str], {
-      type: 'text/csv',
-    }); //파일화
-    saveAs(blob, makeFileName('corr'));
-  };
-
-  //= Correlation Table DownloadBtn onclick
-  const correlationDown = () => {
-    let str = `,${table.tHead.toString()}\n`; // Head
-    table.tBody.forEach((obj, idx) => {
-      str += `${table.tHead[idx]},${Object.values(obj).toString()}\n`;
-      // CSV String Data 생성
-    });
-    const blob = new Blob([str], {
-      type: 'text/csv',
-    }); // 파일화
-    saveAs(blob, makeFileName('correlation'));
-  };
-
   return (
     <section className='content-container'>
       <SideBar />
@@ -224,119 +198,96 @@ const DataAnalysis = () => {
             </button>
             <br />
             <DataUploadComp fileName={fileInfo.name} />
-            {
-              //= 상관분석 다운로드 탭
-              tab === '상관분석' && msg === 'largeData' && (
-                <div className='wrap'>
-                  <div className='previewTable correlation'>
-                    <table>
-                      <thead>
-                        <tr>
-                          <th>Correlation</th>
-                          {previewThead(table)}
-                        </tr>
-                      </thead>
-                      <tbody>{previewTbody()}</tbody>
-                    </table>
-                  </div>
-                  <div className='downloadBtnWrap'>
-                    <button onClick={() => correlationDown()}>다운로드</button>
-                  </div>
-                  <div className='previewTable corr'>
-                    <table>
-                      <thead>
-                        <tr>
-                          <th></th>
-                          <th></th>
-                          <th>corr</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        {corr.reduce((acc, { level_0, level_1, corr }) => {
-                          return (
-                            <>
-                              {acc}
-                              <tr>
-                                <td>{level_0}</td>
-                                <td>{level_1}</td>
-                                <td>{corr}</td>
-                              </tr>
-                            </>
-                          );
-                        }, <></>)}
-                      </tbody>
-                    </table>
-                  </div>
-                  <div className='downloadBtnWrap'>
-                    <button onClick={() => corrDown()}>다운로드</button>
-                  </div>
-                  <img
-                    src={`data:image/jpg;base64,${heatMap}`} //base64 url
-                    alt='Correlation Confusion Matrix'
-                  />
-                </div>
-              )
-            }
-            {
-              //= 교차분석 다운로드 탭
-              tab === '교차분석' && msg === 'download' && (
-                <div className='wrap'>
-                  <div className='previewTable cross'>
-                    <table className='exportTable'>
-                      <thead>
-                        <tr>{previewThead(table)}</tr>
-                      </thead>
-                      <tbody>{previewTbody()}</tbody>
-                    </table>
-                  </div>
-                  <div className='downloadBtnWrap'>
-                    <button
-                      onClick={() => table2csv(fileInfo, tab)}
-                      className='exportBtn'>
-                      다운로드
-                    </button>
-                  </div>
-                </div>
-              )
-            }
-            {
-              //= CART분석 다운로드 탭
-              tab === 'CART분석' && msg === 'download' && (
-                <>
-                  <div className='row'>
+            {msg === 'download' && (
+              <>
+                {
+                  //~ 상관분석
+                  tab === '상관분석' && (
                     <div className='wrap'>
-                      <div className='chart cart-chart'>
-                        <ResponsiveBar
-                          data={bar.data}
-                          keys={bar.keys}
-                          margin={{ top: 30, right: 30, bottom: 10, left: 30 }}
-                          padding={0}
-                          groupMode='grouped'
-                          colors={{ scheme: 'spectral' }}
-                          animate={false}
-                          isInteractive={false}
-                          enableLabel={false}
-                          axisTop={null}
-                          axisRight={null}
-                          axisBottom={{
-                            tickSize: 0,
-                            tickPadding: 10,
-                          }}
-                          axisLeft={{
-                            tickSize: 0,
-                          }}
-                        />
+                      <div className='previewTable correlation'>
+                        <table>
+                          <thead>
+                            <tr>
+                              <th>Correlation</th>
+                              {previewThead(table)}
+                            </tr>
+                          </thead>
+                          <tbody>{previewTbody()}</tbody>
+                        </table>
                       </div>
                       <div className='downloadBtnWrap'>
                         <button
-                          onClick={() => chart2png(fileInfo, tab)}
-                          className='exportBtn'>
-                          차트 이미지 다운로드
+                          onClick={() => {
+                            //- First Table Download
+                            let str = `,${table.tHead.toString()}\n`; // Head
+                            table.tBody.forEach((obj, idx) => {
+                              str += `${table.tHead[idx]},${Object.values(
+                                obj
+                              ).toString()}\n`;
+                              // CSV String Data 생성
+                            });
+                            const blob = new Blob([str], {
+                              type: 'text/csv',
+                            }); // 파일화
+                            saveAs(blob, makeFileName('correlation'));
+                          }}>
+                          다운로드
                         </button>
                       </div>
+                      <div className='previewTable corr'>
+                        <table>
+                          <thead>
+                            <tr>
+                              <th></th>
+                              <th></th>
+                              <th>corr</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            {corr.reduce((acc, { level_0, level_1, corr }) => {
+                              return (
+                                <>
+                                  {acc}
+                                  <tr>
+                                    <td>{level_0}</td>
+                                    <td>{level_1}</td>
+                                    <td>{corr}</td>
+                                  </tr>
+                                </>
+                              );
+                            }, <></>)}
+                          </tbody>
+                        </table>
+                      </div>
+                      <div className='downloadBtnWrap'>
+                        <button
+                          onClick={() => {
+                            //- Second Table Download
+                            let str = `,,corr\n`; // Head
+                            corrData.forEach(obj => {
+                              str += `${Object.values(obj).toString()}\n`;
+                              // CSV String Data 생성
+                            });
+                            const blob = new Blob([str], {
+                              type: 'text/csv',
+                            }); //파일화
+                            saveAs(blob, makeFileName('corr'));
+                          }}>
+                          다운로드
+                        </button>
+                      </div>
+                      <img
+                        src={`data:image/jpg;base64,${heatMap}`} //base64 url
+                        alt='Correlation Confusion Matrix'
+                      />
                     </div>
+                  )
+                }
+                {
+                  //~ 교차분석
+                  tab === '교차분석' && (
                     <div className='wrap'>
-                      <div className='previewTable cart'>
+                      <div className='previewTable cross'>
                         <table className='exportTable'>
                           <thead>
                             <tr>{previewThead(table)}</tr>
@@ -348,14 +299,74 @@ const DataAnalysis = () => {
                         <button
                           onClick={() => table2csv(fileInfo, tab)}
                           className='exportBtn'>
-                          CSV 다운로드
+                          다운로드
                         </button>
                       </div>
                     </div>
-                  </div>
-                </>
-              )
-            }
+                  )
+                }
+                {
+                  //~ CART분석
+                  tab === 'CART분석' && (
+                    <div className='row'>
+                      <div className='wrap'>
+                        <div className='chart cart-chart'>
+                          <ResponsiveBar
+                            data={bar.data}
+                            keys={bar.keys}
+                            margin={{
+                              top: 30,
+                              right: 30,
+                              bottom: 10,
+                              left: 30,
+                            }}
+                            padding={0}
+                            groupMode='grouped'
+                            colors={{ scheme: 'spectral' }}
+                            animate={false}
+                            isInteractive={false}
+                            enableLabel={false}
+                            axisTop={null}
+                            axisRight={null}
+                            axisBottom={{
+                              tickSize: 0,
+                              tickPadding: 10,
+                            }}
+                            axisLeft={{
+                              tickSize: 0,
+                            }}
+                          />
+                        </div>
+                        <div className='downloadBtnWrap'>
+                          <button
+                            onClick={() => chart2png(fileInfo, tab)}
+                            className='exportBtn'>
+                            차트 이미지 다운로드
+                          </button>
+                        </div>
+                      </div>
+                      <div className='wrap'>
+                        <div className='previewTable cart'>
+                          <table className='exportTable'>
+                            <thead>
+                              <tr>{previewThead(table)}</tr>
+                            </thead>
+                            <tbody>{previewTbody()}</tbody>
+                          </table>
+                        </div>
+                        <div className='downloadBtnWrap'>
+                          <button
+                            onClick={() => table2csv(fileInfo, tab)}
+                            className='exportBtn'>
+                            CSV 다운로드
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  )
+                }
+              </>
+            )}
           </div>
         </div>
         <Loading msg={msg} />

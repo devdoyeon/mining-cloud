@@ -30,7 +30,7 @@ const DataNormalization = () => {
 
   const fileSettingState = { setFileInfo, setTab, setMsg };
   const startParamState = { msg, setMsg, setTab, fileInfo };
-  const testState = { setTable, setArr, setMsg };
+  const zipParseState = { setTable, setArr, setMsg };
 
   useEffect(() => {
     document.title = '데이터 정규화 | MINING CLOUD';
@@ -39,12 +39,11 @@ const DataNormalization = () => {
   //! Main Function
   const normalization = async e => {
     if (startFn(e, startParamState)) {
-      //& API
       const result = await normalizationAPI(
         fileInfo.file,
         e.textContent.replaceAll('-', '').toLowerCase() // API Parameter 양식에 맞춰 textContent 가공
       );
-      if (typeof result === 'object') return zipParse(result.data, testState);
+      if (typeof result === 'object') return zipParse(result.data, zipParseState);
       else return errorHandler(result, fileSettingState);
     } else return;
   };

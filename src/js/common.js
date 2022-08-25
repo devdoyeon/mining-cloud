@@ -1,6 +1,6 @@
 import $ from 'jquery';
 import html2canvas from 'html2canvas';
-import saveAs from 'file-saver'
+import saveAs from 'file-saver';
 import { TableExport } from 'tableexport';
 import JSZip from 'jszip';
 
@@ -54,11 +54,11 @@ export const startFn = (e, { msg, setMsg, setTab, fileInfo }) => {
 
 //@ file Input onChange 시 실행되는 함수
 export const fileSetting = (e, { setFileInfo, setTab, setMsg, msg }) => {
-  if (msg === 'largeData') {
+  if (msg === 'largeData')
     return alert(
       '현재 보여지고 있는 데이터의 양이 많아\n파일을 변경할 수 없습니다.\n새로 고침 후 다시 시도해 주세요.'
     );
-  }
+
   const file = e.target.files[0];
   if (!file) return;
   if (e.target.files[1]) {
@@ -75,9 +75,7 @@ export const fileSetting = (e, { setFileInfo, setTab, setMsg, msg }) => {
     const formData = new FormData();
     for (let i = 0; i < e.target.files.length; i++) {
       formData.append('files', e.target.files[i]);
-      if (!trainName.includes(e.target.files[i].name)) {
-        wrongNum += 1;
-      }
+      if (!trainName.includes(e.target.files[i].name)) wrongNum += 1;
       nameArr.push(e.target.files[i].name);
     }
     if (nameArr.length !== 6)
@@ -92,21 +90,19 @@ export const fileSetting = (e, { setFileInfo, setTab, setMsg, msg }) => {
       file: formData,
       name: nameArr,
     });
-  } else {
+  } else
     setFileInfo({
       file: file,
       name: file.name,
     });
-  }
   setTab('');
   setMsg('');
 };
 
 //@ 파일명 만들어주는 함수
 export const makeFileName = (fileInfo, tab) => {
-  if (Array.isArray(fileInfo.name)) {
-    return `${tab} Confusion Matrix`;
-  } else if (fileInfo.name.split('.').length > 2) {
+  if (Array.isArray(fileInfo.name)) return `${tab} Confusion Matrix`;
+  else if (fileInfo.name.split('.').length > 2) {
     const nameArr = fileInfo.name.split('.');
     nameArr.pop();
     return `${nameArr.toString().replaceAll(',', '')}(${tab})`; // 파일 이름 수정
@@ -114,7 +110,7 @@ export const makeFileName = (fileInfo, tab) => {
 };
 
 //- Zip -> Unzip -> Parse File -> Create Blob -> Split Blob -> Merged Blob
-export const zipParse = (data, { setTable, setArr, setMsg }) => {
+export const zipParse = (data, { setTable, setArr, setMsg }) =>
   JSZip.loadAsync(data).then(zip => {
     const files = Object.values(zip.files); // Zip 내의 파일들이 들어있는 배열 생성
     files.forEach(file => {
@@ -143,21 +139,16 @@ export const zipParse = (data, { setTable, setArr, setMsg }) => {
       });
     });
   });
-};
 
 //- 라이브러리로 만든 차트 png 파일로 다운로드 해주는 함수
-export const chart2png = (fileInfo, tab) => {
+export const chart2png = (fileInfo, tab) =>
   html2canvas(document.querySelector('.chart'), {
     scale: tab === 'CART분석' ? 3 : 2,
-  }).then(canvas => {
-    const link = document.createElement('a');
-    document.body.appendChild(link);
-    link.href = canvas.toDataURL('image/png', 1.0);
-    link.download = `${makeFileName(fileInfo, tab)}.png`;
-    link.click();
-    document.body.removeChild(link);
-  });
-};
+  }).then(canvas =>
+    canvas.toBlob(blob => {
+      saveAs(blob, makeFileName(fileInfo, tab));
+    })
+  );
 
 //- 테이블을 csv 파일로 내보내 주는 함수
 export const table2csv = (fileInfo, tab) => {

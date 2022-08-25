@@ -10,7 +10,7 @@ import icon04 from 'image/icon04.png';
 
 const Home = () => {
   useEffect(() => {
-    document.title = 'MINING CLOUD';
+    document.title = 'Home | MINING CLOUD';
   }, []);
 
   return (

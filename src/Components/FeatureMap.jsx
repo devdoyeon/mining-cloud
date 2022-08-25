@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
-import saveAs from 'file-saver'
+import { streamSaver } from 'streamsaver';
+import saveAs from 'file-saver';
 import Loading from './Common/Loading';
 import DataUploadComp from './Common/DataUploadComp';
 import Header from './Common/Header';
@@ -8,10 +9,10 @@ import {
   makeFileName,
   fileSetting,
   startFn,
-  csv2table,
   previewThead,
   previewTbody,
   errorHandler,
+  zipParse,
 } from 'js/common';
 import { featureMapAPI } from 'js/miningAPI';
 
@@ -24,18 +25,20 @@ const FeatureMap = () => {
     tBody: [],
     tHead: [],
   });
-  const [blob, setBlob] = useState({})
+  const [blob, setBlob] = useState({});
   const [msg, setMsg] = useState('');
   const [tab, setTab] = useState('');
+  const [arr, setArr] = useState([]);
 
   const fileSettingState = { setFileInfo, setTab, setMsg };
   const startParamState = { msg, setMsg, setTab, fileInfo };
+  const zipParseState = { setTable, setArr, setMsg };
 
   useEffect(() => {
     document.title = 'AI 학습용 데이터셋 생성 | MINING CLOUD';
   }, []);
 
-  //피처맵 api 요청
+  //! Main Function
   const featureMap = async e => {
     if (startFn(e, startParamState)) {
       const result = await featureMapAPI(
@@ -43,21 +46,15 @@ const FeatureMap = () => {
         e.textContent.toLowerCase()
       );
       if (typeof result === 'object') {
-        if (result.data === null)
-          return alert('업로드한 파일을 확인해 주세요.');
-        if (e.textContent === 'Balancing') {
-          const blob = new Blob([result.data], {
-            type: 'text/csv',
-          });
-          setBlob(blob)
-          csv2table(result.data, setTable);
-        } else if (e.textContent === 'Partitioning') {
+        if (e.textContent === 'Balancing')
+          return zipParse(result.data, zipParseState);
+        else if (e.textContent === 'Partitioning') {
           const blob = new Blob([result.data], {
             type: 'application/octet-stream',
           });
-          setBlob(blob)
+          setBlob(blob);
+          setMsg('download');
         }
-        setMsg('download');
       } else return errorHandler(result, fileSettingState);
     } else return;
   };
@@ -90,68 +87,48 @@ const FeatureMap = () => {
             </button>
             <br />
             <DataUploadComp fileName={fileInfo.name} />
-            {tab === 'Balancing'
-              ? msg === 'download' && (
-                  <div className='wrap'>
+            {msg === 'download' && (
+              <div className='wrap'>
+                {tab === 'Balancing' && (
+                  <>
                     <h2 className='previewTitle'>Preview</h2>
                     <div className='previewTable'>
                       <table>
                         <thead>
-                          <tr>
-                            {previewThead(table)}
-                          </tr>
+                          <tr>{previewThead(table)}</tr>
                         </thead>
                         <tbody>{previewTbody(table)}</tbody>
                       </table>
                     </div>
                     <div className='downloadBtnWrap'>
-                      <button onClick={() => saveAs(blob, makeFileName(fileInfo, tab))}>
+                      <button
+                        onClick={() => {
+                          const blob = new Blob([arr], { type: 'text/csv' });
+                          const fileStream = streamSaver.createWriteStream(
+                            `${makeFileName(fileInfo, tab)}.csv`,
+                            {
+                              size: blob.size,
+                            }
+                          );
+                          const readableStream = blob.stream();
+                          if (window.WritableStream && readableStream.pipeTo)
+                            return readableStream.pipeTo(fileStream);
+                        }}>
                         다운로드
                       </button>
                     </div>
-                  </div>
-                )
-              : msg === 'download' && (
-                  <div className='wrap'>
-                    <div className='previewTable partitioning'>
-                      <table>
-                        <colgroup>
-                          <col width={'600px'} />
-                        </colgroup>
-                        <thead>
-                          <tr>
-                            <th>Files</th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          <tr>
-                            <td>y_val.csv</td>
-                          </tr>
-                          <tr>
-                            <td>y_train.csv</td>
-                          </tr>
-                          <tr>
-                            <td>y_test.csv</td>
-                          </tr>
-                          <tr>
-                            <td>x_val.csv</td>
-                          </tr>
-                          <tr>
-                            <td>x_train.csv</td>
-                          </tr>
-                          <tr>
-                            <td>x_test.csv</td>
-                          </tr>
-                        </tbody>
-                      </table>
-                    </div>
-                    <div className='downloadBtnWrap'>
-                      <button onClick={() => saveAs(blob, makeFileName(fileInfo, tab))}>
-                        ZIP 다운로드
-                      </button>
-                    </div>
+                  </>
+                )}
+                {tab === 'Partitioning' && (
+                  <div className='downloadBtnWrap'>
+                    <button
+                      onClick={() => saveAs(blob, makeFileName(fileInfo, tab))}>
+                      ZIP 다운로드
+                    </button>
                   </div>
                 )}
+              </div>
+            )}
           </div>
         </div>
         <Loading msg={msg} />

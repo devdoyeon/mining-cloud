@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { saveAs } from 'file-saver';
+import { streamSaver } from 'streamsaver';
 import Loading from './Common/Loading';
 import DataUploadComp from './Common/DataUploadComp';
 import Header from './Common/Header';
@@ -8,10 +8,10 @@ import {
   fileSetting,
   startFn,
   errorHandler,
-  csv2table,
   makeFileName,
   previewThead,
   previewTbody,
+  zipParse,
 } from 'js/common';
 import { preprocessAPI } from 'js/miningAPI';
 
@@ -24,17 +24,19 @@ const DataPreprocessing = () => {
     tBody: [],
     tHead: [],
   });
-  const [blob, setBlob] = useState({})
   const [msg, setMsg] = useState('');
   const [tab, setTab] = useState('');
+  const [arr, setArr] = useState([]);
 
   const fileSettingState = { setFileInfo, setTab, setMsg };
   const startParamState = { msg, setMsg, setTab, fileInfo };
+  const zipParseState = { setTable, setArr, setMsg };
 
   useEffect(() => {
     document.title = '데이터 전처리 | MINING CLOUD';
   });
 
+  //! Main Function
   const preprocessing = async e => {
     if (startFn(e, startParamState)) {
       let param;
@@ -49,14 +51,9 @@ const DataPreprocessing = () => {
           return null;
       }
       const result = await preprocessAPI(fileInfo.file, param);
-      if (typeof result === 'object') {
-        const blob = new Blob([result.data], {
-          type: 'text/csv',
-        });
-        setBlob(blob)
-        setMsg('download');
-        csv2table(result.data, setTable);
-      } else return errorHandler(result, fileSettingState);
+      if (typeof result === 'object')
+        return zipParse(result.data, zipParseState);
+      else return errorHandler(result, fileSettingState);
     } else return;
   };
 
@@ -94,15 +91,25 @@ const DataPreprocessing = () => {
                 <div className='previewTable'>
                   <table>
                     <thead>
-                      <tr>
-                        {previewThead(table)}
-                      </tr>
+                      <tr>{previewThead(table)}</tr>
                     </thead>
                     <tbody>{previewTbody(table)}</tbody>
                   </table>
                 </div>
                 <div className='downloadBtnWrap'>
-                  <button onClick={() => saveAs(blob, makeFileName(fileInfo, tab))}>
+                  <button
+                    onClick={() => {
+                      const blob = new Blob([arr], { type: 'text/csv' });
+                      const fileStream = streamSaver.createWriteStream(
+                        `${makeFileName(fileInfo, tab)}.csv`,
+                        {
+                          size: blob.size,
+                        }
+                      );
+                      const readableStream = blob.stream();
+                      if (window.WritableStream && readableStream.pipeTo)
+                        return readableStream.pipeTo(fileStream);
+                    }}>
                     다운로드
                   </button>
                 </div>
