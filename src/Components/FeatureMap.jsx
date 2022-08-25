@@ -1,12 +1,13 @@
 import { useState, useEffect } from 'react';
+import saveAs from 'file-saver'
 import Loading from './Common/Loading';
 import DataUploadComp from './Common/DataUploadComp';
 import Header from './Common/Header';
 import SideBar from './Common/SideBar';
 import {
+  makeFileName,
   fileSetting,
   startFn,
-  download,
   csv2table,
   previewThead,
   previewTbody,
@@ -23,13 +24,12 @@ const FeatureMap = () => {
     tBody: [],
     tHead: [],
   });
-  const [url, setUrl] = useState('');
+  const [blob, setBlob] = useState({})
   const [msg, setMsg] = useState('');
   const [tab, setTab] = useState('');
 
   const fileSettingState = { setFileInfo, setTab, setMsg };
   const startParamState = { msg, setMsg, setTab, fileInfo };
-  const downloadState = { fileInfo, url, tab };
 
   useEffect(() => {
     document.title = 'AI 학습용 데이터셋 생성 | MINING CLOUD';
@@ -49,16 +49,15 @@ const FeatureMap = () => {
           const blob = new Blob([result.data], {
             type: 'text/csv',
           });
-          setUrl(window.URL.createObjectURL(blob));
-          setMsg('download');
+          setBlob(blob)
           csv2table(result.data, setTable);
         } else if (e.textContent === 'Partitioning') {
           const blob = new Blob([result.data], {
             type: 'application/octet-stream',
           });
-          setUrl(window.URL.createObjectURL(blob));
-          setMsg('download');
+          setBlob(blob)
         }
+        setMsg('download');
       } else return errorHandler(result, fileSettingState);
     } else return;
   };
@@ -99,7 +98,6 @@ const FeatureMap = () => {
                       <table>
                         <thead>
                           <tr>
-                            <th>1</th>
                             {previewThead(table)}
                           </tr>
                         </thead>
@@ -107,7 +105,7 @@ const FeatureMap = () => {
                       </table>
                     </div>
                     <div className='downloadBtnWrap'>
-                      <button onClick={() => download(downloadState)}>
+                      <button onClick={() => saveAs(blob, makeFileName(fileInfo, tab))}>
                         다운로드
                       </button>
                     </div>
@@ -148,7 +146,7 @@ const FeatureMap = () => {
                       </table>
                     </div>
                     <div className='downloadBtnWrap'>
-                      <button onClick={() => download(downloadState)}>
+                      <button onClick={() => saveAs(blob, makeFileName(fileInfo, tab))}>
                         ZIP 다운로드
                       </button>
                     </div>

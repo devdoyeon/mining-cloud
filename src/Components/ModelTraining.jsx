@@ -111,17 +111,6 @@ const ModelTraining = () => {
     } else return;
   };
 
-  const previewTbody = () => {
-    return table.tBody.reduce((acc, item) => {
-      return (
-        <>
-          {acc}
-          <td>{item}</td>
-        </>
-      );
-    }, <></>);
-  };
-
   return (
     <section className='content-container'>
       <SideBar />
@@ -244,7 +233,16 @@ const ModelTraining = () => {
                       <tr>{previewThead(table)}</tr>
                     </thead>
                     <tbody>
-                      <tr>{previewTbody()}</tr>
+                      <tr>
+                        {table.tBody.reduce((acc, item) => {
+                          return (
+                            <>
+                              {acc}
+                              <td>{item}</td>
+                            </>
+                          );
+                        }, <></>)}
+                      </tr>
                     </tbody>
                   </table>
                 </div>

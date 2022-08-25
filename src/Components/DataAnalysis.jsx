@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { ResponsiveBar } from '@nivo/bar';
+import saveAs from 'file-saver';
 import Loading from 'Components/Common/Loading';
 import DataUploadComp from './Common/DataUploadComp';
 import Header from './Common/Header';
@@ -19,7 +20,6 @@ const DataAnalysis = () => {
   const [fileInfo, setFileInfo] = useState({
     file: '',
     name: '',
-    ext: '',
   });
   const [table, setTable] = useState({
     tBody: [],
@@ -35,8 +35,7 @@ const DataAnalysis = () => {
   // Correlation State
   const [corr, setCorr] = useState([]);
   const [heatMap, setHeatMap] = useState('');
-  const [corrUrl, setCorrUrl] = useState('');
-  const [correlationUrl, setCorrelationUrl] = useState('');
+  const [corrData, setCorrData] = useState({});
 
   const fileSettingState = { setFileInfo, setTab, setMsg, msg };
   const startParamState = { msg, setMsg, setTab, fileInfo };
@@ -68,43 +67,15 @@ const DataAnalysis = () => {
           return alert('업로드한 파일을 확인해 주세요.');
         //& 상관분석
         if (param === 'correlation') {
-          //@ Table Data Setting
+          //@ Table & Confusion Matrix Data Setting
           const { correlationship, datafrmae, heatmap } = result.data.data;
-          const keys = Object.keys(correlationship);
-          const values = Object.values(correlationship);
           setCorr(JSON.parse(datafrmae).data); // String to Object
-          setHeatMap(heatmap); // Confusion Matrix base64 URL
           setTable({
-            tHead: keys,
-            tBody: values,
+            tHead: Object.keys(correlationship),
+            tBody: Object.values(correlationship),
           });
-
-          /*
-          ~ Make Csv DataSet
-          ~ 테이블의 데이터 양이 커서 Table Export 라이브러리를 사용해 다운로드 받기에는
-          ~ 다운로드 시간이 지나치게 많이 걸리기 때문에 데이터를 직접 text/csv 데이터셋에 맞춰
-          ~ 가공해 Blob으로 다운로드 받을 수 있게끔 만들어 주어야 함. 
-          */
-          let correlationStr = `,${keys.toString()}\n`; // Head
-          values.forEach((obj, idx) => {
-            correlationStr += `${keys[idx]},${Object.values(obj).toString()}\n`;
-            // CSV String Data 생성
-          });
-          const correlationBlob = new Blob([correlationStr], {
-            type: 'text/csv',
-          }); // 파일화
-          setCorrelationUrl(window.URL.createObjectURL(correlationBlob));
-
-          let corrStr = `,,corr\n`; // Head
-          JSON.parse(datafrmae).data.forEach(obj => {
-            corrStr += `${Object.values(obj).toString()}\n`;
-            // CSV String Data 생성
-          });
-          const corrBlob = new Blob([corrStr], {
-            type: 'text/csv',
-          }); //파일화
-          setCorrUrl(window.URL.createObjectURL(corrBlob));
-
+          setCorrData(JSON.parse(datafrmae).data);
+          setHeatMap(heatmap); // Confusion Matrix base64 URL
           //& 교차분석
         } else if (param === 'cross_anus') {
           //@ Table Data Setting
@@ -185,54 +156,39 @@ const DataAnalysis = () => {
     }
   };
 
-  //= Corr Preview Tbody
-  const correlationTbody = () => {
-    return corr.reduce((acc, { level_0, level_1, corr }) => {
-      return (
-        <>
-          {acc}
-          <tr>
-            <td>{level_0}</td>
-            <td>{level_1}</td>
-            <td>{corr}</td>
-          </tr>
-        </>
-      );
-    }, <></>);
+  //= Make CSV File Name
+  const makeFileName = str => {
+    if (fileInfo.name.split('.').length > 2) {
+      const nameArr = fileInfo.name.split('.');
+      nameArr.pop();
+      return `${nameArr.toString().replaceAll(',', '')}(${tab}(${str}))`;
+    } else return `${fileInfo.name.split('.')[0]}(${tab}(${str}))`;
   };
 
-  //= Correlation -> Corr Table Download
+  //= Corr Table DownloadBtn onclick
   const corrDown = () => {
-    const fileName = () => {
-      if (fileInfo.name.split('.').length > 2) {
-        const nameArr = fileInfo.name.split('.');
-        nameArr.pop();
-        return `${nameArr.toString().replaceAll(',', '')}(${tab}(corr))`;
-      } else return `${fileInfo.name.split('.')[0]}(${tab}(corr))`;
-    };
-    const link = document.createElement('a');
-    document.body.appendChild(link);
-    link.href = corrUrl; // csv 다운로드 url
-    link.download = fileName();
-    link.click(); // 다운로드 실행
-    document.body.removeChild(link);
+    let str = `,,corr\n`; // Head
+    corrData.forEach(obj => {
+      str += `${Object.values(obj).toString()}\n`;
+      // CSV String Data 생성
+    });
+    const blob = new Blob([str], {
+      type: 'text/csv',
+    }); //파일화
+    saveAs(blob, makeFileName('corr'));
   };
 
-  //= Correlation -> Correlation Table Download
+  //= Correlation Table DownloadBtn onclick
   const correlationDown = () => {
-    const fileName = () => {
-      if (fileInfo.name.split('.').length > 2) {
-        const nameArr = fileInfo.name.split('.');
-        nameArr.pop();
-        return `${nameArr.toString().replaceAll(',', '')}(${tab}(correlation))`; // 파일 이름 수정
-      } else return `${fileInfo.name.split('.')[0]}(${tab}(correlation))`; // 파일 이름 수정
-    };
-    const link = document.createElement('a');
-    document.body.appendChild(link);
-    link.href = correlationUrl; // csv 다운로드 url
-    link.download = fileName();
-    link.click(); // 다운로드 실행
-    document.body.removeChild(link);
+    let str = `,${table.tHead.toString()}\n`; // Head
+    table.tBody.forEach((obj, idx) => {
+      str += `${table.tHead[idx]},${Object.values(obj).toString()}\n`;
+      // CSV String Data 생성
+    });
+    const blob = new Blob([str], {
+      type: 'text/csv',
+    }); // 파일화
+    saveAs(blob, makeFileName('correlation'));
   };
 
   return (
@@ -295,7 +251,20 @@ const DataAnalysis = () => {
                           <th>corr</th>
                         </tr>
                       </thead>
-                      <tbody>{correlationTbody()}</tbody>
+                      <tbody>
+                        {corr.reduce((acc, { level_0, level_1, corr }) => {
+                          return (
+                            <>
+                              {acc}
+                              <tr>
+                                <td>{level_0}</td>
+                                <td>{level_1}</td>
+                                <td>{corr}</td>
+                              </tr>
+                            </>
+                          );
+                        }, <></>)}
+                      </tbody>
                     </table>
                   </div>
                   <div className='downloadBtnWrap'>

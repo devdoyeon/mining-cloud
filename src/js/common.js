@@ -1,6 +1,8 @@
 import $ from 'jquery';
 import html2canvas from 'html2canvas';
+import saveAs from 'file-saver'
 import { TableExport } from 'tableexport';
+import JSZip from 'jszip';
 
 //! Error
 //& Preparation
@@ -111,17 +113,36 @@ export const makeFileName = (fileInfo, tab) => {
   } else return `${fileInfo.name.split('.')[0]}(${tab})`; // 파일 이름 수정
 };
 
-//- API로 받아오는 파일 다운로드 해주는 함수
-export const download = ({ fileInfo, url, tab }) => {
-  // 임시로 a tag를 만들어서 실행시켜 주고 없애줌
-  const link = document.createElement('a');
-  document.body.appendChild(link);
-  link.href = url; // csv 다운로드 url
-  link.download = makeFileName(fileInfo, tab);
-  console.log(link);
-  link.click(); // 다운로드 실행
-  document.body.removeChild(link);
-  window.URL.revokeObjectURL(url);
+//- Zip -> Unzip -> Parse File -> Create Blob -> Split Blob -> Merged Blob
+export const zipParse = (data, { setTable, setArr, setMsg }) => {
+  JSZip.loadAsync(data).then(zip => {
+    const files = Object.values(zip.files); // Zip 내의 파일들이 들어있는 배열 생성
+    files.forEach(file => {
+      // zip 내 파일 Array Buffer로 가져오기
+      zip.files[file.name].async('arraybuffer').then(arr => {
+        const blob = new Blob([arr], { type: 'text/csv' });
+        const chunks = []; // Blob 조각이 들어갈 배열
+        const chunkSize = Math.ceil(blob.size / 10);
+        for (let i = 0; i < 10; i += 1) {
+          const startByte = chunkSize * i;
+          chunks.push(blob.slice(startByte, startByte + chunkSize, blob.type));
+        }
+        const first = chunks.shift(); // 첫 번째 Blob
+        const last = chunks.pop(); // 마지막 Blob
+        const mergedBlob = new Blob([first, last], { type: blob.type }); // 첫 번째랑 마지막 Blob 합치기
+        const reader = new FileReader();
+        reader.onload = () => {
+          csv2table(reader.result, setTable); // 합친 Blob으로 Preview Table Render
+          setArr(arr); // Stream Download를 위한 SetState
+          setMsg('download'); // 다운로드 버튼 표시
+        };
+        reader.onerror = () => {
+          return alert('새로고침 후 다시 시도해 주세요.');
+        };
+        reader.readAsBinaryString(mergedBlob);
+      });
+    });
+  });
 };
 
 //- 라이브러리로 만든 차트 png 파일로 다운로드 해주는 함수
@@ -179,8 +200,6 @@ export const csv2table = (text, setTable) => {
       arr.forEach(str => {
         numArr.push(str);
       });
-      const idx = previewArr.indexOf(arr) + 1;
-      numArr.unshift(idx); // column number
       first.push(numArr);
     });
     const last = []; // 마지막 쪽 미리보기
@@ -189,8 +208,6 @@ export const csv2table = (text, setTable) => {
       arr.forEach(str => {
         numArr.push(str);
       });
-      const idx = previewArr.indexOf(arr) + 1;
-      numArr.unshift(idx); // column number
       last.push(numArr);
     });
     setTable({
@@ -214,7 +231,7 @@ export const previewThead = table => {
 
 //- 미리보기 테이블 Tbody 렌더
 export const previewTbody = table => {
-  const length = table.tHead.length + 1;
+  const length = table.tHead.length;
   const numArr = [];
   for (let i = 0; i < length; i++) {
     numArr.push(i);

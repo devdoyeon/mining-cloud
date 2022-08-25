@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { saveAs } from 'file-saver';
 import Loading from './Common/Loading';
 import DataUploadComp from './Common/DataUploadComp';
 import Header from './Common/Header';
@@ -8,7 +9,7 @@ import {
   startFn,
   errorHandler,
   csv2table,
-  download,
+  makeFileName,
   previewThead,
   previewTbody,
 } from 'js/common';
@@ -18,19 +19,17 @@ const DataPreprocessing = () => {
   const [fileInfo, setFileInfo] = useState({
     file: '',
     name: '',
-    ext: 'csv',
   });
   const [table, setTable] = useState({
     tBody: [],
     tHead: [],
   });
-  const [url, setUrl] = useState('');
+  const [blob, setBlob] = useState({})
   const [msg, setMsg] = useState('');
   const [tab, setTab] = useState('');
 
   const fileSettingState = { setFileInfo, setTab, setMsg };
   const startParamState = { msg, setMsg, setTab, fileInfo };
-  const downloadState = { fileInfo, url, tab };
 
   useEffect(() => {
     document.title = '데이터 전처리 | MINING CLOUD';
@@ -51,12 +50,10 @@ const DataPreprocessing = () => {
       }
       const result = await preprocessAPI(fileInfo.file, param);
       if (typeof result === 'object') {
-        if (result.data === null)
-          return alert('업로드한 파일을 확인해 주세요.');
         const blob = new Blob([result.data], {
           type: 'text/csv',
         });
-        setUrl(window.URL.createObjectURL(blob));
+        setBlob(blob)
         setMsg('download');
         csv2table(result.data, setTable);
       } else return errorHandler(result, fileSettingState);
@@ -98,7 +95,6 @@ const DataPreprocessing = () => {
                   <table>
                     <thead>
                       <tr>
-                        <th>1</th>
                         {previewThead(table)}
                       </tr>
                     </thead>
@@ -106,7 +102,7 @@ const DataPreprocessing = () => {
                   </table>
                 </div>
                 <div className='downloadBtnWrap'>
-                  <button onClick={() => download(downloadState)}>
+                  <button onClick={() => saveAs(blob, makeFileName(fileInfo, tab))}>
                     다운로드
                   </button>
                 </div>
