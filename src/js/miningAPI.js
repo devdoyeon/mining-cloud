@@ -28,7 +28,7 @@ const errorMessage = async error => {
 //! 데이터 전처리
 export const preprocessAPI = async (file, param) => {
   try {
-    return await axios.post(`/api/preprocess/${param}`, { file }, { headers });
+    return await axios.post(`/api/preprocess/${param}`, { file }, zipHeaders);
   } catch (error) {
     return await errorMessage(error);
   }
@@ -53,7 +53,7 @@ export const featureMapAPI = async (file, param) => {
     return await axios.post(
       `/api/balancing/${param === 'balancing' ? 'fiftyfifty' : param}`,
       { file },
-      param === 'balancing' ? { headers } : zipHeaders
+      zipHeaders
     );
   } catch (error) {
     return await errorMessage(error);

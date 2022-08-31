@@ -1,6 +1,6 @@
 # MINING CLOUD
 
-<img src='https://ifh.cc/g/GZYnTY.png'>
+<img src='https://ifh.cc/g/5NW54h.png'>
 
 <br><hr>
 
@@ -94,7 +94,7 @@
 
 > ### **arr(setArr) :Array**
 >
-> JSZip 라이브러리 ArrayBuffer로 변환된 파일을
+> 파일을 ArrayBuffer로 변환하여 담아두는 State입니다. Stream Saver 라이브러리를 사용해 Zip 파일을 파싱할 때 사용됩니다.
 
 <br><hr>
 
@@ -108,9 +108,9 @@
 >
 > common.js/startFn()에서 사용하기 위한 Parameter를 담아둔 State입니다. event와 함께 사용됩니다.
 
-> ### **downloadState = { fileInfo, url, tab }**
+> ### **zipParseState = { setTable, setArr, setMsg }**
 >
-> common.js/download()에서 사용하기 위한 Parameter를 담아둔 State입니다. event와 함께 사용됩니다.
+> common.js/zipParse()에서 사용하기 위한 Parameter를 담아둔 State입니다.
 
 <br><hr>
 

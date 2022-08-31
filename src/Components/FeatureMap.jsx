@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { streamSaver } from 'streamsaver';
+import streamSaver from 'streamsaver';
 import saveAs from 'file-saver';
 import Loading from './Common/Loading';
 import DataUploadComp from './Common/DataUploadComp';

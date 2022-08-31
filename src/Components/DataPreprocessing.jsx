@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { streamSaver } from 'streamsaver';
+import streamSaver from 'streamsaver';
 import Loading from './Common/Loading';
 import DataUploadComp from './Common/DataUploadComp';
 import Header from './Common/Header';
@@ -51,6 +51,7 @@ const DataPreprocessing = () => {
           return null;
       }
       const result = await preprocessAPI(fileInfo.file, param);
+      console.log(result);
       if (typeof result === 'object')
         return zipParse(result.data, zipParseState);
       else return errorHandler(result, fileSettingState);

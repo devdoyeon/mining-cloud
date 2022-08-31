@@ -43,6 +43,7 @@ const DataNormalization = () => {
         fileInfo.file,
         e.textContent.replaceAll('-', '').toLowerCase() // API Parameter 양식에 맞춰 textContent 가공
       );
+      console.log(result)
       if (typeof result === 'object') return zipParse(result.data, zipParseState);
       else return errorHandler(result, fileSettingState);
     } else return;
