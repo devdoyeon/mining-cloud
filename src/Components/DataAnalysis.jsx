@@ -76,6 +76,7 @@ const DataAnalysis = () => {
           });
           setCorrData(JSON.parse(datafrmae).data);
           setHeatMap(heatmap); // Confusion Matrix base64 URL
+          return setMsg('largeData');
           //& 교차분석
         } else if (param === 'cross_anus') {
           //@ Table Data Setting
@@ -198,91 +199,88 @@ const DataAnalysis = () => {
             </button>
             <br />
             <DataUploadComp fileName={fileInfo.name} />
+            {msg === 'largeData' && tab === '상관분석' && (
+              <div className='wrap'>
+                <div className='previewTable correlation'>
+                  <table>
+                    <thead>
+                      <tr>
+                        <th>Correlation</th>
+                        {previewThead(table)}
+                      </tr>
+                    </thead>
+                    <tbody>{previewTbody()}</tbody>
+                  </table>
+                </div>
+                <div className='downloadBtnWrap'>
+                  <button
+                    onClick={() => {
+                      //- First Table Download
+                      let str = `,${table.tHead.toString()}\n`; // Head
+                      table.tBody.forEach((obj, idx) => {
+                        str += `${table.tHead[idx]},${Object.values(
+                          obj
+                        ).toString()}\n`;
+                        // CSV String Data 생성
+                      });
+                      const blob = new Blob([str], {
+                        type: 'text/csv',
+                      }); // 파일화
+                      saveAs(blob, makeFileName('correlation'));
+                    }}>
+                    다운로드
+                  </button>
+                </div>
+                <div className='previewTable corr'>
+                  <table>
+                    <thead>
+                      <tr>
+                        <th></th>
+                        <th></th>
+                        <th>corr</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {corr.reduce((acc, { level_0, level_1, corr }) => {
+                        return (
+                          <>
+                            {acc}
+                            <tr>
+                              <td>{level_0}</td>
+                              <td>{level_1}</td>
+                              <td>{corr}</td>
+                            </tr>
+                          </>
+                        );
+                      }, <></>)}
+                    </tbody>
+                  </table>
+                </div>
+                <div className='downloadBtnWrap'>
+                  <button
+                    onClick={() => {
+                      //- Second Table Download
+                      let str = `,,corr\n`; // Head
+                      corrData.forEach(obj => {
+                        str += `${Object.values(obj).toString()}\n`;
+                        // CSV String Data 생성
+                      });
+                      const blob = new Blob([str], {
+                        type: 'text/csv',
+                      }); //파일화
+                      saveAs(blob, makeFileName('corr'));
+                    }}>
+                    다운로드
+                  </button>
+                </div>
+                <img
+                  src={`data:image/jpg;base64,${heatMap}`} //base64 url
+                  alt='Correlation Confusion Matrix'
+                />
+              </div>
+            )}
             {msg === 'download' && (
               <>
-                {
-                  //~ 상관분석
-                  tab === '상관분석' && (
-                    <div className='wrap'>
-                      <div className='previewTable correlation'>
-                        <table>
-                          <thead>
-                            <tr>
-                              <th>Correlation</th>
-                              {previewThead(table)}
-                            </tr>
-                          </thead>
-                          <tbody>{previewTbody()}</tbody>
-                        </table>
-                      </div>
-                      <div className='downloadBtnWrap'>
-                        <button
-                          onClick={() => {
-                            //- First Table Download
-                            let str = `,${table.tHead.toString()}\n`; // Head
-                            table.tBody.forEach((obj, idx) => {
-                              str += `${table.tHead[idx]},${Object.values(
-                                obj
-                              ).toString()}\n`;
-                              // CSV String Data 생성
-                            });
-                            const blob = new Blob([str], {
-                              type: 'text/csv',
-                            }); // 파일화
-                            saveAs(blob, makeFileName('correlation'));
-                          }}>
-                          다운로드
-                        </button>
-                      </div>
-                      <div className='previewTable corr'>
-                        <table>
-                          <thead>
-                            <tr>
-                              <th></th>
-                              <th></th>
-                              <th>corr</th>
-                            </tr>
-                          </thead>
-                          <tbody>
-                            {corr.reduce((acc, { level_0, level_1, corr }) => {
-                              return (
-                                <>
-                                  {acc}
-                                  <tr>
-                                    <td>{level_0}</td>
-                                    <td>{level_1}</td>
-                                    <td>{corr}</td>
-                                  </tr>
-                                </>
-                              );
-                            }, <></>)}
-                          </tbody>
-                        </table>
-                      </div>
-                      <div className='downloadBtnWrap'>
-                        <button
-                          onClick={() => {
-                            //- Second Table Download
-                            let str = `,,corr\n`; // Head
-                            corrData.forEach(obj => {
-                              str += `${Object.values(obj).toString()}\n`;
-                              // CSV String Data 생성
-                            });
-                            const blob = new Blob([str], {
-                              type: 'text/csv',
-                            }); //파일화
-                            saveAs(blob, makeFileName('corr'));
-                          }}>
-                          다운로드
-                        </button>
-                      </div>
-                      <img
-                        src={`data:image/jpg;base64,${heatMap}`} //base64 url
-                        alt='Correlation Confusion Matrix'
-                      />
-                    </div>
-                  )
-                }
                 {
                   //~ 교차분석
                   tab === '교차분석' && (

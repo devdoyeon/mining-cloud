@@ -51,7 +51,6 @@ const DataPreprocessing = () => {
           return null;
       }
       const result = await preprocessAPI(fileInfo.file, param);
-      console.log(result);
       if (typeof result === 'object')
         return zipParse(result.data, zipParseState);
       else return errorHandler(result, fileSettingState);
