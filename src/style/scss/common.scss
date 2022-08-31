@@ -1,28 +1,11 @@
 @import "./style";
 
-:root {
-    --main-color: #79db56;
-    --sub-color: #2d2e39;
-    --side-bar-color: #24252d;
-    --font-color: #333;
-    --gray01: #434343;
-    --gray02: #777777;
-    --gray03: #858585;
-    --gray04: #cdcdcd;
-    --white: #ffffff;
-    --background-color: #f5f5f5;
-    --active: #1c8053;
-    --bold: "S-CoreDream-6Bold", "맑은고딕", "sans-serif";
-    --medium: "S-CoreDream-5Medium", "맑은고딕", "sans-serif";
-    --regular: "S-CoreDream-4Regular", "맑은고딕", "sans-serif";
-}
-
 /* common */
 html,
 body,
 * {
-    @extend .regular;
-    color: var(--font-color);
+    font-family: $regularFont;
+    color: $fontColor;
     font-size: 16px;
 }
 .row {
@@ -32,16 +15,16 @@ body,
     @include flex-style($flexDirection: column);
 }
 .bold {
-    font-family: var(--bold);
+    font-family: $boldFont;
 }
 .medium {
-    font-family: var(--medium);
+    font-family: $mediumFont;
 }
 .regular {
-    font-family: var(--regular);
+    font-family: $regularFont;
 }
-input::placeholder {
-    @extend .regular;
+.highlight {
+    color: $highlightColor;
 }
 .content-container {
     @include flex-style($justifyVal: flex-start);
@@ -49,20 +32,133 @@ input::placeholder {
     > div {
         @include position-style(relative, $zIndex: 5);
         @include flex-style(column, $justifyVal: flex-start);
-        width: calc(100vw - 420px);
+        width: 100vw;
         min-height: 100vh;
-        padding-left: 420px;
-        padding-bottom: 100px;
     }
 
     .content-wrap {
+        > h3 {
+            user-select: none;
+        }
         @include flex-style(column, $justifyVal: flex-start);
         width: 1170px;
         height: 100%;
-        margin-top: 150px;
-
+        margin: 150px 0;
         > div {
             width: 100%;
+        }
+        .wrap {
+            margin-top: 30px;
+            display: flex;
+            flex-flow: column;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            .downloadBtnWrap {
+                margin-top: 10px;
+                display: flex;
+                align-items: center;
+                width: 100%;
+                justify-content: center;
+                > button {
+                    font-family: $mediumFont;
+                }
+            }
+            .chart {
+                z-index: 1;
+                width: 100%;
+                height: 1000px;
+                > div > div > svg > g > g {
+                    cursor: default !important;
+                }
+                &.cart-chart {
+                    width: 500px;
+                    height: 500px;
+                }
+                &.train-chart {
+                    width: 700px;
+                    height: 700px;
+                }
+            }
+            .previewTitle {
+                width: 100%;
+                font-size: 18px;
+                margin-bottom: 5px;
+            }
+            .previewTable {
+                width: fit-content;
+                max-width: 100%;
+                max-height: 500px;
+                border: 1px solid rgb(188, 188, 188);
+                overflow-x: auto;
+                > table {
+                    .gray {
+                        background-color: rgb(220, 220, 220);
+                    }
+                    thead th {
+                        font-family: $boldFont;
+                        background-color: $gray03;
+                        color: white;
+                    }
+                    td,
+                    th {
+                        border: 1px solid rgb(188, 188, 188);
+                        white-space: pre;
+                        padding: 7px;
+                        text-align: center;
+                    }
+                }
+                &.correlation {
+                    td,
+                    th {
+                        &:first-child {
+                            background-color: gray;
+                            font-family: $boldFont;
+                            color: white;
+                        }
+                    }
+                }
+                &.correlation thead > tr > th {
+                    &:first-child {
+                        background-color: $gray01;
+                    }
+                }
+                &.corr {
+                    margin-top: 50px;
+                }
+            }
+        }
+        .trainGuide {
+            margin-top: 10px;
+            user-select: none;
+            .guideToggle {
+                text-decoration: underline;
+                text-underline-position: under;
+                &:hover {
+                    cursor: pointer;
+                    color: $highlightColor;
+                }
+            }
+        }
+        .guideBox {
+            background-color: white;
+            z-index: 2;
+            user-select: none;
+            font-family: $boldFont;
+            height: 50px;
+            letter-spacing: 2px;
+            position: fixed;
+            line-height: 50px;
+            text-align: center;
+            border-top: 2px solid $mainColor;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            transition: all 0.3s;
+        }
+        .none {
+            transition: all 0.3s;
+            bottom: -52px;
         }
     }
 
@@ -74,49 +170,76 @@ input::placeholder {
 
     hr {
         width: 100%;
+        color: white;
     }
 
     input[type="file"] {
         display: none;
     }
-
     label {
+        font-family: $mediumFont;
+        user-select: none;
         display: inline-block;
-        margin-top: 10px;
         padding: 10px 20px;
-        background-color: var(--gray02);
+        background-color: $gray02;
         border-radius: 5px;
-        color: var(--white);
+        transition: all 0.1s;
+        color: $white;
         cursor: pointer;
+        &:hover {
+            background-color: $gray01;
+            transition: all 0.1s;
+        }
     }
-
     button {
+        user-select: none;
+        margin-top: 10px;
         margin-left: 5px;
-        background-color: var(--gray04);
+        background-color: $gray05;
         padding: 10px 20px;
         border-radius: 5px;
         cursor: pointer;
-
+        transition: all 0.1s;
         &.active {
-            background-color: var(--active);
-            color: var(--white);
+            font-family: $mediumFont;
+            background-color: $green03;
+            color: $white;
+        }
+        &:hover {
+            background-color: $gray04;
+            transition: all 0.1s;
+            &.active {
+                background-color: $green02;
+            }
+        }
+        &:active {
+            background-color: $gray03;
+            &.active {
+                background-color: $green01;
+            }
         }
     }
 
-    .ouputWrap {
+    .outputWrap {
         margin-top: 50px;
+
+        h4,
+        span,
+        p {
+            user-select: none;
+        }
 
         .row {
             justify-content: flex-start;
             height: 50px;
             margin-top: 10px;
-            border: 1px solid var(--gray04);
+            border: 1px solid $gray05;
 
             span {
                 display: inline-block;
                 width: 100px;
                 height: 100%;
-                background-color: var(--background-color);
+                background-color: $bgColor;
                 text-align: center;
                 line-height: 50px;
             }
@@ -125,50 +248,34 @@ input::placeholder {
                 padding: 0 20px;
             }
         }
-
-        // table {
-
-        //     width:100%;margin: 10px 0 30px;border: 1px solid var(--gray04);text-align:center;vertical-align:middle;
-
-        //     tr {
-
-        //         border-bottom: 1px solid var(--gray04);
-
-        //         &:last-child { border-bottom: none; }
-
-        //     }
-
-        //     th { padding:10px 0;background-color: var(--background-color); }
-
-        //     td {
-
-        //         padding: 10px 0;
-
-        //         &.no-data-col { padding: 50px 0;text-align: center; }
-
-        //     }
-
-        // }
-
-        // .upload-img { width: 100px;height: 100px;object-fit: cover; }
+        .multi {
+            margin-top: 0;
+            border-top: none;
+            &:first-child {
+                margin-top: 10px;
+                border-top: 1px solid $gray05;
+            }
+        }
     }
 }
 
 /* header */
 header {
+    z-index: 2;
     position: fixed;
     display: flex;
     flex-direction: column;
     align-items: flex-end;
     justify-content: center;
-    width: calc(100% - 420px);
-    height: 100px;
+    width: 100%;
+    height: 50px;
     padding: 0 100px;
-    background-color: var(--main-color);
+    background-color: $mainColor;
     box-sizing: border-box;
 
     a {
-        color: var(--white);
+        font-family: $boldFont;
+        color: $white;
         font-size: 36px;
     }
 }
@@ -176,25 +283,29 @@ header {
 /* side-bar | 사이드바 */
 .side-bar {
     @include position-style(fixed, $zIndex: 10);
-    width: 420px;
+    @include flex-style(column);
+    width: 300px;
+    left: -300px;
     min-height: 100vh;
-    background-color: var(--side-bar-color);
+    background-color: $sideBarColor;
+    transition: all 0.3s;
 
     .inner {
-        justify-content: flex-start;
         width: 100%;
         height: 100%;
     }
 
     .top-area {
+        position: absolute;
+        top: 0;
         width: 100%;
-        height: 100px;
-        background-color: var(--sub-color);
+        height: 50px;
+        background-color: $subColor;
     }
 
     nav {
         width: 100%;
-        margin: 50px 0;
+        margin-bottom: 5vh;
         padding: 0 50px;
         box-sizing: border-box;
 
@@ -205,7 +316,7 @@ header {
 
         li {
             width: 100%;
-            border-top: 1px solid var(--white);
+            border-top: 1px solid $white;
 
             &:first-child {
                 border-top: none;
@@ -217,82 +328,120 @@ header {
             display: inline-block;
             padding: 30px 0;
             box-sizing: border-box;
-            color: var(--white);
+            color: $white;
             cursor: pointer;
+            font-size: 1em;
 
             &:hover {
-                color: var(--main-color);
+                color: $mainColor;
             }
         }
     }
 
     footer p {
-        color: var(--white);
+        user-select: none;
+        color: $white;
+    }
+
+    // 현재 페이지 나타내는 클래스
+    .active {
+        a {
+            color: $mainColor;
+            font-family: $boldFont;
+        }
+    }
+    &.open {
+        transform: translateX(300px);
+        transition: all 0.3s;
+    }
+}
+
+// 슬라이드 메뉴 토글 버튼
+.menuBtn {
+    z-index: 11;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 50px;
+    height: 50px;
+    padding: 0 !important;
+    margin: 0 !important;
+    align-items: center;
+    justify-content: center;
+    display: flex;
+    background-color: transparent !important;
+    svg {
+        width: 25px;
+        height: 25px;
+    }
+    &.open {
+        svg {
+            fill: white;
+        }
     }
 }
 
 /* dashboard-home */
 .dashboard-home {
     h2 {
-        width: 1170px;
+        user-select: none;
+        width: 100%;
         font-size: 30px;
         margin-bottom: 10px;
     }
 
     .row {
-        width: 1170px;
-        flex-wrap: wrap;
+        width: 100%;
+        justify-content: space-evenly;
 
         > div {
             @include flex-style(column);
-            width: 580px;
+            flex-grow: 1;
             margin-right: 10px;
             margin-bottom: 10px;
-            border: 1px solid var(--gray04);
+            border: 1px solid $gray05;
             box-sizing: border-box;
             cursor: pointer;
             box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.2);
 
-            &:nth-child(even) {
-                margin-right: 0;
-            }
-
             a {
                 display: inline-block;
                 width: 100%;
-                padding: 10px;
-                background-color: var(--background-color);
-                color: var(--font-color);
+                background-color: $bgColor;
+                color: $fontColor;
                 box-sizing: border-box;
-            }
+                > div {
+                    @include flex-style(column);
+                    height: fit-content;
+                    width: 100%;
+                    padding: 40px 0;
+                    background-color: $white;
+                    border-top: 1px solid $gray05;
 
-            &:hover a {
-                color: var(--main-color);
-            }
-
-            > div {
-                @include flex-style(column);
-                width: 100%;
-                padding: 40px 0;
-                background-color: var(--white);
-                border-top: 1px solid var(--gray04);
-
-                figure {
-                    width: 150px;
-                    height: 150px;
-                    border-radius: 50%;
-                    background-color: var(--background-color);
-                    box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.2);
+                    figure {
+                        width: 150px;
+                        height: 150px;
+                        border-radius: 50%;
+                        background-color: $bgColor;
+                        box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.2);
+                    }
                 }
-            }
-
-            p {
-                width: 100%;
-                padding: 15px 0;
-                border-top: 1px solid var(--gray04);
-                text-align: center;
-                color: var(--gray02);
-                font-size: 14px;
+                span {
+                    display: inline-block;
+                    padding: 15px;
+                }
+                p {
+                    width: 100%;
+                    padding: 15px 0;
+                    border-top: 1px solid $gray05;
+                    text-align: center;
+                    color: $gray02;
+                    font-size: 14px;
+                }
+                &:hover span {
+                    font-family: $mediumFont;
+                    color: $mainColor;
+                }
             }
         }
     }
@@ -301,18 +450,189 @@ header {
 /* loading-home */
 .loading-home {
     @include flex-style;
-
+    position: fixed;
+    top: 40vh;
     img {
-        @include position-style($left: calc(50% + 100px));
-        bottom: 0;
+        @include flex-style;
         width: 200px;
-        margin: auto 0;
+        opacity: 0.7;
+    }
+}
+//~~~~~~~~~~~~~~~~~~wide-tablet responsive~~~~~~~~~~~~~~~~~~~
+@include wide-tablet {
+    .content-container {
+        @include flex-style;
+        width: 100vw;
+
+        > div {
+            padding-bottom: 50px;
+        }
+
+        .content-wrap {
+            width: 100vw;
+            margin-top: 70px;
+
+            > div {
+                width: 90%;
+                align-items: center;
+            }
+            > h2 {
+                margin-top: 20px;
+            }
+        }
+
+        h3 {
+            width: 90%;
+            font-size: 20px;
+        }
+
+        hr {
+            width: 90%;
+        }
+
+        label {
+            padding: 5px 10px;
+        }
+
+        button {
+            padding: 5px 10px;
+        }
+
+        .outputWrap {
+            margin-top: 30px;
+        }
+    }
+    header {
+        height: 50px;
+        width: 100vw;
+        padding: 0;
+        a {
+            font-size: 1.4em;
+            margin-right: 1em;
+        }
+    }
+    .dashboard-home {
+        width: 100vw;
+        h2 {
+            text-align: center;
+            font-size: 3em;
+            width: 100vw;
+            margin-top: 60px;
+        }
+
+        .row {
+            margin: 0;
+            width: auto;
+
+            > div {
+                width: 350px;
+                text-align: center;
+                margin: 10px;
+            }
+        }
+    }
+}
+//~~~~~~~~~~~~~~~~~~tablet responsive~~~~~~~~~~~~~~~~~~~
+@include tablet {
+    .content-wrap {
+        margin-top: 120px !important;
+    }
+    .dashboard-home {
+        .row {
+            > div {
+                width: 40vw;
+                a {
+                    font-size: 0.9em;
+                }
+            }
+        }
+    }
+}
+//~~~~~~~~~~~~~~~~~~mobile responsive~~~~~~~~~~~~~~~~~~~
+@include mobile {
+    .content-container {
+        .content-wrap {
+            margin-top: 60px;
+            > div {
+                > label {
+                    margin-top: 10px;
+                    display: block;
+                    width: fit-content;
+                }
+                > button {
+                    font-size: 14px;
+                    &:first-of-type {
+                        margin-left: 0;
+                    }
+                }
+                .outputWrap > .row {
+                    span {
+                        width: 80px;
+                    }
+                    p {
+                        font-size: 14px;
+                    }
+                }
+                .previewTable > table {
+                    td,
+                    th {
+                        padding: 4px;
+                        font-size: 14px;
+                    }
+                }
+            }
+        }
+    }
+    // 모바일부터 폴드까지 사이드바 열었을 때 full로 채워짐
+    .side-bar {
+        left: -100vw;
+        width: 100vw;
+        &.true {
+            transform: translateX(100%);
+        }
     }
 
-    a {
-        background-color: var(--sub-color);
-        padding: 10px 20px;
-        color: var(--white);
-        border-radius: 5px;
+    // Home 요소들 세로 정렬
+    .dashboard-home {
+        h2 {
+            font-size: 2.1em;
+        }
+
+        .row {
+            flex-direction: column;
+            > div {
+                width: 80vw;
+                height: fit-content;
+                margin: 10px 0;
+            }
+        }
+    }
+    .loading-home {
+        img {
+            width: 100px;
+        }
+    }
+}
+
+//~~~~~~~~~~~~~~~~~~fold responsive~~~~~~~~~~~~~~~~~~~
+@include fold {
+    .content-container {
+        .content-wrap > div {
+            > button {
+                font-size: 14px;
+                &:first-of-type {
+                    margin-left: 0;
+                }
+            }
+            .outputWrap > .row {
+                span {
+                    width: 70px;
+                    font-size: 14px;
+                }
+                p {
+                    font-size: 13px;
+                }
+            }
+        }
     }
 }

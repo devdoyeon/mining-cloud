@@ -1,25 +1,45 @@
-import { useState } from "react";
-
-import { activeOn, fileNamePreview } from "js/common";
-
-import Loading from "Components/Loading";
+import { useState, useEffect } from "react";
+import streamSaver from "streamsaver";
+import Loading from "Components/Common/Loading";
+import DataUploadComp from "./Common/DataUploadComp";
 import Header from "./Common/Header";
 import SideBar from "./Common/SideBar";
-import ImgUploadComp from "./Common/ImgUploadComp";
+import { makeFileName, fileSetting, startFn, previewThead, previewTbody, errorHandler, zipParse } from "js/common";
+import { normalizationAPI } from "js/miningAPI";
 
-const ImageNormalization = () => {
-    const [uploadFile, setUploadFile] = useState("");
-    const [uploadFileName, setUploadFileName] = useState("");
+const DataNormalization = () => {
+    const [fileInfo, setFileInfo] = useState({
+        file: "",
+        name: "",
+    });
+    const [table, setTable] = useState({
+        tBody: [],
+        tHead: [],
+    });
     const [msg, setMsg] = useState("");
-    const [downloadUrl, setDownloadUrl] = useState("");
+    const [tab, setTab] = useState("");
+    const [arr, setArr] = useState([]);
 
-    const dataProcess = async (e) => {
-        activeOn(e, uploadFile, setMsg); //업로드 파일 체크 후 버튼 및 로딩바 활성화
+    const fileSettingState = { setFileInfo, setTab, setMsg };
+    const startParamState = { msg, setMsg, setTab, fileInfo };
+    const zipParseState = { setTable, setArr, setMsg };
+
+    useEffect(() => {
+        document.title = "데이터 정규화 | MINING CLOUD";
+    }, []);
+
+    //! Main Function
+    const normalization = async (e) => {
+        if (startFn(e, startParamState)) {
+            const result = await normalizationAPI(
+                fileInfo.file,
+                e.textContent.replaceAll("-", "").toLowerCase() // API Parameter 양식에 맞춰 textContent 가공
+            );
+            console.log(result);
+            if (typeof result === "object") return zipParse(result.data, zipParseState);
+            else return errorHandler(result, fileSettingState);
+        } else return;
     };
-
-    const loadingData = { msg, downloadUrl };
-
-    const uploadFileData = { uploadFile, uploadFileName };
 
     return (
         <section className="content-container">
@@ -27,25 +47,60 @@ const ImageNormalization = () => {
             <div>
                 <Header />
                 <div className="content-wrap">
-                    <h3 className="bold">데이터 정규화</h3>
+                    <h3 className="bold" onClick={() => previewThead()}>
+                        데이터 정규화
+                    </h3>
                     <hr />
                     <div>
                         <label htmlFor="fileUpload">파일 업로드</label>
-                        <input
-                            type="file"
-                            id="fileUpload"
-                            onChange={(e) => fileNamePreview(e.target.files[0], setUploadFile, setUploadFileName)}
-                            accept=".csv"
-                        />
-                        <button onClick={(e) => dataProcess(e.target)}>정규화하기</button>
+                        <input type="file" id="fileUpload" onChange={(e) => fileSetting(e, fileSettingState)} accept=".csv" />
+                        <button onClick={(e) => normalization(e.target)} className={tab === "Z-Score" ? "active" : ""}>
+                            Z-Score
+                        </button>
+                        <button onClick={(e) => normalization(e.target)} className={tab === "Min-Max" ? "active" : ""}>
+                            Min-Max
+                        </button>
+                        <button onClick={(e) => normalization(e.target)} className={tab === "Quartile" ? "active" : ""}>
+                            Quartile
+                        </button>
+                        <button onClick={(e) => normalization(e.target)} className={tab === "Standard Scaler" ? "active" : ""}>
+                            Standard Scaler
+                        </button>
                         <br />
-                        <ImgUploadComp {...uploadFileData} />
+                        <DataUploadComp fileName={fileInfo.name} />
+                        {msg === "download" && (
+                            <div className="wrap">
+                                <h2 className="previewTitle">Preview</h2>
+                                <div className="previewTable normalization">
+                                    <table>
+                                        <thead>
+                                            <tr>{previewThead(table)}</tr>
+                                        </thead>
+                                        <tbody>{previewTbody(table)}</tbody>
+                                    </table>
+                                </div>
+                                <div className="downloadBtnWrap">
+                                    <button
+                                        onClick={() => {
+                                            const blob = new Blob([arr], { type: "text/csv" });
+                                            const fileStream = streamSaver.createWriteStream(`${makeFileName(fileInfo, tab)}.csv`, {
+                                                size: blob.size,
+                                            });
+                                            const readableStream = blob.stream();
+                                            if (window.WritableStream && readableStream.pipeTo) return readableStream.pipeTo(fileStream);
+                                        }}
+                                    >
+                                        다운로드
+                                    </button>
+                                </div>
+                            </div>
+                        )}
                     </div>
                 </div>
-                <Loading {...loadingData} />
+                <Loading msg={msg} />
             </div>
         </section>
     );
 };
 
-export default ImageNormalization;
+export default DataNormalization;

@@ -1,15 +1,67 @@
-//---------------display flex style mixin---------------
-@mixin flex-style ($flexDirection:row,$alignVal:center,$justifyVal:center) {
+//! -------------color, font--------------
+$mainColor: #79db56;
+$highlightColor: #2ca700;
+$subColor: #2d2e39;
+$sideBarColor: #24252d;
+$fontColor: #333;
+$gray01: #434343;
+$gray02: #777777;
+$gray03: #858585;
+$gray04: #ababab;
+$gray05: #cdcdcd;
+$white: #ffffff;
+$bgColor: #f5f5f5;
+$green01: #014023;
+$green02: #0c643d;
+$green03: #1c8053;
+$boldFont: "S-CoreDream-6Bold", "맑은고딕", "sans-serif";
+$mediumFont: "S-CoreDream-5Medium", "맑은고딕", "sans-serif";
+$regularFont: "S-CoreDream-4Regular", "맑은고딕", "sans-serif";
+
+//# -------------flex style mixin--------------
+@mixin flex-style($flexDirection: row, $alignVal: center, $justifyVal: center) {
     display: flex;
-    flex-direction  : $flexDirection;
-    align-items     : $alignVal;
-    justify-content : $justifyVal;
+    flex-direction: $flexDirection;
+    align-items: $alignVal;
+    justify-content: $justifyVal;
 }
-//position-style
-//---------------position style mixin---------------
-@mixin position-style ($position:absolute,$left:0,$top:0,$zIndex:null){
-    position    : $position;
-    left        : $left;
-    top         : $top;
-    z-index     : $zIndex;
+
+//& -------------position style mixin--------------
+@mixin position-style($position: absolute, $left: 0, $top: 0, $zIndex: null) {
+    position: $position;
+    left: $left;
+    top: $top;
+    z-index: $zIndex;
+}
+
+//@ -------------BreakPoint--------------
+$breakpoint-wide-tablet: 1180px; //태블릿 가로
+$breakpoint-tablet: 820px; //태블릿 세로
+$breakpoint-mobile: 480px; //모바일
+$breakpoint-fold: 374px; //갤럭시 폴드
+
+//--------------Media Query--------------
+//태블릿 가로
+@mixin wide-tablet {
+    @media screen and (max-width: $breakpoint-wide-tablet) {
+        @content;
+    }
+}
+//태블릿 세로
+@mixin tablet {
+    @media screen and (max-width: $breakpoint-tablet) {
+        @content;
+    }
+}
+//모바일
+@mixin mobile {
+    @media screen and (max-width: $breakpoint-mobile) {
+        @content;
+    }
+}
+//폴드
+@mixin fold {
+    @media screen and (max-width: $breakpoint-fold) {
+        @content;
+    }
 }

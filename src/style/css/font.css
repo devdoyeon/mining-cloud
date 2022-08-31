@@ -1,12 +1,12 @@
 @font-face {
     font-family: "S-CoreDream-6Bold";
-    src: url("fonts/SCDream6.otf") format("opentype");
+    src: url(style/fonts/SCDream6.otf) format("opentype");
 }
 @font-face {
     font-family: "S-CoreDream-5Medium";
-    src: url("fonts/SCDream5.otf") format("opentype");
+    src: url(style/fonts/SCDream5.otf) format("opentype");
 }
 @font-face {
     font-family: "S-CoreDream-4Regular";
-    src: url("fonts/SCDream4.otf") format("opentype");
+    src: url(style/fonts/SCDream4.otf) format("opentype");
 }

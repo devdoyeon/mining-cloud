@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 const Header = () => {
     return (
         <header>
-            <Link to="/home" className="bold">
+            <Link to="/" className="bold">
                 MINING CLOUD
             </Link>
         </header>

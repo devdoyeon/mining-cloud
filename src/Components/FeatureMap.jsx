@@ -1,26 +1,51 @@
-import { useState } from "react";
-
-import { activeOn, fileNamePreview } from "js/common";
-
-import Loading from "Components/Loading";
+import { useState, useEffect } from "react";
+import streamSaver from "streamsaver";
+import saveAs from "file-saver";
+import Loading from "./Common/Loading";
+import DataUploadComp from "./Common/DataUploadComp";
 import Header from "./Common/Header";
 import SideBar from "./Common/SideBar";
-import ImgUploadComp from "./Common/ImgUploadComp";
+import { makeFileName, fileSetting, startFn, previewThead, previewTbody, errorHandler, zipParse } from "js/common";
+import { featureMapAPI } from "js/miningAPI";
 
 const FeatureMap = () => {
-    const [uploadFile, setUploadFile] = useState("");
-    const [uploadFileName, setUploadFileName] = useState("");
+    const [fileInfo, setFileInfo] = useState({
+        file: "",
+        name: "",
+    });
+    const [table, setTable] = useState({
+        tBody: [],
+        tHead: [],
+    });
+    const [blob, setBlob] = useState({});
     const [msg, setMsg] = useState("");
-    const [downloadUrl, setDownloadUrl] = useState("");
+    const [tab, setTab] = useState("");
+    const [arr, setArr] = useState([]);
 
-    //이미지 피처맵 api 요청
-    const makeFeatureMap = async (e) => {
-        activeOn(e, uploadFile, setMsg);
+    const fileSettingState = { setFileInfo, setTab, setMsg };
+    const startParamState = { msg, setMsg, setTab, fileInfo };
+    const zipParseState = { setTable, setArr, setMsg };
+
+    useEffect(() => {
+        document.title = "AI 학습용 데이터셋 생성 | MINING CLOUD";
+    }, []);
+
+    //! Main Function
+    const featureMap = async (e) => {
+        if (startFn(e, startParamState)) {
+            const result = await featureMapAPI(fileInfo.file, e.textContent.toLowerCase());
+            if (typeof result === "object") {
+                if (e.textContent === "Balancing") return zipParse(result.data, zipParseState);
+                else if (e.textContent === "Partitioning") {
+                    const blob = new Blob([result.data], {
+                        type: "application/octet-stream",
+                    });
+                    setBlob(blob);
+                    setMsg("download");
+                }
+            } else return errorHandler(result, fileSettingState);
+        } else return;
     };
-
-    const loadingData = { msg, downloadUrl };
-
-    const uploadFileData = { uploadFile, uploadFileName };
 
     return (
         <section className="content-container">
@@ -32,19 +57,54 @@ const FeatureMap = () => {
                     <hr />
                     <div>
                         <label htmlFor="fileUpload">파일 업로드</label>
-                        <input
-                            type="file"
-                            id="fileUpload"
-                            onChange={(e) => fileNamePreview(e.target.files[0], setUploadFile, setUploadFileName)}
-                            accept=".csv"
-                        />
-                        {/* <input type="file" id="fileUpload" onChange={(e)=>imgPreview(e.target.files,setUploadImg,setUploadImgName)} accept="image/*" multiple/> */}
-                        <button onClick={(e) => makeFeatureMap(e.target)}>Partitioning</button>
+                        <input type="file" id="fileUpload" onChange={(e) => fileSetting(e, fileSettingState)} accept=".csv" />
+                        <button onClick={(e) => featureMap(e.target)} className={tab === "Balancing" ? "active" : ""}>
+                            Balancing
+                        </button>
+                        <button onClick={(e) => featureMap(e.target)} className={tab === "Partitioning" ? "active" : ""}>
+                            Partitioning
+                        </button>
                         <br />
-                        <ImgUploadComp {...uploadFileData} />
+                        <DataUploadComp fileName={fileInfo.name} />
+                        {msg === "download" && (
+                            <div className="wrap">
+                                {tab === "Balancing" && (
+                                    <>
+                                        <h2 className="previewTitle">Preview</h2>
+                                        <div className="previewTable">
+                                            <table>
+                                                <thead>
+                                                    <tr>{previewThead(table)}</tr>
+                                                </thead>
+                                                <tbody>{previewTbody(table)}</tbody>
+                                            </table>
+                                        </div>
+                                        <div className="downloadBtnWrap">
+                                            <button
+                                                onClick={() => {
+                                                    const blob = new Blob([arr], { type: "text/csv" });
+                                                    const fileStream = streamSaver.createWriteStream(`${makeFileName(fileInfo, tab)}.csv`, {
+                                                        size: blob.size,
+                                                    });
+                                                    const readableStream = blob.stream();
+                                                    if (window.WritableStream && readableStream.pipeTo) return readableStream.pipeTo(fileStream);
+                                                }}
+                                            >
+                                                다운로드
+                                            </button>
+                                        </div>
+                                    </>
+                                )}
+                                {tab === "Partitioning" && (
+                                    <div className="downloadBtnWrap">
+                                        <button onClick={() => saveAs(blob, makeFileName(fileInfo, tab))}>ZIP 다운로드</button>
+                                    </div>
+                                )}
+                            </div>
+                        )}
                     </div>
                 </div>
-                <Loading {...loadingData} />
+                <Loading msg={msg} />
             </div>
         </section>
     );
