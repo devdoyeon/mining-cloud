@@ -69,16 +69,16 @@ const ModelTraining = () => {
           param = 'deccisiontree';
           break;
         case 'SVM':
-          param = '';
+          param = 'svm';
           break;
         case 'DNN':
-          param = '';
+          param = 'dnn';
           break;
         case 'RF':
-          param = '';
+          param = 'randomforest';
           break;
         case 'XGBoost':
-          param = '';
+          param = 'xgboost';
           break;
         default:
           return null;
