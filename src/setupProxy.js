@@ -1,12 +1,10 @@
 const { createProxyMiddleware } = require('http-proxy-middleware');
 
-const dummy = 'http://192.168.0.102:8110/' //마이닝 더미 데이터
-
 module.exports = app => {
   app.use(
     '/api',
     createProxyMiddleware({
-      target: dummy,
+      target: 'http://192.168.0.102:8110/',
       changeOrigin: true,
       pathRewrite: {
         '^/api': '',

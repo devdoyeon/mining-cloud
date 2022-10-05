@@ -62,8 +62,8 @@ export const fileSetting = (e, { setFileInfo, setTab, setMsg, msg }) => {
   const file = e.target.files[0];
   if (!file) return;
   if (e.target.files[1]) {
-    let nameArr = [];
-    let trainName = [
+    const nameArr = [];
+    const trainName = [
       'y_val.csv',
       'y_train.csv',
       'y_test.csv',

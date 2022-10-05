@@ -50,7 +50,7 @@ const FeatureMap = () => {
           return zipParse(result.data, zipParseState);
         else if (e.textContent === 'Partitioning') {
           const blob = new Blob([result.data], {
-            type: 'application/octet-stream',
+            type: 'application/zip',
           });
           setBlob(blob);
           setMsg('download');
