@@ -162,8 +162,8 @@ const DataAnalysis = () => {
     if (fileInfo.name.split('.').length > 2) {
       const nameArr = fileInfo.name.split('.');
       nameArr.pop();
-      return `${nameArr.toString().replaceAll(',', '')}(${tab}(${str}))`;
-    } else return `${fileInfo.name.split('.')[0]}(${tab}(${str}))`;
+      return `${nameArr.toString().replaceAll(',', '')}(Correlation(${str}))`;
+    } else return `${fileInfo.name.split('.')[0]}(Correlation(${str}))`;
   };
 
   return (
@@ -226,7 +226,7 @@ const DataAnalysis = () => {
                       const blob = new Blob([str], {
                         type: 'text/csv',
                       }); // 파일화
-                      saveAs(blob, makeFileName('correlation'));
+                      saveAs(blob, makeFileName('table_1'));
                     }}>
                     다운로드
                   </button>
@@ -268,7 +268,7 @@ const DataAnalysis = () => {
                       const blob = new Blob([str], {
                         type: 'text/csv',
                       }); //파일화
-                      saveAs(blob, makeFileName('corr'));
+                      saveAs(blob, makeFileName('table_2'));
                     }}>
                     다운로드
                   </button>

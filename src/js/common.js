@@ -101,12 +101,39 @@ export const fileSetting = (e, { setFileInfo, setTab, setMsg, msg }) => {
 
 //@ 파일명 만들어주는 함수
 export const makeFileName = (fileInfo, tab) => {
+  const regex = /[ㄱ-ㅎ|ㅏ-ㅣ|가-힣]/;
+  let kor2eng;
+  if (regex.test(tab)) {
+    switch (tab) {
+      case '제거/삭제':
+        kor2eng = `del`;
+        break;
+      case '채우기/보간':
+        kor2eng = `fill`;
+        break;
+        case '교차분석':
+          kor2eng = `cross_anus`;
+          break;
+        case 'CART분석':
+          kor2eng = `cart_anus`;
+          break;
+      default:
+    }
+  }
   if (Array.isArray(fileInfo.name)) return `${tab} Confusion Matrix`;
   else if (fileInfo.name.split('.').length > 2) {
     const nameArr = fileInfo.name.split('.');
     nameArr.pop();
+    if (regex.test(tab)) {
+      return `${nameArr.toString().replaceAll(',', '')}(${kor2eng})`;
+    }
     return `${nameArr.toString().replaceAll(',', '')}(${tab})`; // 파일 이름 수정
-  } else return `${fileInfo.name.split('.')[0]}(${tab})`; // 파일 이름 수정
+  } else {
+    if (regex.test(tab)) {
+      return `${fileInfo.name.split('.')[0]}(${kor2eng})`;
+    }
+    return `${fileInfo.name.split('.')[0]}(${tab})`; // 파일 이름 수정
+  }
 };
 
 //- Zip -> Unzip -> Parse File -> Create Blob -> Split Blob -> Merged Blob
