@@ -1,9 +1,9 @@
 import { useState, useEffect } from 'react';
 import streamSaver from 'streamsaver';
-import Loading from './Common/Loading';
-import DataUploadComp from './Common/DataUploadComp';
-import Header from './Common/Header';
-import SideBar from './Common/SideBar';
+import Loading from 'Components/Common/Loading';
+import DataUploadComp from 'Components/Common/DataUploadComp';
+import Header from 'Components/Common/Header';
+import SideBar from 'Components/Common/SideBar';
 import {
   fileSetting,
   startFn,

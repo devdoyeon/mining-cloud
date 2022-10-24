@@ -1,9 +1,9 @@
 import { useState, useEffect } from 'react';
 import { ResponsiveHeatMap } from '@nivo/heatmap';
 import Loading from 'Components/Common/Loading';
-import DataUploadComp from './Common/DataUploadComp';
-import Header from './Common/Header';
-import SideBar from './Common/SideBar';
+import DataUploadComp from 'Components/Common/DataUploadComp';
+import Header from 'Components/Common/Header';
+import SideBar from 'Components/Common/SideBar';
 import {
   fileSetting,
   startFn,
@@ -190,7 +190,7 @@ const ModelTraining = () => {
             </p>
             <div className={`guideBox ${!guide.view ? 'none' : ''}`}>
               <span className='bold highlight'>업로드 가능 파일: </span>
-              y_val.csv, y_train.csv, y_test.csv, x_val.csv, x_train.csv,
+              y_val.csv, y_train.csv, y_test.csv, x_val.csv, x_train.csv,{' '}
               x_test.csv
             </div>
             <DataUploadComp fileName={fileInfo.name} />
@@ -217,7 +217,9 @@ const ModelTraining = () => {
                     borderColor='black'
                     labelTextColor={
                       ({ data }) =>
-                        data.y > (matrix.max + matrix.min) / 2 ? 'black' : 'white'
+                        data.y > (matrix.max + matrix.min) / 2
+                          ? 'black'
+                          : 'white'
                       // value가 Min-Max의 평균보다 클 때 노드 색상이 밝아짐
                       // value가 Min-Max의 평균보다 클 때 노드 색상이 어두워짐
                       // 따라서 가독성을 위해 value에 따라 label text color를 조작해 준다.

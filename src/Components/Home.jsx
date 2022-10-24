@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import Header from './Common/Header';
-import SideBar from './Common/SideBar';
+import Header from 'Components/Common/Header';
+import SideBar from 'Components/Common/SideBar';
 import icon00 from 'image/icon00.png';
 import icon01 from 'image/icon01.png';
 import icon02 from 'image/icon02.png';
