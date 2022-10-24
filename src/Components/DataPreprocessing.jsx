@@ -36,10 +36,6 @@ const DataPreprocessing = () => {
     document.title = '데이터 전처리 | MINING CLOUD';
   }, []);
 
-  useEffect(() => {
-    console.log(tab)
-  }, [tab])
-
   //! Main Function
   const preprocessing = async e => {
     if (startFn(e, startParamState)) {
