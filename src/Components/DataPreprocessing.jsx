@@ -74,6 +74,17 @@ const DataPreprocessing = () => {
               accept='.csv'
             />
             <button
+              className='resetBtn'
+              onClick={() =>
+                setFileInfo({
+                  file: '',
+                  name: '',
+                })
+              }>
+              파일 목록 초기화
+            </button>
+            <span className='button-space'></span>
+            <button
               onClick={e => preprocessing(e.target)}
               className={tab === '제거/삭제' ? 'active' : ''}>
               제거/삭제

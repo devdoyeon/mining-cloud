@@ -43,7 +43,8 @@ const DataNormalization = () => {
         fileInfo.file,
         e.textContent.replaceAll('-', '').toLowerCase() // API Parameter 양식에 맞춰 textContent 가공
       );
-      if (typeof result === 'object') return zipParse(result.data, zipParseState);
+      if (typeof result === 'object')
+        return zipParse(result.data, zipParseState);
       else return errorHandler(result, fileSettingState);
     } else return;
   };
@@ -66,6 +67,17 @@ const DataNormalization = () => {
               onChange={e => fileSetting(e, fileSettingState)}
               accept='.csv'
             />
+            <button
+              className='resetBtn'
+              onClick={() =>
+                setFileInfo({
+                  file: '',
+                  name: '',
+                })
+              }>
+              파일 목록 초기화
+            </button>
+            <span className='button-space'></span>
             <button
               onClick={e => normalization(e.target)}
               className={tab === 'Z-Score' ? 'active' : ''}>

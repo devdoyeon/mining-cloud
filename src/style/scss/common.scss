@@ -176,7 +176,7 @@ body,
   input[type='file'] {
     display: none;
   }
-  label {
+  label, .resetBtn {
     font-family: $mediumFont;
     user-select: none;
     display: inline-block;
@@ -190,6 +190,10 @@ body,
       background-color: $gray01;
       transition: all 0.1s;
     }
+  }
+  .button-space {
+    display: inline-block;
+    width: 10px;
   }
   button {
     user-select: none;

@@ -5,17 +5,19 @@ const DataUploadComp = ({ fileName }) => {
     <div className='outputWrap'>
       <h4>Uploaded Data</h4>
       {Array.isArray(fileName) ? (
-        fileName.reduce((acc, name, idx) => {
-          return (
-            <div className='fileList'>
-              {acc}
-              <div className='row multi'>
-                <span className='medium'>{idx + 1}</span>
-                <p>{name}</p>
-              </div>
-            </div>
-          );
-        }, <></>)
+        <div className='fileList'>
+          {fileName.reduce((acc, name, idx) => {
+            return (
+              <>
+                {acc}
+                <div className='row multi'>
+                  <span className='medium'>{idx + 1}</span>
+                  <p>{name}</p>
+                </div>
+              </>
+            );
+          }, <></>)}
+        </div>
       ) : (
         <div className='row'>
           <span className='medium'>Name</span>

@@ -41,7 +41,7 @@ export const startFn = (e, { msg, setMsg, setTab, fileInfo }) => {
     return false;
   } else if (fileInfo.file === '') {
     setTab('');
-    alert('데이터를 업로드해 주세요.');
+    alert('파일을 업로드해 주세요.');
     return false;
   } else {
     $('.content-wrap > div button').removeClass('active');

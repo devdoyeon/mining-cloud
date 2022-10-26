@@ -183,6 +183,17 @@ const DataAnalysis = () => {
               accept='.csv'
             />
             <button
+              className='resetBtn'
+              onClick={() =>
+                setFileInfo({
+                  file: '',
+                  name: '',
+                })
+              }>
+              파일 목록 초기화
+            </button>
+            <span className='button-space'></span>
+            <button
               onClick={e => analysis(e.target)}
               className={tab === '상관분석' ? 'active' : ''}>
               상관분석
