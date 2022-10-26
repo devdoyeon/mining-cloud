@@ -10,7 +10,6 @@ import {
   table2csv,
   previewThead,
   chart2png,
-  changeState,
 } from 'JS/common';
 import { trainingAPI } from 'JS/miningAPI';
 
@@ -30,27 +29,11 @@ const ModelTraining = () => {
   });
   const [msg, setMsg] = useState('');
   const [tab, setTab] = useState('');
-  const [guide, setGuide] = useState({
-    // 업로드 가능한 파일명 가이드
-    btn: false, // 가이드 토글 버튼
-    view: false, // 가이드 렌더 여부
-  });
+  const [guide, setGuide] = useState(true);
 
   useEffect(() => {
     document.title = '모델 학습 및 검증 | MINING CLOUD';
   }, []);
-
-  useEffect(() => {
-    if (!guide.btn) return; // guide.btn이 true일 때만 작동
-    changeState(setGuide, 'view', true);
-    setTimeout(() => {
-      // 3초 뒤 렌더 해제 및 토글 버튼 상태도 false로 변경
-      setGuide({
-        btn: false,
-        view: false,
-      });
-    }, 3000);
-  }, [guide.btn]);
 
   const fileSettingState = { setFileInfo, setTab, setMsg };
   const startParamState = { msg, setMsg, setTab, fileInfo };
@@ -183,18 +166,11 @@ const ModelTraining = () => {
                 <span className='bold highlight'>Partitioning</span>
               </span>
               에서{' '}
-              <span
-                className='guideToggle'
-                onClick={() => changeState(setGuide, 'btn', true)}>
+              <span className='guideToggle' onClick={() => setGuide(true)}>
                 다운로드한 파일
               </span>
               만 업로드 가능합니다.
             </p>
-            <div className={`guideBox ${!guide.view ? 'none' : ''}`}>
-              <span className='bold highlight'>업로드 가능 파일: </span>
-              y_val.csv, y_train.csv, y_test.csv, x_val.csv, x_train.csv,{' '}
-              x_test.csv
-            </div>
             <DataUploadComp fileName={fileInfo.name} />
             {msg === 'download' && (
               <div className='wrap'>
@@ -271,6 +247,14 @@ const ModelTraining = () => {
           </div>
         </div>
         <Loading msg={msg} />
+        {guide && (
+          <div className={`guideBox`}>
+            <span className='bold highlight'>업로드 가능 파일: </span>
+            y_val.csv, y_train.csv, y_test.csv, x_val.csv, x_train.csv,{' '}
+            x_test.csv
+            <button onClick={() => setGuide(false)}>확인</button>
+          </div>
+        )}
       </div>
     </section>
   );

@@ -156,25 +156,32 @@ body,
   cursor: pointer;
   color: #2ca700;
 }
-.content-container .content-wrap .guideBox {
+.content-container .guideBox {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
   background-color: white;
   z-index: 2;
-  user-select: none;
   font-family: "S-CoreDream-6Bold", "맑은고딕", "sans-serif";
-  height: 50px;
-  letter-spacing: 2px;
   position: fixed;
-  line-height: 50px;
   text-align: center;
-  border-top: 2px solid #79db56;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  transition: all 0.3s;
+  padding: 15px;
+  border: 2px solid #79db56;
+  bottom: 30px;
 }
-.content-container .content-wrap .none {
-  transition: all 0.3s;
-  bottom: -52px;
+.content-container .guideBox button {
+  background-color: #79db56;
+  font-family: "S-CoreDream-6Bold", "맑은고딕", "sans-serif";
+  color: white;
+  height: 30px;
+  line-height: 15px;
+}
+.content-container .guideBox button:hover {
+  background-color: #2ca700;
+}
+.content-container .guideBox button:focus {
+  background-color: #238300;
 }
 .content-container h3 {
   width: 100%;
@@ -188,7 +195,8 @@ body,
 .content-container input[type=file] {
   display: none;
 }
-.content-container label, .content-container .resetBtn {
+.content-container label,
+.content-container .resetBtn {
   font-family: "S-CoreDream-5Medium", "맑은고딕", "sans-serif";
   user-select: none;
   display: inline-block;
@@ -199,7 +207,8 @@ body,
   color: #ffffff;
   cursor: pointer;
 }
-.content-container label:hover, .content-container .resetBtn:hover {
+.content-container label:hover,
+.content-container .resetBtn:hover {
   background-color: #434343;
   transition: all 0.1s;
 }
