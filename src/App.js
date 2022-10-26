@@ -1,11 +1,11 @@
 import 'App.css';
 import { Routes, Route } from 'react-router-dom';
-import Home from 'Components/Home';
-import DataPreprocessing from 'Components/DataPreprocessing';
-import DataNormalization from 'Components/DataNormalization';
-import DataAnalysis from 'Components/DataAnalysis';
-import FeatureMap from 'Components/FeatureMap';
-import ModelTraining from 'Components/ModelTraining';
+import Home from 'Pages/Home';
+import DataPreprocessing from 'Pages/DataPreprocessing';
+import DataNormalization from 'Pages/DataNormalization';
+import DataAnalysis from 'Pages/DataAnalysis';
+import FeatureMap from 'Pages/FeatureMap';
+import ModelTraining from 'Pages/ModelTraining';
 
 function App() {
   return (

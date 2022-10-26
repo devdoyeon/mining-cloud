@@ -1,10 +1,10 @@
 import { useState, useEffect } from 'react';
 import { ResponsiveBar } from '@nivo/bar';
 import saveAs from 'file-saver';
-import Loading from 'Components/Common/Loading';
-import DataUploadComp from 'Components/Common/DataUploadComp';
-import Header from 'Components/Common/Header';
-import SideBar from 'Components/Common/SideBar';
+import Loading from 'Components/Loading';
+import DataUploadComp from 'Components/DataUploadComp';
+import Header from 'Components/Header';
+import SideBar from 'Components/SideBar';
 import {
   fileSetting,
   startFn,
@@ -12,8 +12,8 @@ import {
   previewThead,
   table2csv,
   errorHandler,
-} from 'js/common';
-import { analysisAPI } from 'js/miningAPI';
+} from 'JS/common';
+import { analysisAPI } from 'JS/miningAPI';
 
 const DataAnalysis = () => {
   // Common State
@@ -63,12 +63,12 @@ const DataAnalysis = () => {
       }
       const result = await analysisAPI(fileInfo.file, param);
       if (typeof result === 'object') {
-        if (result.data === null)
+        if (result?.data === null)
           return alert('업로드한 파일을 확인해 주세요.');
         //& 상관분석
         if (param === 'correlation') {
           //@ Table & Confusion Matrix Data Setting
-          const { correlationship, datafrmae, heatmap } = result.data.data;
+          const { correlationship, datafrmae, heatmap } = result?.data?.data;
           setCorr(JSON.parse(datafrmae).data); // String to Object
           setTable({
             tHead: Object.keys(correlationship),
@@ -81,13 +81,13 @@ const DataAnalysis = () => {
         } else if (param === 'cross_anus') {
           //@ Table Data Setting
           setTable({
-            tHead: Object.keys(result.data.data),
-            tBody: Object.values(result.data.data),
+            tHead: Object.keys(result?.data?.data),
+            tBody: Object.values(result?.data?.data),
           });
           //& CART분석
         } else if (param === 'cart_anus') {
           //@ Table Data Setting
-          const { importance_df } = result.data.data;
+          const { importance_df } = result?.data?.data;
           setTable({
             tHead: Object.keys(importance_df),
             tBody: Object.values(importance_df),

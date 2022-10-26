@@ -25,7 +25,7 @@ const SideBar = () => {
           <div className='top-area'></div>
           <nav>
             <ul className='column'>
-            <li className={location === '/' ? 'active' : ''}>
+              <li className={location === '/' ? 'active' : ''}>
                 <Link to='/'>HOME</Link>
               </li>
               <li className={location === '/preprocessing' ? 'active' : ''}>
@@ -52,7 +52,7 @@ const SideBar = () => {
       </section>
       <button
         onClick={e => {
-          setMenuBtn('open');
+          setMenuBtn(menuBtn === 'open' ? 'close' : 'open');
           e.stopPropagation();
         }}
         className={`menuBtn ${menuBtn}`}>

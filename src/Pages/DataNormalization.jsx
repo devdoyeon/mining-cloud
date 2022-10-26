@@ -1,9 +1,9 @@
 import { useState, useEffect } from 'react';
 import streamSaver from 'streamsaver';
-import Loading from 'Components/Common/Loading';
-import DataUploadComp from 'Components/Common/DataUploadComp';
-import Header from 'Components/Common/Header';
-import SideBar from 'Components/Common/SideBar';
+import Loading from 'Components/Loading';
+import DataUploadComp from 'Components/DataUploadComp';
+import Header from 'Components/Header';
+import SideBar from 'Components/SideBar';
 import {
   makeFileName,
   fileSetting,
@@ -12,8 +12,8 @@ import {
   previewTbody,
   errorHandler,
   zipParse,
-} from 'js/common';
-import { normalizationAPI } from 'js/miningAPI';
+} from 'JS/common';
+import { normalizationAPI } from 'JS/miningAPI';
 
 const DataNormalization = () => {
   const [fileInfo, setFileInfo] = useState({
@@ -44,7 +44,7 @@ const DataNormalization = () => {
         e.textContent.replaceAll('-', '').toLowerCase() // API Parameter 양식에 맞춰 textContent 가공
       );
       if (typeof result === 'object')
-        return zipParse(result.data, zipParseState);
+        return zipParse(result?.data, zipParseState);
       else return errorHandler(result, fileSettingState);
     } else return;
   };

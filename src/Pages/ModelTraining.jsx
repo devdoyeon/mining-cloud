@@ -1,17 +1,18 @@
 import { useState, useEffect } from 'react';
 import { ResponsiveHeatMap } from '@nivo/heatmap';
-import Loading from 'Components/Common/Loading';
-import DataUploadComp from 'Components/Common/DataUploadComp';
-import Header from 'Components/Common/Header';
-import SideBar from 'Components/Common/SideBar';
+import Loading from 'Components/Loading';
+import DataUploadComp from 'Components/DataUploadComp';
+import Header from 'Components/Header';
+import SideBar from 'Components/SideBar';
 import {
   fileSetting,
   startFn,
   table2csv,
   previewThead,
   chart2png,
-} from 'js/common';
-import { trainingAPI } from 'js/miningAPI';
+  changeState,
+} from 'JS/common';
+import { trainingAPI } from 'JS/miningAPI';
 
 const ModelTraining = () => {
   const [fileInfo, setFileInfo] = useState({
@@ -41,11 +42,7 @@ const ModelTraining = () => {
 
   useEffect(() => {
     if (!guide.btn) return; // guide.btn이 true일 때만 작동
-    setGuide(prev => {
-      const clone = { ...prev };
-      clone.view = true; // 토글 버튼이 클릭 됐을 때 렌더됨
-      return clone;
-    });
+    changeState(setGuide, 'view', true);
     setTimeout(() => {
       // 3초 뒤 렌더 해제 및 토글 버튼 상태도 false로 변경
       setGuide({
@@ -85,7 +82,7 @@ const ModelTraining = () => {
       }
       const trainResult = await trainingAPI(fileInfo.file, param);
       if (typeof trainResult === 'object') {
-        const { conf_mat, result } = trainResult.data.data;
+        const { conf_mat, result } = trainResult?.data?.data;
         //@ Confusion Matrix Data Setting
         let dataArr = [];
         let numArr = [];
@@ -188,13 +185,7 @@ const ModelTraining = () => {
               에서{' '}
               <span
                 className='guideToggle'
-                onClick={() =>
-                  setGuide(prev => {
-                    const clone = { ...prev };
-                    clone.btn = true;
-                    return clone;
-                  })
-                }>
+                onClick={() => changeState(setGuide, 'btn', true)}>
                 다운로드한 파일
               </span>
               만 업로드 가능합니다.

@@ -1,9 +1,9 @@
 import { useState, useEffect } from 'react';
 import streamSaver from 'streamsaver';
-import Loading from 'Components/Common/Loading';
-import DataUploadComp from 'Components/Common/DataUploadComp';
-import Header from 'Components/Common/Header';
-import SideBar from 'Components/Common/SideBar';
+import Loading from 'Components/Loading';
+import DataUploadComp from 'Components/DataUploadComp';
+import Header from 'Components/Header';
+import SideBar from 'Components/SideBar';
 import {
   fileSetting,
   startFn,
@@ -12,8 +12,8 @@ import {
   previewThead,
   previewTbody,
   zipParse,
-} from 'js/common';
-import { preprocessAPI } from 'js/miningAPI';
+} from 'JS/common';
+import { preprocessAPI } from 'JS/miningAPI';
 
 const DataPreprocessing = () => {
   const [fileInfo, setFileInfo] = useState({
@@ -48,11 +48,11 @@ const DataPreprocessing = () => {
           param = 'fillna';
           break;
         default:
-          return null;
+          param = '';
       }
       const result = await preprocessAPI(fileInfo.file, param);
       if (typeof result === 'object')
-        return zipParse(result.data, zipParseState);
+        return zipParse(result?.data, zipParseState);
       else return errorHandler(result, fileSettingState);
     } else return;
   };

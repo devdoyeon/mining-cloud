@@ -1,4 +1,4 @@
-import loadingImg from 'image/loading.gif';
+import loadingImg from 'Image/loading.gif';
 
 const Loading = ({ msg }) => {
   return (

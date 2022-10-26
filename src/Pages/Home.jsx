@@ -1,12 +1,12 @@
 import { useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import Header from 'Components/Common/Header';
-import SideBar from 'Components/Common/SideBar';
-import icon00 from 'image/icon00.png';
-import icon01 from 'image/icon01.png';
-import icon02 from 'image/icon02.png';
-import icon03 from 'image/icon03.png';
-import icon04 from 'image/icon04.png';
+import Header from 'Components/Header';
+import SideBar from 'Components/SideBar';
+import icon00 from 'Image/icon00.png';
+import icon01 from 'Image/icon01.png';
+import icon02 from 'Image/icon02.png';
+import icon03 from 'Image/icon03.png';
+import icon04 from 'Image/icon04.png';
 
 const Home = () => {
   useEffect(() => {

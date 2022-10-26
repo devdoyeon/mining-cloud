@@ -1,10 +1,10 @@
 import { useState, useEffect } from 'react';
 import streamSaver from 'streamsaver';
 import saveAs from 'file-saver';
-import Loading from 'Components/Common/Loading';
-import DataUploadComp from 'Components/Common/DataUploadComp';
-import Header from 'Components/Common/Header';
-import SideBar from 'Components/Common/SideBar';
+import Loading from 'Components/Loading';
+import DataUploadComp from 'Components/DataUploadComp';
+import Header from 'Components/Header';
+import SideBar from 'Components/SideBar';
 import {
   makeFileName,
   fileSetting,
@@ -13,8 +13,8 @@ import {
   previewTbody,
   errorHandler,
   zipParse,
-} from 'js/common';
-import { featureMapAPI } from 'js/miningAPI';
+} from 'JS/common';
+import { featureMapAPI } from 'JS/miningAPI';
 
 const FeatureMap = () => {
   const [fileInfo, setFileInfo] = useState({
@@ -47,9 +47,9 @@ const FeatureMap = () => {
       );
       if (typeof result === 'object') {
         if (e.textContent === 'Balancing')
-          return zipParse(result.data, zipParseState);
+          return zipParse(result?.data, zipParseState);
         else if (e.textContent === 'Partitioning') {
-          const blob = new Blob([result.data], {
+          const blob = new Blob([result?.data], {
             type: 'application/zip',
           });
           setBlob(blob);
