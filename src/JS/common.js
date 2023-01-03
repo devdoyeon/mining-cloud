@@ -196,13 +196,13 @@ export const csv2table = (csvStr, setTable) => {
   if (previewArr.length <= 10) {
     //- length가 10 이하일 경우 자르는 기능 없이 모두 렌더
     setTable({
-      tBody: previewArr.slice(1),
       tHead: previewArr[0],
+      tBody: previewArr.slice(1),
     });
   } else {
     //- 아닐 경우 자르는 기능 포함하여 렌더
-    const middle = new Array(previewArr[0].length + 1).fill('...');
     const first = []; // 미리보기로 보여줄 데이터
+    const middle = new Array(previewArr[0].length + 1).fill('...');
     previewArr.slice(1, 5).forEach(arr => {
       const numArr = [];
       arr.forEach(str => {
@@ -240,9 +240,7 @@ export const previewThead = table => {
 //- 미리보기 테이블 Tbody 렌더
 export const previewTbody = table => {
   const numArr = [];
-  for (let i = 0; i < table.tHead.length; i++) {
-    numArr.push(i);
-  }
+  for (let i = 0; i < table.tHead.length; i++) numArr.push(i);
   return table.tBody.reduce((acc, item, idx) => {
     const data = numArr.reduce((acc, num) => {
       return (

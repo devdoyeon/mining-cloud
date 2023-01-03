@@ -195,6 +195,9 @@ body,
       background-color: $gray01;
       transition: all 0.1s;
     }
+    &:active {
+      background-color: $fontColor;
+    }
   }
   .button-space {
     display: inline-block;

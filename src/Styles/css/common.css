@@ -212,6 +212,10 @@ body,
   background-color: #434343;
   transition: all 0.1s;
 }
+.content-container label:active,
+.content-container .resetBtn:active {
+  background-color: #333;
+}
 .content-container .button-space {
   display: inline-block;
   width: 10px;
