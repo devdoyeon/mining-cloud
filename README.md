@@ -1,7 +1,5 @@
 # MINING CLOUD
 
-<img src='https://ifh.cc/g/5NW54h.png'>
-
 <br><hr>
 
 ## **Common Components | _Components/Common_**
